@@ -93,7 +93,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div
-          className="lg:hidden absolute top-0 left-0 right-0 z-40 flex flex-col"
+          className="lg:hidden fixed inset-0 z-50 flex flex-col h-screen"
           style={{
             backgroundColor: "#141127",
             paddingTop: 100,

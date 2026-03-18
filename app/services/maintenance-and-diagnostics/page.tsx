@@ -23,7 +23,7 @@ export default function MaintenanceAndDiagnostics() {
           aria-hidden="true"
         />
         {/* Dark overlay with blur */}
-        <div className="absolute inset-0 backdrop-blur-[12px]" style={{ backgroundColor: "rgba(20,17,39,0.50)" }} />
+        <div className="absolute inset-0 backdrop-blur-[8px]" style={{ backgroundColor: "rgba(20,17,39,0.50)" }} />
         <Navbar />
         <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">

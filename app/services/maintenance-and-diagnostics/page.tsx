@@ -59,7 +59,7 @@ export default function MaintenanceAndDiagnostics() {
               <div>
                 <a
                   href="#more"
-                  className="inline-flex items-center rounded-full text-white text-[15px] transition-all hover:bg-[#00FF7E]/10 group"
+                  className="inline-flex items-center rounded-full text-[15px] text-white bg-transparent hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
                   style={{
                     fontFamily: "var(--font-inter)",
                     padding: "8px 8px 8px 20px",
@@ -69,7 +69,7 @@ export default function MaintenanceAndDiagnostics() {
                   }}
                 >
                   Learn more
-                  <span className="flex items-center justify-center rounded-full bg-[#00FF7E] transition-transform group-hover:scale-105" style={{ width: 30, height: 30 }}>
+                  <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 30, height: 30 }}>
                     <ArrowDown size={14} color="#141127" strokeWidth={2.5} />
                   </span>
                 </a>

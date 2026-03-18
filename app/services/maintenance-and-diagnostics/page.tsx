@@ -10,7 +10,9 @@ export const metadata = {
 
 export default function MaintenanceAndDiagnostics() {
   return (
-    <div className="h-screen bg-blue text-white flex flex-col overflow-hidden">
+    <div>
+      {/* Dark hero — locked to 100vh */}
+      <div className="h-screen bg-blue text-white flex flex-col overflow-hidden">
       <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
         <Navbar />
 
@@ -98,6 +100,10 @@ export default function MaintenanceAndDiagnostics() {
           </div>
         </main>
       </div>
+      </div>
+
+      {/* White section */}
+      <div style={{ height: 1000, backgroundColor: "#ffffff" }} />
     </div>
   );
 }

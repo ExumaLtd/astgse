@@ -73,7 +73,7 @@ export default function Navbar() {
           aria-label="Open menu"
           style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}
         >
-          <Menu size={18} strokeWidth={1.5} />
+          <Menu size={20} strokeWidth={1.5} />
         </button>
       </nav>
 
@@ -95,7 +95,7 @@ export default function Navbar() {
               className="text-white hover:text-[#00FF7E] transition-colors duration-200"
               style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}
             >
-              <X size={18} strokeWidth={1.5} />
+              <X size={20} strokeWidth={1.5} />
             </button>
           </div>
 

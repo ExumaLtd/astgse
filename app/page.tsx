@@ -19,7 +19,7 @@ export default function Home() {
       />
 
       {/* Overlay with blur */}
-      <div className="absolute inset-0" style={{ backgroundColor: "rgba(20,17,39,0.50)", backdropFilter: "blur(12px)" }} />
+      <div className="absolute inset-0 backdrop-blur-[8px]" style={{ backgroundColor: "rgba(20,17,39,0.50)" }} />
 
       {/* Navbar — full width */}
       <Navbar />

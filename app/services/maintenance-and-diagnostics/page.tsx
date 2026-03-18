@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 
 export const metadata = {
@@ -103,7 +103,79 @@ export default function MaintenanceAndDiagnostics() {
       </div>
 
       {/* White section */}
-      <div style={{ height: 1000, backgroundColor: "#ffffff" }} />
+      <div id="more" style={{ backgroundColor: "#ffffff", paddingTop: 96, paddingBottom: 96 }}>
+        <div className="max-w-[1440px] mx-auto" style={{ paddingLeft: 80, paddingRight: 80 }}>
+          <div className="grid grid-cols-12" style={{ gap: 24 }}>
+
+            {/* Left: text + CTA */}
+            <div className="col-span-5 flex flex-col" style={{ gap: 50 }}>
+              <div className="flex flex-col" style={{ gap: 50 }}>
+                <h2
+                  style={{
+                    fontFamily: "var(--font-almaren-nueva)",
+                    fontSize: 54,
+                    fontWeight: 21,
+                    lineHeight: "58px",
+                    color: "#151129",
+                    maxWidth: 411,
+                  }}
+                >
+                  Servicing and inspection
+                </h2>
+                <p
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontSize: 16,
+                    fontWeight: 400,
+                    lineHeight: "24px",
+                    color: "#151129",
+                    maxWidth: 519,
+                  }}
+                >
+                  Scheduled and unscheduled servicing, pre-delivery inspections, compliance checks. The routine work that keeps equipment legal and operational.
+                </p>
+              </div>
+
+              {/* Enquire now button — always filled green */}
+              <div>
+                <a
+                  href="/contact"
+                  className="inline-flex items-center"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    fontSize: 15,
+                    padding: "8px 8px 8px 20px",
+                    gap: 12,
+                    backgroundColor: "#00FF7E",
+                    color: "#141127",
+                    borderRadius: 100,
+                    border: "1px solid #00FF7E",
+                  }}
+                >
+                  Enquire now
+                  <span className="flex items-center justify-center rounded-full bg-[#141127]" style={{ width: 30, height: 30 }}>
+                    <ArrowRight size={14} color="#00FF7E" strokeWidth={2.5} />
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            {/* Right: image */}
+            <div className="col-span-6 col-start-7">
+              <div className="overflow-hidden" style={{ borderRadius: 22, width: 628, height: 418 }}>
+                <Image
+                  src="/images/iStock_Placeholder.avif"
+                  alt="Servicing and inspection"
+                  width={628}
+                  height={418}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

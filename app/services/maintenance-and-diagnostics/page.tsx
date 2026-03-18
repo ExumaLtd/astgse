@@ -23,7 +23,7 @@ export default function MaintenanceAndDiagnostics() {
             className="flex items-center gap-2 pt-4 pb-[80px]"
             style={{
               fontFamily: "var(--font-almaren-nueva)",
-              fontSize: "14px",
+              fontSize: "0.875rem",
               fontWeight: 21,
             }}
             aria-label="Breadcrumb"
@@ -43,9 +43,9 @@ export default function MaintenanceAndDiagnostics() {
                 className="text-white"
                 style={{
                   fontFamily: "var(--font-almaren-nueva)",
-                  fontSize: "54px",
+                  fontSize: "3.375rem",
                   fontWeight: 21,
-                  lineHeight: "58px",
+                  lineHeight: "3.625rem",
                 }}
               >
                 We diagnose<br />
@@ -58,7 +58,7 @@ export default function MaintenanceAndDiagnostics() {
             <div className="col-span-6 col-start-7 flex flex-col justify-center" style={{ gap: 44 }}>
               <p
                 className="text-white"
-                style={{ fontFamily: "var(--font-inter)", fontSize: "18px", fontWeight: 400, lineHeight: "26px" }}
+                style={{ fontFamily: "var(--font-inter)", fontSize: "1.125rem", fontWeight: 400, lineHeight: "1.625rem" }}
               >
                 Most GSE maintenance providers service one brand, follow one process, and stop when it gets complicated. We don&apos;t. AST&apos;s diagnostic capability spans multiple manufacturers and equipment types, which means when your ground fleet has a problem, we can actually find it.
               </p>
@@ -66,7 +66,7 @@ export default function MaintenanceAndDiagnostics() {
               <div>
                 <a
                   href="#more"
-                  className="inline-flex items-center rounded-full text-[15px] text-white bg-transparent hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
+                  className="inline-flex items-center rounded-full text-[0.9375rem] text-white bg-transparent hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
                   style={{
                     fontFamily: "var(--font-inter)",
                     padding: "8px 8px 8px 20px",
@@ -113,11 +113,11 @@ export default function MaintenanceAndDiagnostics() {
                 <h2
                   style={{
                     fontFamily: "var(--font-almaren-nueva)",
-                    fontSize: 54,
+                    fontSize: "3.375rem",
                     fontWeight: 21,
-                    lineHeight: "58px",
+                    lineHeight: "3.625rem",
                     color: "#151129",
-                    maxWidth: 411,
+                    maxWidth: "25.6875rem",
                   }}
                 >
                   Servicing and inspection
@@ -125,11 +125,11 @@ export default function MaintenanceAndDiagnostics() {
                 <p
                   style={{
                     fontFamily: "var(--font-inter)",
-                    fontSize: 16,
+                    fontSize: "1rem",
                     fontWeight: 400,
-                    lineHeight: "24px",
+                    lineHeight: "1.5rem",
                     color: "#151129",
-                    maxWidth: 519,
+                    maxWidth: "32.4375rem",
                   }}
                 >
                   Scheduled and unscheduled servicing, pre-delivery inspections, compliance checks. The routine work that keeps equipment legal and operational.
@@ -143,7 +143,7 @@ export default function MaintenanceAndDiagnostics() {
                   className="inline-flex items-center"
                   style={{
                     fontFamily: "var(--font-inter)",
-                    fontSize: 15,
+                    fontSize: "0.9375rem",
                     padding: "8px 8px 8px 20px",
                     gap: 12,
                     backgroundColor: "#00FF7E",

@@ -17,7 +17,7 @@ export default function Navbar() {
 
       {/* Right side: nav links + contact + search */}
       <div className="flex items-center" style={{ gap: 40 }}>
-        <ul className="flex items-center text-white text-[15px]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
+        <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
           <li>
             <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
               Services
@@ -48,7 +48,7 @@ export default function Navbar() {
         <div className="flex items-center" style={{ gap: 28 }}>
         <Link
           href=""
-          className="inline-flex items-center rounded-full text-white text-[15px] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
+          className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
           style={{
             fontFamily: "var(--font-inter)",
             padding: "6px 6px 6px 20px",

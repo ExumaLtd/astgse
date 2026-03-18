@@ -21,38 +21,37 @@ export default function Home() {
         <Navbar />
       </div>
 
-      {/* Content — constrained to 1440px */}
-      <div className="relative z-10 flex flex-col flex-1 justify-between max-w-[1440px] mx-auto w-full" style={{ paddingLeft: 80, paddingRight: 80, paddingBottom: 65 }}>
-        {/* Spacer pushes heading down */}
-        <div className="flex-1" />
+      {/* Content — full width, heading centred, subtext at bottom */}
+      <div className="relative z-10 flex flex-col flex-1 w-full" style={{ paddingLeft: 80, paddingRight: 80, paddingBottom: 65 }}>
 
-        {/* Hero heading */}
-        <h1
-          className="text-white"
-          style={{
-            fontFamily: "var(--font-almaren-nueva)",
-            fontSize: 70,
-            fontWeight: 21,
-            lineHeight: "80px",
-            maxWidth: 476,
-            marginBottom: 80,
-          }}
-        >
-          Every Aircraft.<br />
-          Every Airport.<br />
-          Every Day.
-        </h1>
+        {/* Heading — vertically centred */}
+        <div className="flex flex-1 items-center">
+          <h1
+            className="text-white"
+            style={{
+              fontFamily: "var(--font-almaren-nueva)",
+              fontSize: "4.375rem",
+              fontWeight: 21,
+              lineHeight: "5rem",
+              maxWidth: "29.75rem",
+            }}
+          >
+            Every Aircraft.<br />
+            Every Airport.<br />
+            Every Day.
+          </h1>
+        </div>
 
-        {/* Subtext — bottom */}
+        {/* Subtext — pinned to bottom */}
         <p
           className="text-white"
           style={{
             fontFamily: "var(--font-dm-mono)",
-            fontSize: 15,
+            fontSize: "0.9375rem",
             fontWeight: 400,
             lineHeight: "normal",
             textTransform: "uppercase",
-            maxWidth: 534,
+            maxWidth: "33.375rem",
           }}
         >
           From a single hard-to-find unit to full ground fleet support, we provide the equipment, expertise and backup that keeps your airside operation running.

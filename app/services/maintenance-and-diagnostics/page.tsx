@@ -10,11 +10,11 @@ export const metadata = {
 
 export default function MaintenanceAndDiagnostics() {
   return (
-    <div className="min-h-screen bg-blue text-white flex flex-col">
-      <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1">
+    <div className="h-screen bg-blue text-white flex flex-col overflow-hidden">
+      <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
         <Navbar />
 
-        <main className="flex flex-col flex-1">
+        <main className="flex flex-col flex-1 min-h-0">
           <div style={{ paddingLeft: 80, paddingRight: 80 }}>
           {/* Breadcrumb */}
           <nav
@@ -84,7 +84,7 @@ export default function MaintenanceAndDiagnostics() {
           </div>
 
           {/* Full-width image — 25px from edges, 65px from bottom, fills remaining vh */}
-          <div className="flex-1" style={{ paddingLeft: 25, paddingRight: 25, paddingBottom: 65 }}>
+          <div className="flex-1 min-h-0" style={{ paddingLeft: 25, paddingRight: 25, paddingBottom: 65 }}>
             <div className="overflow-hidden w-full h-full" style={{ borderRadius: 22 }}>
               <Image
                 src="/images/iStock_Placeholder.avif"

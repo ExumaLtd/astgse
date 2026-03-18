@@ -139,7 +139,7 @@ export default function MaintenanceAndDiagnostics() {
               {/* Enquire now button — always filled green */}
               <div>
                 <a
-                  href="/contact"
+                  href="#"
                   className="inline-flex items-center"
                   style={{
                     fontFamily: "var(--font-inter)",

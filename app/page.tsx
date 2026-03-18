@@ -14,7 +14,7 @@ export default function Home() {
       />
 
       {/* Dark overlay so nav stays readable */}
-      <div className="absolute inset-0 bg-[#141127]/40" />
+      <div className="absolute inset-0 bg-[#141127]/50" />
 
       {/* Navbar on top */}
       <div className="relative z-10">

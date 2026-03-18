@@ -19,7 +19,7 @@ export default function Navbar() {
       <div className="flex items-center" style={{ gap: 40 }}>
         <ul className="flex items-center text-white text-[15px]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
           <li>
-            <button className="flex items-center group text-white" style={{ gap: "12px" }}>
+            <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
               Services
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
                 <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -27,7 +27,7 @@ export default function Navbar() {
             </button>
           </li>
           <li>
-            <button className="flex items-center group text-white" style={{ gap: "12px" }}>
+            <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
               Equipment
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
                 <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -35,13 +35,13 @@ export default function Navbar() {
             </button>
           </li>
           <li>
-            <Link href="/about" className="text-white">About</Link>
+            <Link href="/about" className="text-white hover:text-[#00FF7E] transition-colors duration-200">About</Link>
           </li>
           <li>
-            <Link href="/careers" className="text-white">Careers</Link>
+            <Link href="/careers" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Careers</Link>
           </li>
           <li>
-            <Link href="/newsroom" className="text-white">Newsroom</Link>
+            <Link href="/newsroom" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Newsroom</Link>
           </li>
         </ul>
 
@@ -63,7 +63,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <button className="text-white/70 hover:text-white transition-colors">
+        <button className="text-white hover:text-[#00FF7E] transition-colors duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M12.75 12.75L9.85667 9.85667M11.4167 6.08333C11.4167 9.02885 9.02885 11.4167 6.08333 11.4167C3.13781 11.4167 0.75 9.02885 0.75 6.08333C0.75 3.13781 3.13781 0.75 6.08333 0.75C9.02885 0.75 11.4167 3.13781 11.4167 6.08333Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>

@@ -82,7 +82,7 @@ export default function MaintenanceAndDiagnostics() {
           </div>
 
           {/* Full-width image */}
-          <div className="rounded-2xl overflow-hidden w-full aspect-[16/7]">
+          <div className="overflow-hidden w-full aspect-[16/7]" style={{ borderRadius: 25 }}>
             <Image
               src="/images/iStock_Placeholder.avif"
               alt="GSE maintenance technician at work"

@@ -10,11 +10,11 @@ export const metadata = {
 
 export default function MaintenanceAndDiagnostics() {
   return (
-    <div className="min-h-screen bg-blue text-white">
-      <div className="max-w-[1440px] mx-auto">
+    <div className="min-h-screen bg-blue text-white flex flex-col">
+      <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1">
         <Navbar />
 
-        <main>
+        <main className="flex flex-col flex-1">
           <div style={{ paddingLeft: 80, paddingRight: 80 }}>
           {/* Breadcrumb */}
           <nav
@@ -53,7 +53,7 @@ export default function MaintenanceAndDiagnostics() {
             </div>
 
             {/* Right: body + CTA */}
-            <div className="col-span-6 col-start-7 flex flex-col justify-center gap-8">
+            <div className="col-span-6 col-start-7 flex flex-col justify-center" style={{ gap: 44 }}>
               <p
                 className="text-white"
                 style={{ fontFamily: "var(--font-inter)", fontSize: "18px", fontWeight: 400, lineHeight: "26px" }}
@@ -83,9 +83,9 @@ export default function MaintenanceAndDiagnostics() {
           </div>
           </div>
 
-          {/* Full-width image — 25px from page edges */}
-          <div style={{ paddingLeft: 25, paddingRight: 25 }}>
-            <div className="overflow-hidden w-full aspect-[16/7]" style={{ borderRadius: 22 }}>
+          {/* Full-width image — 25px from edges, 65px from bottom, fills remaining vh */}
+          <div className="flex-1" style={{ paddingLeft: 25, paddingRight: 25, paddingBottom: 65 }}>
+            <div className="overflow-hidden w-full h-full" style={{ borderRadius: 22 }}>
               <Image
                 src="/images/iStock_Placeholder.avif"
                 alt="GSE maintenance technician at work"

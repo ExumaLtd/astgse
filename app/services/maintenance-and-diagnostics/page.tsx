@@ -4,7 +4,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 
 export const metadata = {
-  title: "Maintenance and Diagnostics | AST GSE",
+  title: "Maintenance and Diagnostics",
   description: "AST's diagnostic capability spans multiple manufacturers and equipment types. We diagnose what others can't — then we fix it.",
 };
 

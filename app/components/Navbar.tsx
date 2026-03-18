@@ -35,13 +35,13 @@ export default function Navbar() {
             </button>
           </li>
           <li>
-            <Link href="/about" className="hover:text-white transition-colors">About</Link>
+            <Link href="/about" className="">About</Link>
           </li>
           <li>
-            <Link href="/careers" className="hover:text-white transition-colors">Careers</Link>
+            <Link href="/careers" className="">Careers</Link>
           </li>
           <li>
-            <Link href="/newsroom" className="hover:text-white transition-colors">Newsroom</Link>
+            <Link href="/newsroom" className="">Newsroom</Link>
           </li>
         </ul>
 

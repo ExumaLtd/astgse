@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, DM_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -16,6 +16,12 @@ const geistMono = Geist_Mono({
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+});
+
+const dmMono = DM_Mono({
+  variable: "--font-dm-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 const almarenaNueva = localFont({
@@ -40,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${almarenaNueva.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${dmMono.variable} ${almarenaNueva.variable} antialiased`}
       >
         {children}
       </body>

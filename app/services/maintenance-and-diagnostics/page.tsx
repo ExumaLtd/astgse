@@ -17,7 +17,7 @@ export default function MaintenanceAndDiagnostics() {
         <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
 
         <main className="flex flex-col flex-1 min-h-0">
-          <div style={{ paddingLeft: 80, paddingRight: 80 }}>
+          <div className="px-6 md:px-10 lg:px-[80px]">
           {/* Breadcrumb */}
           <nav
             className="flex items-center gap-2 pt-4 pb-[80px]"
@@ -36,9 +36,9 @@ export default function MaintenanceAndDiagnostics() {
           </nav>
 
           {/* Hero — two column */}
-          <div className="grid grid-cols-12 gap-[24px] pb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-[24px] pb-12">
             {/* Left: heading */}
-            <div className="col-span-5">
+            <div className="lg:col-span-5">
               <h1
                 className="text-white"
                 style={{
@@ -55,7 +55,7 @@ export default function MaintenanceAndDiagnostics() {
             </div>
 
             {/* Right: body + CTA */}
-            <div className="col-span-6 col-start-7 flex flex-col justify-center" style={{ gap: 44 }}>
+            <div className="lg:col-span-6 lg:col-start-7 flex flex-col justify-center" style={{ gap: 44 }}>
               <p
                 className="text-white"
                 style={{ fontFamily: "var(--font-inter)", fontSize: "1.125rem", fontWeight: 400, lineHeight: "1.625rem" }}
@@ -105,10 +105,10 @@ export default function MaintenanceAndDiagnostics() {
       {/* White section */}
       <div id="more" style={{ backgroundColor: "#ffffff", paddingTop: 160, paddingBottom: 160 }}>
         <div className="max-w-[1440px] mx-auto" style={{ paddingLeft: 80, paddingRight: 80 }}>
-          <div className="grid grid-cols-12 items-center" style={{ gap: 24 }}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center" style={{ gap: 24 }}>
 
             {/* Left: text + CTA */}
-            <div className="col-span-5 flex flex-col" style={{ gap: 50 }}>
+            <div className="lg:col-span-5 flex flex-col" style={{ gap: 50 }}>
               <div className="flex flex-col" style={{ gap: 30 }}>
                 <h2
                   style={{
@@ -161,7 +161,7 @@ export default function MaintenanceAndDiagnostics() {
             </div>
 
             {/* Right: image */}
-            <div className="col-span-6 col-start-7">
+            <div className="lg:col-span-6 lg:col-start-7">
               <div className="overflow-hidden" style={{ borderRadius: 22, width: 628, height: 418 }}>
                 <Image
                   src="/images/iStock_Placeholder.avif"

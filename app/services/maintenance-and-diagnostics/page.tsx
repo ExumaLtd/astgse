@@ -17,15 +17,19 @@ export default function MaintenanceAndDiagnostics() {
         <main className="px-10">
           {/* Breadcrumb */}
           <nav
-            className="flex items-center gap-2 text-[13px] text-white/40 pt-4 pb-12"
-            style={{ fontFamily: "var(--font-inter)" }}
+            className="flex items-center gap-2 pt-4 pb-[80px]"
+            style={{
+              fontFamily: "var(--font-almaren-nueva)",
+              fontSize: "14px",
+              fontWeight: 21,
+            }}
             aria-label="Breadcrumb"
           >
-            <Link href="/" className="hover:text-white/70 transition-colors">Home</Link>
-            <span>/</span>
-            <Link href="/services" className="hover:text-white/70 transition-colors">Services</Link>
-            <span>/</span>
-            <span className="text-white/70">Maintenance and diagnostics</span>
+            <Link href="/" className="transition-colors" style={{ color: "rgba(255,255,255,0.40)" }}>Home</Link>
+            <span style={{ color: "#00FF7E" }}>/</span>
+            <Link href="/services" className="transition-colors" style={{ color: "rgba(255,255,255,0.40)" }}>Services</Link>
+            <span style={{ color: "#00FF7E" }}>/</span>
+            <span style={{ color: "#ffffff" }}>Maintenance and diagnostics</span>
           </nav>
 
           {/* Hero — two column */}

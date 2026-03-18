@@ -68,10 +68,10 @@ export default function Navbar() {
 
         {/* Burger — visible below lg */}
         <button
-          className="lg:hidden text-white hover:text-[#00FF7E] transition-colors duration-200"
+          className="flex lg:hidden text-white hover:text-[#00FF7E] transition-colors duration-200"
           onClick={() => setOpen(true)}
           aria-label="Open menu"
-          style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}
+          style={{ padding: 0, lineHeight: 0, background: "none", border: "none" }}
         >
           <Menu size={20} strokeWidth={1.5} />
         </button>

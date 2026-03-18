@@ -109,7 +109,7 @@ export default function MaintenanceAndDiagnostics() {
 
             {/* Left: text + CTA */}
             <div className="col-span-5 flex flex-col" style={{ gap: 50 }}>
-              <div className="flex flex-col" style={{ gap: 50 }}>
+              <div className="flex flex-col" style={{ gap: 30 }}>
                 <h2
                   style={{
                     fontFamily: "var(--font-almaren-nueva)",

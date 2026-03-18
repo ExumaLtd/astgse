@@ -29,15 +29,16 @@ export default function MaintenanceAndDiagnostics() {
           </nav>
 
           {/* Hero — two column */}
-          <div className="grid grid-cols-12 gap-6 pb-12">
+          <div className="grid grid-cols-12 gap-[24px] pb-12">
             {/* Left: heading */}
-            <div className="col-span-6">
+            <div className="col-span-5">
               <h1
-                className="text-white font-semibold tracking-tight"
+                className="text-white"
                 style={{
                   fontFamily: "var(--font-almaren-nueva)",
-                  fontSize: "72px",
-                  lineHeight: 1.1,
+                  fontSize: "54px",
+                  fontWeight: 21,
+                  lineHeight: "58px",
                 }}
               >
                 We diagnose<br />
@@ -47,10 +48,10 @@ export default function MaintenanceAndDiagnostics() {
             </div>
 
             {/* Right: body + CTA */}
-            <div className="col-span-5 col-start-8 flex flex-col justify-center gap-8">
+            <div className="col-span-6 col-start-7 flex flex-col justify-center gap-8">
               <p
-                className="text-white/75 leading-relaxed"
-                style={{ fontFamily: "var(--font-inter)", fontSize: "18px", lineHeight: 1.6 }}
+                className="text-white"
+                style={{ fontFamily: "var(--font-inter)", fontSize: "18px", fontWeight: 400, lineHeight: "26px" }}
               >
                 Most GSE maintenance providers service one brand, follow one process, and stop when it gets complicated. We don&apos;t. AST&apos;s diagnostic capability spans multiple manufacturers and equipment types, which means when your ground fleet has a problem, we can actually find it.
               </p>
@@ -58,12 +59,18 @@ export default function MaintenanceAndDiagnostics() {
               <div>
                 <a
                   href="#more"
-                  className="inline-flex items-center gap-3 border border-white/30 rounded-full pl-6 pr-2 py-2 text-white text-[15px] hover:border-white/60 transition-colors"
-                  style={{ fontFamily: "var(--font-inter)" }}
+                  className="inline-flex items-center rounded-full text-white text-[15px] transition-all hover:bg-[#00FF7E]/10 group"
+                  style={{
+                    fontFamily: "var(--font-inter)",
+                    padding: "8px 8px 8px 20px",
+                    gap: "12px",
+                    border: "1px solid #00FF7E",
+                    borderRadius: "100px",
+                  }}
                 >
                   Learn more
-                  <span className="flex items-center justify-center w-9 h-9 rounded-full bg-green">
-                    <ArrowDown size={16} color="#141127" />
+                  <span className="flex items-center justify-center rounded-full bg-[#00FF7E] transition-transform group-hover:scale-105" style={{ width: 30, height: 30 }}>
+                    <ArrowDown size={14} color="#141127" strokeWidth={2.5} />
                   </span>
                 </a>
               </div>

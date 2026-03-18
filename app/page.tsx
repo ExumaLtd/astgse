@@ -22,9 +22,7 @@ export default function Home() {
       <div className="absolute inset-0" style={{ backgroundColor: "rgba(20,17,39,0.50)", backdropFilter: "blur(12px)" }} />
 
       {/* Navbar — full width */}
-      <div className="relative z-10">
-        <Navbar />
-      </div>
+      <Navbar />
 
       {/* Content — full width, heading centred, subtext at bottom */}
       <div className="relative z-10 flex flex-col flex-1 w-full px-[20px] md:px-[32px] lg:px-[80px]" style={{ paddingBottom: 65 }}>

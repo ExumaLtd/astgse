@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between py-6 w-full" style={{ paddingLeft: 40, paddingRight: 40 }}>
+    <nav className="flex items-center justify-between w-full" style={{ paddingLeft: 40, paddingRight: 40, paddingTop: 25, paddingBottom: 25 }}>
       {/* Logo */}
       <Link href="/" className="shrink-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}

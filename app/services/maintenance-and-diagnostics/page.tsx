@@ -13,8 +13,8 @@ export default function MaintenanceAndDiagnostics() {
     <div>
       {/* Dark hero — locked to 100vh */}
       <div className="h-screen bg-blue text-white flex flex-col overflow-hidden">
-      <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
         <Navbar />
+        <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
 
         <main className="flex flex-col flex-1 min-h-0">
           <div style={{ paddingLeft: 80, paddingRight: 80 }}>
@@ -99,7 +99,7 @@ export default function MaintenanceAndDiagnostics() {
             </div>
           </div>
         </main>
-      </div>
+        </div>
       </div>
 
       {/* White section */}

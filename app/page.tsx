@@ -16,13 +16,13 @@ export default function Home() {
       {/* Overlay */}
       <div className="absolute inset-0 bg-[#141127]/50" />
 
-      {/* Navbar */}
+      {/* Navbar — full width */}
       <div className="relative z-10">
         <Navbar />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col flex-1 justify-between" style={{ paddingLeft: 80, paddingRight: 80, paddingBottom: 65 }}>
+      {/* Content — constrained to 1440px */}
+      <div className="relative z-10 flex flex-col flex-1 justify-between max-w-[1440px] mx-auto w-full" style={{ paddingLeft: 80, paddingRight: 80, paddingBottom: 65 }}>
         {/* Spacer pushes heading down */}
         <div className="flex-1" />
 

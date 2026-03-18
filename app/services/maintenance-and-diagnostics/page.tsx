@@ -103,7 +103,7 @@ export default function MaintenanceAndDiagnostics() {
       </div>
 
       {/* White section */}
-      <div id="more" style={{ backgroundColor: "#ffffff", paddingTop: 96, paddingBottom: 96 }}>
+      <div id="more" style={{ backgroundColor: "#ffffff", paddingTop: 160, paddingBottom: 160 }}>
         <div className="max-w-[1440px] mx-auto" style={{ paddingLeft: 80, paddingRight: 80 }}>
           <div className="grid grid-cols-12" style={{ gap: 24 }}>
 

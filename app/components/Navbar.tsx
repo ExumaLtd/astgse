@@ -47,7 +47,7 @@ export default function Navbar() {
 
         <div className="flex items-center" style={{ gap: 28 }}>
         <Link
-          href="/contact"
+          href=""
           className="inline-flex items-center rounded-full text-white text-[15px] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
           style={{
             fontFamily: "var(--font-inter)",

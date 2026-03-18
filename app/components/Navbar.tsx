@@ -19,7 +19,7 @@ export default function Navbar() {
       <div className="flex items-center" style={{ gap: 40 }}>
         <ul className="flex items-center text-white text-[15px]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
           <li>
-            <button className="flex items-center group" style={{ gap: "12px" }}>
+            <button className="flex items-center group text-white" style={{ gap: "12px" }}>
               Services
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
                 <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -27,7 +27,7 @@ export default function Navbar() {
             </button>
           </li>
           <li>
-            <button className="flex items-center group" style={{ gap: "12px" }}>
+            <button className="flex items-center group text-white" style={{ gap: "12px" }}>
               Equipment
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
                 <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -35,13 +35,13 @@ export default function Navbar() {
             </button>
           </li>
           <li>
-            <Link href="/about" className="">About</Link>
+            <Link href="/about" className="text-white">About</Link>
           </li>
           <li>
-            <Link href="/careers" className="">Careers</Link>
+            <Link href="/careers" className="text-white">Careers</Link>
           </li>
           <li>
-            <Link href="/newsroom" className="">Newsroom</Link>
+            <Link href="/newsroom" className="text-white">Newsroom</Link>
           </li>
         </ul>
 

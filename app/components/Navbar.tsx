@@ -42,12 +42,18 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <Link
           href="/contact"
-          className="flex items-center gap-3 border border-green rounded-full pl-5 pr-1.5 py-1.5 text-white text-[15px] hover:bg-white/5 transition-colors"
-          style={{ fontFamily: "var(--font-inter)" }}
+          className="inline-flex items-center rounded-full text-white text-[15px] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
+          style={{
+            fontFamily: "var(--font-inter)",
+            padding: "6px 6px 6px 20px",
+            gap: "12px",
+            border: "1px solid #00FF7E",
+            borderRadius: "100px",
+          }}
         >
           Contact us
-          <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green">
-            <ArrowRight size={16} color="#141127" />
+          <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 26, height: 26 }}>
+            <ArrowRight size={13} color="#141127" strokeWidth={2.5} />
           </span>
         </Link>
 

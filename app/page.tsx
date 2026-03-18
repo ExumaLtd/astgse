@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/app/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Homepage",
+  title: { absolute: "ASTGSE | Homepage" },
 };
 
 export default function Home() {
@@ -18,8 +18,8 @@ export default function Home() {
         src="/videos/gettyimages-2192368667-640_adpp.mp4"
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-[#141127]/50" />
+      {/* Overlay with blur */}
+      <div className="absolute inset-0" style={{ backgroundColor: "rgba(20,17,39,0.50)", backdropFilter: "blur(12px)" }} />
 
       {/* Navbar — full width */}
       <div className="relative z-10">
@@ -27,23 +27,21 @@ export default function Home() {
       </div>
 
       {/* Content — full width, heading centred, subtext at bottom */}
-      <div className="relative z-10 flex flex-col flex-1 w-full" style={{ paddingLeft: 80, paddingRight: 80, paddingBottom: 65 }}>
+      <div className="relative z-10 flex flex-col flex-1 w-full px-[20px] md:px-[32px] lg:px-[80px]" style={{ paddingBottom: 65 }}>
 
         {/* Heading — vertically centred */}
         <div className="flex flex-1 items-center">
           <h1
-            className="text-white"
+            className="text-white text-[2.25rem] leading-[2.5rem] md:text-[3.25rem] md:leading-[3.625rem] lg:text-[4.375rem] lg:leading-[5rem]"
             style={{
               fontFamily: "var(--font-almaren-nueva)",
-              fontSize: "4.375rem",
               fontWeight: 21,
-              lineHeight: "5rem",
               maxWidth: "29.75rem",
             }}
           >
-            Every Aircraft.<br />
-            Every Airport.<br />
-            Every Day.
+            <span style={{ backgroundColor: "#00FF7E", color: "#141127" }}>Every aircraft.</span><br />
+            Every airport.<br />
+            Every day.
           </h1>
         </div>
 

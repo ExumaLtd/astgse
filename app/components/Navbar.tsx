@@ -9,19 +9,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav
-        className="flex items-center justify-between w-full relative z-50"
-        style={{ paddingLeft: 40, paddingRight: 40, paddingTop: 25, paddingBottom: 25 }}
-      >
+      <nav className="flex items-center justify-between w-full relative z-50 px-[20px] md:px-[32px] lg:px-[40px] h-[80px]">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/astgse_Logo_Web_White.svg"
-            alt="AST GSE"
-            width={91}
-            height={27}
-          />
+          <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />
         </Link>
 
         {/* Desktop nav — hidden below lg */}
@@ -58,13 +50,7 @@ export default function Navbar() {
             <Link
               href=""
               className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
-              style={{
-                fontFamily: "var(--font-inter)",
-                padding: "6px 6px 6px 20px",
-                gap: "12px",
-                border: "1px solid #00FF7E",
-                borderRadius: "100px",
-              }}
+              style={{ fontFamily: "var(--font-inter)", padding: "6px 6px 6px 20px", gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
             >
               Contact us
               <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 26, height: 26 }}>
@@ -83,63 +69,71 @@ export default function Navbar() {
         {/* Burger — visible below lg */}
         <button
           className="lg:hidden text-white hover:text-[#00FF7E] transition-colors duration-200"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}
         >
-          {open ? <X size={16} strokeWidth={1.5} /> : <Menu size={16} strokeWidth={1.5} />}
+          <Menu size={18} strokeWidth={1.5} />
         </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu overlay */}
       {open && (
         <div
-          className="lg:hidden fixed inset-0 z-50 flex flex-col h-screen"
-          style={{
-            backgroundColor: "#141127",
-            paddingTop: 100,
-            paddingBottom: 40,
-            paddingLeft: 40,
-            paddingRight: 40,
-          }}
+          className="lg:hidden fixed inset-0 z-50 flex flex-col"
+          style={{ backgroundColor: "#141127" }}
         >
-          <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 32, fontSize: "1.125rem" }}>
-            <li>
-              <Link href="/services/maintenance-and-diagnostics" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>
-                Services
-              </Link>
-            </li>
-            <li>
-              <span className="text-white/60">Equipment</span>
-            </li>
-            <li>
-              <Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link>
-            </li>
-            <li>
-              <Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link>
-            </li>
-            <li>
-              <Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link>
-            </li>
-          </ul>
-
-          <div style={{ marginTop: 48 }}>
-            <Link
-              href=""
-              className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
-              style={{
-                fontFamily: "var(--font-inter)",
-                padding: "6px 6px 6px 20px",
-                gap: "12px",
-                border: "1px solid #00FF7E",
-                borderRadius: "100px",
-              }}
-              onClick={() => setOpen(false)}
-            >
-              Contact us
-              <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 26, height: 26 }}>
-                <ArrowRight size={13} color="#141127" strokeWidth={2.5} />
-              </span>
+          {/* Header row — mirrors nav */}
+          <div className="flex items-center justify-between px-[20px] md:px-[32px] py-[20px] shrink-0">
+            <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />
             </Link>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="text-white hover:text-[#00FF7E] transition-colors duration-200"
+              style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}
+            >
+              <X size={18} strokeWidth={1.5} />
+            </button>
+          </div>
+
+          {/* Nav content */}
+          <div className="flex flex-col flex-1 overflow-y-auto px-[20px] md:px-[32px] pt-[40px] pb-[40px]">
+            <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 32, fontSize: "1.125rem" }}>
+              <li>
+                <Link href="/services/maintenance-and-diagnostics" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>
+                  Services
+                </Link>
+              </li>
+              <li>
+                <span className="text-white/60">Equipment</span>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link>
+              </li>
+              <li>
+                <Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link>
+              </li>
+              <li>
+                <Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link>
+              </li>
+            </ul>
+
+            <div style={{ marginTop: 48 }}>
+              <Link
+                href=""
+                className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
+                style={{ fontFamily: "var(--font-inter)", padding: "6px 6px 6px 20px", gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
+                onClick={() => setOpen(false)}
+              >
+                Contact us
+                <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 26, height: 26 }}>
+                  <ArrowRight size={13} color="#141127" strokeWidth={2.5} />
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       )}

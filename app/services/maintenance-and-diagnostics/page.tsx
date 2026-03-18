@@ -4,7 +4,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
 
 export const metadata = {
-  title: "Maintenance and Diagnostics",
+  title: { absolute: "ASTGSE | Maintenance and diagnostics" },
   description: "AST's diagnostic capability spans multiple manufacturers and equipment types. We diagnose what others can't — then we fix it.",
 };
 
@@ -12,12 +12,24 @@ export default function MaintenanceAndDiagnostics() {
   return (
     <div>
       {/* Dark hero — locked to 100vh */}
-      <div className="h-screen bg-blue text-white flex flex-col overflow-hidden">
+      <div className="relative h-screen bg-blue text-white flex flex-col overflow-hidden">
+        {/* Background image */}
+        <Image
+          src="/images/iStock_Placeholder.avif"
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority
+          aria-hidden="true"
+        />
+        {/* Dark overlay with blur */}
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(20,17,39,0.50)", backdropFilter: "blur(12px)" }} />
+        <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <Navbar />
         <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
 
         <main className="flex flex-col flex-1 min-h-0">
-          <div className="px-6 md:px-10 lg:px-[80px]">
+          <div className="px-[20px] md:px-[32px] lg:px-[80px]">
           {/* Breadcrumb */}
           <nav
             className="flex items-center gap-2 pt-4 pb-[80px]"
@@ -40,13 +52,8 @@ export default function MaintenanceAndDiagnostics() {
             {/* Left: heading */}
             <div className="lg:col-span-5">
               <h1
-                className="text-white"
-                style={{
-                  fontFamily: "var(--font-almaren-nueva)",
-                  fontSize: "3.375rem",
-                  fontWeight: 21,
-                  lineHeight: "3.625rem",
-                }}
+                className="text-white text-[2rem] leading-[2.25rem] md:text-[2.75rem] md:leading-[3rem] lg:text-[3.375rem] lg:leading-[3.625rem]"
+                style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21 }}
               >
                 We diagnose<br />
                 what others can&apos;t.<br />
@@ -100,25 +107,20 @@ export default function MaintenanceAndDiagnostics() {
           </div>
         </main>
         </div>
+        </div>{/* end z-10 wrapper */}
       </div>
 
       {/* White section */}
       <div id="more" style={{ backgroundColor: "#ffffff", paddingTop: 160, paddingBottom: 160 }}>
-        <div className="max-w-[1440px] mx-auto" style={{ paddingLeft: 80, paddingRight: 80 }}>
+        <div className="max-w-[1440px] mx-auto px-[20px] md:px-[32px] lg:px-[80px]">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center" style={{ gap: 24 }}>
 
             {/* Left: text + CTA */}
             <div className="lg:col-span-5 flex flex-col" style={{ gap: 50 }}>
               <div className="flex flex-col" style={{ gap: 30 }}>
                 <h2
-                  style={{
-                    fontFamily: "var(--font-almaren-nueva)",
-                    fontSize: "3.375rem",
-                    fontWeight: 21,
-                    lineHeight: "3.625rem",
-                    color: "#151129",
-                    maxWidth: "25.6875rem",
-                  }}
+                  className="text-[2rem] leading-[2.25rem] md:text-[2.75rem] md:leading-[3rem] lg:text-[3.375rem] lg:leading-[3.625rem]"
+                  style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21, color: "#151129", maxWidth: "25.6875rem" }}
                 >
                   Servicing and inspection
                 </h2>
@@ -162,7 +164,7 @@ export default function MaintenanceAndDiagnostics() {
 
             {/* Right: image */}
             <div className="lg:col-span-6 lg:col-start-7">
-              <div className="overflow-hidden" style={{ borderRadius: 22, width: 628, height: 418 }}>
+              <div className="overflow-hidden w-full" style={{ borderRadius: 22, aspectRatio: "628 / 418" }}>
                 <Image
                   src="/images/iStock_Placeholder.avif"
                   alt="Servicing and inspection"

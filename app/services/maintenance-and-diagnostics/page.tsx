@@ -105,7 +105,7 @@ export default function MaintenanceAndDiagnostics() {
       {/* White section */}
       <div id="more" style={{ backgroundColor: "#ffffff", paddingTop: 160, paddingBottom: 160 }}>
         <div className="max-w-[1440px] mx-auto" style={{ paddingLeft: 80, paddingRight: 80 }}>
-          <div className="grid grid-cols-12" style={{ gap: 24 }}>
+          <div className="grid grid-cols-12 items-center" style={{ gap: 24 }}>
 
             {/* Left: text + CTA */}
             <div className="col-span-5 flex flex-col" style={{ gap: 50 }}>

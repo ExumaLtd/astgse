@@ -14,7 +14,8 @@ export default function MaintenanceAndDiagnostics() {
       <div className="max-w-[1440px] mx-auto">
         <Navbar />
 
-        <main className="px-10">
+        <main>
+          <div style={{ paddingLeft: 80, paddingRight: 80 }}>
           {/* Breadcrumb */}
           <nav
             className="flex items-center gap-2 pt-4 pb-[80px]"
@@ -80,17 +81,20 @@ export default function MaintenanceAndDiagnostics() {
               </div>
             </div>
           </div>
+          </div>
 
-          {/* Full-width image */}
-          <div className="overflow-hidden w-full aspect-[16/7]" style={{ borderRadius: 25 }}>
-            <Image
-              src="/images/iStock_Placeholder.avif"
-              alt="GSE maintenance technician at work"
-              width={2000}
-              height={875}
-              className="w-full h-full object-cover object-center"
-              priority
-            />
+          {/* Full-width image — 25px from page edges */}
+          <div style={{ paddingLeft: 25, paddingRight: 25 }}>
+            <div className="overflow-hidden w-full aspect-[16/7]" style={{ borderRadius: 22 }}>
+              <Image
+                src="/images/iStock_Placeholder.avif"
+                alt="GSE maintenance technician at work"
+                width={2000}
+                height={875}
+                className="w-full h-full object-cover object-center"
+                priority
+              />
+            </div>
           </div>
         </main>
       </div>

@@ -48,5 +48,5 @@ export const navigation = defineType({
       initialValue: "/",
     }),
   ],
-  preview: { select: { title: "Navigation" } },
+  preview: { select: {}, prepare: () => ({ title: "ASTGSE menu" }) },
 });

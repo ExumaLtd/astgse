@@ -27,5 +27,5 @@ export const homepage = defineType({
       description: "Upload an image to replace the background video.",
     }),
   ],
-  preview: { select: { title: "heroHeading" } },
+  preview: { select: {}, prepare: () => ({ title: "ASTGSE homepage" }) },
 });

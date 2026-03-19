@@ -260,7 +260,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Content */}
-            <div className="flex flex-1 items-center justify-center px-[20px] md:px-[32px] pb-[80px]">
+            <div className="flex flex-1 items-start md:items-center justify-center px-[20px] md:px-[32px] pt-10 md:pt-0 md:pb-[80px]">
             <div
               className="w-full"
               style={{ maxWidth: 720 }}

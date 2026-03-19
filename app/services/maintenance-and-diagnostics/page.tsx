@@ -150,10 +150,10 @@ export default async function MaintenanceAndDiagnostics() {
                 <a
                   href="#"
                   className="inline-flex items-center"
-                  style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", padding: "8px 8px 8px 20px", gap: 12, backgroundColor: "#00FF7E", color: "#141127", borderRadius: 100, border: "1px solid #00FF7E" }}
+                  style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: 12, backgroundColor: "#00FF7E", color: "#141127", borderRadius: 100, border: "1px solid #00FF7E" }}
                 >
                   Enquire now
-                  <span className="flex items-center justify-center rounded-full bg-[#141127]" style={{ width: 30, height: 30 }}>
+                  <span className="flex items-center justify-center rounded-full bg-[#141127] rtl:rotate-180" style={{ width: 30, height: 30 }}>
                     <ArrowRight size={14} color="#00FF7E" strokeWidth={2.5} />
                   </span>
                 </a>

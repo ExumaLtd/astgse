@@ -139,8 +139,7 @@ export default function Navbar() {
                     key={l}
                     onClick={() => switchLanguage(l)}
                     className="hover:text-[#00FF7E] transition-colors duration-150 text-center"
-                    style={{ padding: "8px 16px" }}
-                    style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
+                    style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
                   >
                     {l}
                   </button>
@@ -173,7 +172,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          <div className="flex flex-col flex-1 overflow-y-auto px-[20px] md:px-[32px] pt-[40px] pb-[40px]">
+          <div className="page-px flex flex-col flex-1 overflow-y-auto pt-[40px] pb-[40px]">
             <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
               <li>
                 <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>

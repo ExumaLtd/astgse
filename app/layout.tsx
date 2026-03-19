@@ -66,11 +66,15 @@ export default function RootLayout({
         {/* Google Translate — hidden widget, controlled by language switcher */}
         <div id="google_translate_element" style={{ display: "none" }} />
         <Script id="google-translate-init" strategy="afterInteractive">{`
-          function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar', autoDisplay: false }, 'google_translate_element');
+          if (!window.location.pathname.startsWith('/studio')) {
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar', autoDisplay: false }, 'google_translate_element');
+            }
+            var s = document.createElement('script');
+            s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.body.appendChild(s);
           }
         `}</Script>
-        <Script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" strategy="afterInteractive" />
       </body>
     </html>
   );

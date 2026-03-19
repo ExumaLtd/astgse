@@ -53,7 +53,7 @@ export default function MaintenanceAndDiagnostics() {
             {/* Right: body + CTA */}
             <div className="lg:col-span-6 lg:col-start-7 flex flex-col justify-center gap-[24px] lg:gap-[44px]">
               <p
-                className="text-white"
+                className="hidden md:block text-white"
                 style={{ fontFamily: "var(--font-inter)", fontSize: "1.125rem", fontWeight: 400, lineHeight: "1.625rem" }}
               >
                 Most GSE maintenance providers service one brand, follow one process, and stop when it gets complicated. We don&apos;t. AST&apos;s diagnostic capability spans multiple manufacturers and equipment types, which means when your ground fleet has a problem, we can actually find it.

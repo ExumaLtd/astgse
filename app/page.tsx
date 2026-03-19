@@ -31,7 +31,7 @@ export default function Home() {
         {/* Heading — vertically centred */}
         <div className="flex flex-1 items-center">
           <h1
-            className="text-white text-[2.25rem] leading-[2.5rem] md:text-[3.25rem] md:leading-[3.625rem] lg:text-[4.375rem] lg:leading-[5rem]"
+            className="text-white text-[2.75rem] leading-[3rem] md:text-[3.25rem] md:leading-[3.625rem] lg:text-[4.375rem] lg:leading-[5rem]"
             style={{
               fontFamily: "var(--font-almaren-nueva)",
               fontWeight: 21,

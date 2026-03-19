@@ -1,11 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X, Globe, ChevronDown } from "lucide-react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [lang, setLang] = useState("EN");
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
+
+  // Close language dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const LanguageSwitcher = ({ mobile = false }: { mobile?: boolean }) => (
+    <div ref={mobile ? undefined : langRef} className="relative">
+      <button
+        onClick={() => setLangOpen(!langOpen)}
+        className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer"
+        style={{ gap: 6, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: mobile ? "1.125rem" : "0.9375rem" }}
+      >
+        <Globe size={14} strokeWidth={1.5} />
+        <span>{lang}</span>
+        <ChevronDown
+          size={10}
+          strokeWidth={1.5}
+          className="transition-transform duration-200"
+          style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", color: "#00FF7E" }}
+        />
+      </button>
+
+      {langOpen && (
+        <div
+          className="absolute top-full mt-2 flex flex-col overflow-hidden z-50"
+          style={{ backgroundColor: "#141127", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8, minWidth: 80, left: mobile ? 0 : "50%", transform: mobile ? "none" : "translateX(-50%)" }}
+        >
+          {["EN", "AR"].map((l) => (
+            <button
+              key={l}
+              onClick={() => { setLang(l); setLangOpen(false); }}
+              className="text-left px-4 py-2 text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
+              style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", fontWeight: lang === l ? 600 : 400 }}
+            >
+              {l === "EN" ? "English" : "العربية"}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -63,6 +114,8 @@ export default function Navbar() {
                 <path d="M12.75 12.75L9.85667 9.85667M11.4167 6.08333C11.4167 9.02885 9.02885 11.4167 6.08333 11.4167C3.13781 11.4167 0.75 9.02885 0.75 6.08333C0.75 3.13781 3.13781 0.75 6.08333 0.75C9.02885 0.75 11.4167 3.13781 11.4167 6.08333Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
+
+            <LanguageSwitcher />
           </div>
         </div>
 
@@ -83,7 +136,7 @@ export default function Navbar() {
           className="lg:hidden fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: "#141127" }}
         >
-          {/* Header row — mirrors nav */}
+          {/* Header row */}
           <div className="flex items-center justify-between px-[20px] md:px-[32px] h-[80px] shrink-0">
             <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -126,6 +179,9 @@ export default function Navbar() {
               </li>
               <li>
                 <Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link>
+              </li>
+              <li>
+                <LanguageSwitcher mobile />
               </li>
             </ul>
 

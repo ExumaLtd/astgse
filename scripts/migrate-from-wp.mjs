@@ -465,7 +465,9 @@ async function main() {
   console.log("📦 Fetching all posts...");
   const allPosts = await fetchAllPosts();
   const categoryNames = Object.fromEntries(Object.entries(categories).map(([id, name]) => [id, name]));
-  const posts = allPosts.filter((p) => p.slug === "ambulift-on-3-5-licence-to-drive-brand-new-based-on-fuso-canter-van");
+  const posts = allPosts.filter((p) =>
+    (p.categories || []).some((id) => categoryNames[id] === "Ambulift")
+  );
   console.log(`\n✅ Found ${posts.length} posts total\n`);
 
   let created = 0;

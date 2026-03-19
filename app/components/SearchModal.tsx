@@ -319,14 +319,14 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
 
               <Command shouldFilter={false} className="search-modal-light">
                 {/* Label */}
-                <p style={{
+                <p className="mb-[20px] md:mb-[40px]" style={{
                   color: "#141127",
                   fontSize: "0.75rem",
                   fontWeight: 600,
                   fontFamily: "var(--font-inter)",
                   textTransform: "uppercase",
                   letterSpacing: "0.1em",
-                  margin: "0 0 40px",
+                  margin: 0,
                 }}>
                   {t.searching}
                 </p>

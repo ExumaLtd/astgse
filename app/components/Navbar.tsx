@@ -26,6 +26,7 @@ export default function Navbar() {
   const [lang, setLang] = useState("EN");
   const [langOpen, setLangOpen] = useState(false);
   const [hoveredLang, setHoveredLang] = useState<string | null>(null);
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
 
   const desktopLangRef = useRef<HTMLDivElement>(null);
   const mobileLangRef = useRef<HTMLDivElement>(null);
@@ -87,15 +88,15 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center" style={{ gap: 40 }}>
           <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
             <li>
-              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
+              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }} onMouseEnter={() => setHoveredNav("services")} onMouseLeave={() => setHoveredNav(null)}>
                 Services
-                <Chevron />
+                <Chevron open={hoveredNav === "services"} />
               </Link>
             </li>
             <li>
-              <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}>
+              <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }} onMouseEnter={() => setHoveredNav("equipment")} onMouseLeave={() => setHoveredNav(null)}>
                 Equipment
-                <Chevron />
+                <Chevron open={hoveredNav === "equipment"} />
               </button>
             </li>
             <li>

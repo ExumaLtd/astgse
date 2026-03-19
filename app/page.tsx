@@ -54,14 +54,13 @@ export default async function Home() {
         <div className="flex flex-1 items-center">
           <h1
             className="text-white text-[2.75rem] leading-[3rem] md:text-[3.25rem] md:leading-[3.625rem] lg:text-[4.375rem] lg:leading-[5rem]"
-            style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21, maxWidth: "29.75rem" }}
+            style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21 }}
           >
             {lines.map((line: string, i: number) => (
-              <span key={i}>
+              <span key={i} style={{ display: "block", whiteSpace: "nowrap" }}>
                 {i === 0 ? (
                   <span style={{ backgroundColor: "#00FF7E", color: "#141127" }}>{line}</span>
                 ) : line}
-                {i < lines.length - 1 && <br />}
               </span>
             ))}
           </h1>

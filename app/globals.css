@@ -116,7 +116,7 @@ body {
   color: #00ff7e;
 }
 .search-item-title {
-  font-size: 18px;
+  font-size: 1rem;
   font-family: var(--font-inter);
   transition: color 0.15s;
 }

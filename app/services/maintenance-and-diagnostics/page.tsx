@@ -117,7 +117,7 @@ export default async function MaintenanceAndDiagnostics() {
       {/* White section */}
       <div id="more" className="py-[100px] lg:py-[160px]" style={{ backgroundColor: "#ffffff" }}>
         <div className="max-w-[1440px] mx-auto page-px">
-          <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-[20px] lg:gap-[24px]">
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-[40px] lg:gap-[24px]">
 
             {/* Image — stacks above text on mobile, right column on desktop */}
             <div className="order-first lg:order-none lg:col-span-6 lg:col-start-7 lg:row-start-1">
@@ -134,7 +134,7 @@ export default async function MaintenanceAndDiagnostics() {
             </div>
 
             {/* Left: text + CTA */}
-            <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1 flex flex-col gap-[32px] lg:gap-[50px]">
+            <div className="lg:col-span-5 lg:col-start-1 lg:row-start-1 flex flex-col gap-[20px] lg:gap-[50px]">
               <div className="flex flex-col" style={{ gap: 30 }}>
                 <h2
                   className="text-[2rem] leading-[2.25rem] md:text-[2.75rem] md:leading-[3rem] lg:text-[3.375rem] lg:leading-[3.625rem]"

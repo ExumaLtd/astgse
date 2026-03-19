@@ -31,13 +31,13 @@ export default async function MaintenanceAndDiagnostics() {
 
   return (
     <div>
-      {/* Dark hero — locked to 100vh */}
-      <div className="relative h-screen bg-blue text-white flex flex-col overflow-hidden">
+      {/* Dark hero */}
+      <div className="relative bg-blue text-white flex flex-col overflow-hidden md:h-screen">
         <Navbar />
-        <div className="relative z-10 flex flex-col flex-1 min-h-0">
-        <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
+        <div className="relative z-10 flex flex-col md:flex-1 md:min-h-0">
+        <div className="max-w-[1440px] mx-auto w-full flex flex-col md:flex-1 md:min-h-0">
 
-        <main className="flex flex-col flex-1 min-h-0">
+        <main className="flex flex-col pb-[40px] md:pb-0 md:flex-1 md:min-h-0">
           <div className="page-px">
           {/* Breadcrumb */}
           <nav
@@ -85,8 +85,8 @@ export default async function MaintenanceAndDiagnostics() {
           </div>
 
           {/* Hero image */}
-          <div className="page-px flex-1 min-h-[250px] pb-[25px] lg:pb-[65px]">
-            <div className="overflow-hidden w-full h-full" style={{ borderRadius: 22 }}>
+          <div className="page-px md:flex-1 md:min-h-[250px] md:pb-[65px]">
+            <div className="overflow-hidden w-full aspect-[628/418] md:aspect-auto md:h-full" style={{ borderRadius: 22 }}>
               <Image
                 src={heroImageUrl}
                 alt="GSE maintenance technician at work"

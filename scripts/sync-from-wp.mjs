@@ -55,6 +55,7 @@ const UK_ENGLISH = [
 
 function normaliseText(text) {
   let t = text.replace(/\bMercedes\b(?![-\s]Benz)/g, "Mercedes-Benz");
+  t = t.replace(/\blpg\b/gi, "LPG");
   for (const [pattern, replacement] of UK_ENGLISH) t = t.replace(pattern, replacement);
   return t;
 }

@@ -103,7 +103,6 @@ export const listing = defineType({
           ], layout: "radio" },
           initialValue: "GBP",
         }),
-        defineField({ name: "onApplication", title: "Price on Application", type: "boolean", initialValue: false }),
         defineField({
           name: "period",
           title: "Per",
@@ -111,6 +110,7 @@ export const listing = defineType({
           options: { list: ["Day", "Week", "Month", "Year"], layout: "radio" },
           initialValue: "Day",
         }),
+        defineField({ name: "onApplication", title: "Price on Application", type: "boolean", initialValue: false }),
       ],
     }),
     defineField({ name: "description", title: "Description", type: "text", rows: 5 }),

@@ -129,7 +129,7 @@ export default function Navbar() {
               <button
                 onClick={() => setLangOpen(!langOpen)}
                 className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer"
-                style={{ gap: 6, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+                style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
               >
                 <Globe size={14} strokeWidth={1.5} />
                 <span>{lang}</span>
@@ -223,7 +223,7 @@ export default function Navbar() {
                 <button
                   onClick={() => setLangOpen(!langOpen)}
                   className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200"
-                  style={{ gap: 6, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "1.125rem", cursor: "pointer" }}
+                  style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "1.125rem", cursor: "pointer" }}
                 >
                   <Globe size={14} strokeWidth={1.5} />
                   <span>{lang}</span>

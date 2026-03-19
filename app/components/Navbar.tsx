@@ -197,7 +197,7 @@ export default function Navbar() {
                     onMouseEnter={() => setHoveredLang(code)}
                     onMouseLeave={() => setHoveredLang(null)}
                     className="transition-colors duration-150 text-center"
-                    style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(code) }}
+                    style={{ padding: "6px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(code) }}
                   >
                     {code}
                   </button>

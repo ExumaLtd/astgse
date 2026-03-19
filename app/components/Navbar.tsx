@@ -77,7 +77,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="page-px flex items-center justify-between w-full relative z-50 h-[80px]">
+      <nav className="px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full relative z-50 h-[80px]">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -159,6 +159,7 @@ export const listing = defineType({
         ],
       },
     }),
+    defineField({ name: "availableFrom", title: "Available From", type: "date" }),
     defineField({ name: "location", title: "Location", type: "string" }),
     defineField({ name: "serialNumber", title: "Serial Number", type: "string" }),
     defineField({ name: "featured", title: "Featured Listing", type: "boolean", initialValue: false }),
@@ -168,6 +169,6 @@ export const listing = defineType({
     { title: "Sale Price Low–High", name: "priceAsc", by: [{ field: "salePrice.amount", direction: "asc" }] },
   ],
   preview: {
-    select: { title: "title", subtitle: "category", media: "images.0" },
+    select: { title: "title", subtitle: "category", media: "images.0.asset" },
   },
 });

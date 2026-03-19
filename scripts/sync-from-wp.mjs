@@ -205,8 +205,22 @@ function parseSpecs(post) {
   const mileage = mileageAmount ? { amount: mileageAmount, unit: mileageUnit } : null;
   const hoursStr = extractField(specs, "Operation hours", "Hours of Mileage", "Hours");
   const hours = hoursStr ? parseInt(hoursStr.replace(/[^\d]/g, ""), 10) || null : null;
-  const location = extractField(specs, "Location");
+  let location = extractField(specs, "Location");
+  if (!location) {
+    const locMatch = full.match(/(?:direct from|located in|based in|from)\s+([A-Z][A-Za-z\s,]+?)(?:\s+airport|\s+airfield|[,.]|$)/i);
+    if (locMatch) location = locMatch[1].trim();
+  }
+
   const serialNumber = extractField(specs, "Serial number", "Serial");
+
+  let availableFrom = null;
+  const availMatch = full.match(/[Aa]vailable\s+(?:from\s+)?([A-Za-z]+\s+\d{4}|\d{1,2}[\/\-]\d{4})/i);
+  if (availMatch) {
+    const parsed = new Date(availMatch[1]);
+    if (!isNaN(parsed.getTime())) {
+      availableFrom = parsed.toISOString().split("T")[0];
+    }
+  }
 
   let quantity = null;
   const qtyMatch = full.match(/(\d+)\s+units?\s+(?:in stock|available)/i);
@@ -254,7 +268,7 @@ function parseSpecs(post) {
     make:         make         ? normaliseText(make)        : null,
     model:        model        ? normaliseText(model)       : null,
     description:  description  ? normaliseText(description) : null,
-    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber,
+    year, mileage, hours, fuelType, transmission, quantity, location, availableFrom, serialNumber,
     price, priceCurrency, priceOnApplication, status,
   };
 }
@@ -329,6 +343,7 @@ async function main() {
         description: specs.description || undefined,
         images: images.length > 0 ? images : undefined,
         location: specs.location || undefined,
+        availableFrom: specs.availableFrom || undefined,
         serialNumber: specs.serialNumber || undefined,
         featured: false,
       };

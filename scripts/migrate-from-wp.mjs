@@ -201,8 +201,24 @@ function parseSpecs(post, debug = false) {
   const hoursStr = extractField(specs, "Operation hours", "Hours of Mileage", "Hours");
   const hours = hoursStr ? parseInt(hoursStr.replace(/[^\d]/g, ""), 10) || null : null;
 
-  const location = extractField(specs, "Location");
+  // Location: labelled field, or detect "direct from X" / "located in X" / "based in X"
+  let location = extractField(specs, "Location");
+  if (!location) {
+    const locMatch = full.match(/(?:direct from|located in|based in|from)\s+([A-Z][A-Za-z\s,]+?)(?:\s+airport|\s+airfield|[,.]|$)/i);
+    if (locMatch) location = locMatch[1].trim();
+  }
+
   const serialNumber = extractField(specs, "Serial number", "Serial");
+
+  // Availability date: "Available [Month] [Year]" or "Available from [Month] [Year]"
+  let availableFrom = null;
+  const availMatch = full.match(/[Aa]vailable\s+(?:from\s+)?([A-Za-z]+\s+\d{4}|\d{1,2}[\/\-]\d{4})/i);
+  if (availMatch) {
+    const parsed = new Date(availMatch[1]);
+    if (!isNaN(parsed.getTime())) {
+      availableFrom = parsed.toISOString().split("T")[0]; // YYYY-MM-DD
+    }
+  }
 
   // ── Quantity ─────────────────────────────────────────────────────────────
   let quantity = null;
@@ -271,7 +287,7 @@ function parseSpecs(post, debug = false) {
     make:         make         ? normaliseText(make)        : null,
     model:        model        ? normaliseText(model)       : null,
     description:  description  ? normaliseText(description) : null,
-    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber,
+    year, mileage, hours, fuelType, transmission, quantity, location, availableFrom, serialNumber,
     price, priceCurrency, priceOnApplication, status,
   };
 }
@@ -432,6 +448,7 @@ async function main() {
         description: specs.description || undefined,
         images: images.length > 0 ? images : undefined,
         location: specs.location || undefined,
+        availableFrom: specs.availableFrom || undefined,
         serialNumber: specs.serialNumber || undefined,
         featured: false,
       };

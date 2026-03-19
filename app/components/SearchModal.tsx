@@ -326,7 +326,6 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                   fontFamily: "var(--font-inter)",
                   textTransform: "uppercase",
                   letterSpacing: "0.1em",
-                  margin: 0,
                 }}>
                   {t.searching}
                 </p>

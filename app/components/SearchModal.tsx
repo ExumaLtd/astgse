@@ -80,56 +80,67 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
   return (
     <AnimatePresence>
       {open && (
-        <>
-          <motion.div
-            className="fixed inset-0 z-[100]"
-            style={{ backgroundColor: "rgba(20,17,39,0.7)", backdropFilter: "blur(4px)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+        <motion.div
+          className="fixed inset-0 z-[100] flex items-center justify-center"
+          style={{ backgroundColor: "#141127" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15 }}
+        >
+          {/* Close */}
+          <button
             onClick={onClose}
-          />
-          <motion.div
-            className="fixed inset-x-0 top-[12vh] z-[101] mx-auto w-full max-w-[580px] px-[20px]"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute top-6 right-[40px] text-white hover:text-[#00FF7E] transition-colors duration-200"
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0 }}
           >
-            <Command
-              shouldFilter={false}
-              className="search-command"
-            >
-              <div className="search-input-row">
-                <Search size={15} strokeWidth={1.5} style={{ color: "rgba(255,255,255,0.35)", flexShrink: 0 }} />
+            <X size={20} strokeWidth={1.5} />
+          </button>
+
+          {/* Centred search container */}
+          <div className="w-full px-[20px] md:px-[32px] lg:px-0" style={{ maxWidth: 600 }}>
+            <Command shouldFilter={false}>
+
+              {/* Input row */}
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <Search size={20} strokeWidth={1.5} color="white" style={{ flexShrink: 0 }} />
                 <Command.Input
                   value={query}
                   onValueChange={setQuery}
-                  placeholder="Search services, equipment, news…"
-                  className="search-input"
+                  placeholder="Search…"
                   autoFocus
+                  style={{
+                    flex: 1,
+                    background: "none",
+                    border: "none",
+                    outline: "none",
+                    color: "white",
+                    fontSize: 18,
+                    fontFamily: "var(--font-inter)",
+                    padding: 0,
+                  }}
                 />
-                <button onClick={onClose} className="search-close">
-                  <X size={15} strokeWidth={1.5} />
-                </button>
               </div>
 
-              <Command.List className="search-list">
-                {loading && (
+              {/* Divider — only when typing */}
+              {query.trim() && (
+                <div style={{ height: 1, backgroundColor: "rgba(255,255,255,0.12)", margin: "24px 0" }} />
+              )}
+
+              {/* Results */}
+              <Command.List>
+                {loading && query.trim() && (
                   <Command.Loading>
-                    <div className="search-empty">Searching…</div>
+                    <p style={{ color: "white", fontSize: 18, fontFamily: "var(--font-inter)", margin: 0 }}>Searching…</p>
                   </Command.Loading>
                 )}
 
                 {!loading && query.trim() && results.length === 0 && (
                   <Command.Empty>
-                    <div className="search-empty">No results for &ldquo;{query}&rdquo;</div>
+                    <p style={{ color: "white", fontSize: 18, fontFamily: "var(--font-inter)", margin: 0 }}>
+                      No results for &ldquo;{query}&rdquo;
+                    </p>
                   </Command.Empty>
-                )}
-
-                {!query.trim() && (
-                  <div className="search-empty" style={{ opacity: 0.4 }}>Start typing to search</div>
                 )}
 
                 {grouped.map(({ type, label, items }) => (
@@ -148,9 +159,10 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                   </Command.Group>
                 ))}
               </Command.List>
+
             </Command>
-          </motion.div>
-        </>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

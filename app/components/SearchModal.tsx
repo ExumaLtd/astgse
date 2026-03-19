@@ -13,18 +13,22 @@ type Result = {
   title: string;
   slug: string;
   excerpt?: string;
+  make?: string;
+  model?: string;
+  category?: string;
+  description?: string;
 };
 
 const TYPE_LABELS: Record<string, string> = {
   servicePage: "Services",
   listing: "Equipment",
-  newsroom: "News",
+  post: "News",
 };
 
 const TYPE_HREFS: Record<string, string> = {
   servicePage: "/services",
   listing: "/equipment",
-  newsroom: "/newsroom",
+  post: "/newsroom",
 };
 
 const SUGGESTIONS = [
@@ -134,11 +138,15 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     }
     // Fetch all docs once when modal opens
     client.fetch(
-      `*[_type in ["servicePage", "listing", "newsroom"]] {
+      `*[_type in ["servicePage", "listing", "post"]] {
         _type,
         title,
         "slug": slug.current,
-        excerpt
+        excerpt,
+        make,
+        model,
+        category,
+        description
       }`
     ).then(setAllDocs).catch(() => setAllDocs([]));
   }, [open]);
@@ -163,7 +171,11 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
           // fall back to original query
         }
       }
-      const filtered = allDocs.filter((r) => fuzzyMatch(r.title, searchQuery));
+      const searchFields = (r: Result) =>
+        [r.title, r.make, r.model, r.category, r.description, r.excerpt]
+          .filter(Boolean)
+          .join(" ");
+      const filtered = allDocs.filter((r) => fuzzyMatch(searchFields(r), searchQuery));
       setResults(filtered.slice(0, 20));
       setLoading(false);
     }, 150);

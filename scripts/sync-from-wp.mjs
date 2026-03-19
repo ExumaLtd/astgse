@@ -94,7 +94,7 @@ const UK_ENGLISH = [
 ];
 
 function normaliseText(text) {
-  let t = text.replace(/\bMercedes\b(?![-\s]Benz)/g, "Mercedes-Benz");
+  let t = text.replace(/\bMercedes(?:\s*-?\s*Benz)?\b/g, "Mercedes-Benz");
   t = t.replace(/\blpg\b/gi, "LPG");
   for (const [pattern, replacement] of UK_ENGLISH) t = t.replace(pattern, replacement);
   return t;
@@ -240,9 +240,17 @@ function parseSpecs(post) {
   if (!make) {
     const chassisVal = extractField(specs, "Chassis");
     if (chassisVal) {
-      const parts = chassisVal.split(/\s+/);
-      make  = parts[0] || null;
-      model = parts.slice(1).join(" ") || null;
+      const clean = chassisVal.replace(/[\s•.,]+$/, "").trim();
+      const MULTI_WORD_MAKES = ["Mercedes Benz", "Mercedes-Benz", "Man Truck", "Iveco Daily", "Fuso Canter"];
+      const matchedMake = MULTI_WORD_MAKES.find((m) => clean.toLowerCase().startsWith(m.toLowerCase()));
+      if (matchedMake) {
+        make  = matchedMake;
+        model = clean.slice(matchedMake.length).replace(/^\s+/, "").replace(/[\s•.,]+$/, "") || null;
+      } else {
+        const parts = clean.split(/\s+/);
+        make  = parts[0] || null;
+        model = parts.slice(1).join(" ") || null;
+      }
     }
   }
   const yearStr = extractField(specs, "Year");
@@ -255,7 +263,7 @@ function parseSpecs(post) {
   const hours = hoursStr ? parseInt(hoursStr.replace(/[^\d]/g, ""), 10) || null : null;
   let location = extractField(specs, "Location");
   if (!location) {
-    const locMatch = full.match(/(?:direct from|located in|based in|from)\s+([A-Z][A-Za-z\s,]+?)(?:\s+airport|\s+airfield|[,.]|$)/i);
+    const locMatch = full.match(/(?:direct from|located in|based in)\s+([A-Z][A-Za-z\s,]+?)(?:\s+airport|\s+airfield|[,.]|$)/);
     if (locMatch) location = locMatch[1].trim();
   }
 
@@ -311,7 +319,7 @@ function parseSpecs(post) {
   let description = null;
   let specifications = null;
 
-  const descMatch = content.match(/\b(?:GENERAL\s+)?DESCRIPTION\b[:\s]+(.+?)(?=\s*\b(?:WORKING RANGE|APPLICABLE REGULATIONS|STANDARD FEATURES|Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
+  const descMatch = content.match(/\b(?:GENERAL\s+)?DESCRIPTION\b[:\s]+(.+?)(?=\s*\b(?:WORKING RANGE|APPLICABLE REGULATIONS|STANDARD FEATURES|Enquire)\b|$)/i);
   if (descMatch) {
     description = normaliseText(descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim());
   }

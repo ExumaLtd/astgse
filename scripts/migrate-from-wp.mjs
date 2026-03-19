@@ -167,7 +167,7 @@ const UK_ENGLISH = [
 ];
 
 function normaliseText(text) {
-  let t = text.replace(/\bMercedes\b(?![-\s]Benz)/g, "Mercedes-Benz");
+  let t = text.replace(/\bMercedes(?:\s*-?\s*Benz)?\b/g, "Mercedes-Benz");
   t = t.replace(/\blpg\b/gi, "LPG");
   for (const [pattern, replacement] of UK_ENGLISH) t = t.replace(pattern, replacement);
   return t;
@@ -238,10 +238,17 @@ function parseSpecs(post, debug = false) {
   if (!make) {
     const chassisVal = extractField(specs, "Chassis");
     if (chassisVal) {
-      // Split on first space-separated word after brand
-      const parts = chassisVal.split(/\s+/);
-      make  = parts[0] || null;
-      model = parts.slice(1).join(" ") || null;
+      const clean = chassisVal.replace(/[\s•.,]+$/, "").trim();
+      const MULTI_WORD_MAKES = ["Mercedes Benz", "Mercedes-Benz", "Man Truck", "Iveco Daily", "Fuso Canter"];
+      const matchedMake = MULTI_WORD_MAKES.find((m) => clean.toLowerCase().startsWith(m.toLowerCase()));
+      if (matchedMake) {
+        make  = matchedMake;
+        model = clean.slice(matchedMake.length).replace(/^\s+/, "").replace(/[\s•.,]+$/, "") || null;
+      } else {
+        const parts = clean.split(/\s+/);
+        make  = parts[0] || null;
+        model = parts.slice(1).join(" ").replace(/[\s•.,]+$/, "") || null;
+      }
     }
   }
 
@@ -259,7 +266,8 @@ function parseSpecs(post, debug = false) {
   // Location: labelled field, or detect "direct from X" / "located in X" / "based in X"
   let location = extractField(specs, "Location");
   if (!location) {
-    const locMatch = full.match(/(?:direct from|located in|based in|from)\s+([A-Z][A-Za-z\s,]+?)(?:\s+airport|\s+airfield|[,.]|$)/i);
+    // Only match capitalised proper nouns — no i flag so [A-Z] is strict uppercase
+    const locMatch = full.match(/(?:direct from|located in|based in)\s+([A-Z][A-Za-z\s,]+?)(?:\s+airport|\s+airfield|[,.]|$)/);
     if (locMatch) location = locMatch[1].trim();
   }
 
@@ -323,7 +331,7 @@ function parseSpecs(post, debug = false) {
   let specifications = null;
 
   // Try: text after "GENERAL DESCRIPTION" or "Description" label in content
-  const descMatch = content.match(/\b(?:GENERAL\s+)?DESCRIPTION\b[:\s]+(.+?)(?=\s*\b(?:WORKING RANGE|APPLICABLE REGULATIONS|STANDARD FEATURES|Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
+  const descMatch = content.match(/\b(?:GENERAL\s+)?DESCRIPTION\b[:\s]+(.+?)(?=\s*\b(?:WORKING RANGE|APPLICABLE REGULATIONS|STANDARD FEATURES|Enquire)\b|$)/i);
   if (descMatch) {
     description = normaliseText(descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim());
   }
@@ -457,9 +465,7 @@ async function main() {
   console.log("📦 Fetching all posts...");
   const allPosts = await fetchAllPosts();
   const categoryNames = Object.fromEntries(Object.entries(categories).map(([id, name]) => [id, name]));
-  const posts = allPosts.filter((p) =>
-    (p.categories || []).some((id) => categoryNames[id] === "Ambulift")
-  );
+  const posts = allPosts.filter((p) => p.slug === "ambulift-on-3-5-licence-to-drive-brand-new-based-on-fuso-canter-van");
   console.log(`\n✅ Found ${posts.length} posts total\n`);
 
   let created = 0;

@@ -12,6 +12,7 @@
     "@sanity/image-url": "^2.0.3",
     "@sanity/vision": "^5.17.1",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",
     "next": "^16.2.0",

@@ -12,7 +12,7 @@ export default function MaintenanceAndDiagnostics() {
   return (
     <div>
       {/* Dark hero — locked to 100vh */}
-      <div className="relative h-screen bg-blue text-white flex flex-col overflow-hidden">
+      <div className="relative h-[calc(100vh+25px)] md:h-screen bg-blue text-white flex flex-col overflow-hidden">
         <Navbar />
         <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
@@ -100,7 +100,7 @@ export default function MaintenanceAndDiagnostics() {
       </div>
 
       {/* White section */}
-      <div id="more" style={{ backgroundColor: "#ffffff", paddingTop: 160, paddingBottom: 160 }}>
+      <div id="more" className="py-[100px] lg:py-[160px]" style={{ backgroundColor: "#ffffff" }}>
         <div className="max-w-[1440px] mx-auto px-[20px] md:px-[32px] lg:px-[80px]">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center" style={{ gap: 24 }}>
 

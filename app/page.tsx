@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="relative h-screen overflow-hidden bg-blue flex flex-col">
+    <div className="relative h-[calc(100vh+25px)] md:h-screen overflow-hidden bg-blue flex flex-col">
       {/* Full-screen video */}
       <video
         autoPlay

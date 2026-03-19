@@ -84,7 +84,7 @@ export default function Navbar() {
           style={{ backgroundColor: "#141127" }}
         >
           {/* Header row — mirrors nav */}
-          <div className="flex items-center justify-between px-[20px] md:px-[32px] py-[20px] shrink-0">
+          <div className="flex items-center justify-between px-[20px] md:px-[32px] h-[80px] shrink-0">
             <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />
@@ -101,14 +101,22 @@ export default function Navbar() {
 
           {/* Nav content */}
           <div className="flex flex-col flex-1 overflow-y-auto px-[20px] md:px-[32px] pt-[40px] pb-[40px]">
-            <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 32, fontSize: "1.125rem" }}>
+            <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
               <li>
-                <Link href="/services/maintenance-and-diagnostics" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>
+                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Services
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
+                    <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </Link>
               </li>
               <li>
-                <span className="text-white/60">Equipment</span>
+                <Link href="/equipment" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                  Equipment
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
+                    <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </Link>
               </li>
               <li>
                 <Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link>
@@ -125,12 +133,12 @@ export default function Navbar() {
               <Link
                 href=""
                 className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
-                style={{ fontFamily: "var(--font-inter)", padding: "6px 6px 6px 20px", gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
+                style={{ fontFamily: "var(--font-inter)", padding: "8px 8px 8px 20px", gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
                 onClick={() => setOpen(false)}
               >
                 Contact us
-                <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 26, height: 26 }}>
-                  <ArrowRight size={13} color="#141127" strokeWidth={2.5} />
+                <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 30, height: 30 }}>
+                  <ArrowRight size={14} color="#141127" strokeWidth={2.5} />
                 </span>
               </Link>
             </div>

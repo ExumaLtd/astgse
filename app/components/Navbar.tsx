@@ -171,10 +171,10 @@ export default function Navbar() {
         <motion.div
           className="lg:hidden fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: "#141127" }}
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
         >
           <div className="page-px flex items-center justify-between h-[80px] shrink-0">
             <Link href="/" onClick={() => setOpen(false)} className="shrink-0">

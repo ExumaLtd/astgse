@@ -4,7 +4,6 @@ export const navigation = defineType({
   name: "navigation",
   title: "Navigation",
   type: "document",
-  __experimental_actions: ["update", "publish"],
   fields: [
     defineField({
       name: "navItems",

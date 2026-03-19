@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Menu, X, Globe, ChevronDown } from "lucide-react";
+import { ArrowRight, Menu, X, Globe } from "lucide-react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -30,12 +30,9 @@ export default function Navbar() {
       >
         <Globe size={14} strokeWidth={1.5} />
         <span>{lang}</span>
-        <ChevronDown
-          size={10}
-          strokeWidth={1.5}
-          className="transition-transform duration-200"
-          style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", color: "#00FF7E" }}
-        />
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200" style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
+          <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </button>
 
       {langOpen && (

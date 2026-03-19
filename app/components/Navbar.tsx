@@ -56,7 +56,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav dir="ltr" className="page-px flex items-center justify-between w-full relative z-50 h-[80px]">
+      <nav className="page-px flex items-center justify-between w-full relative z-50 h-[80px]">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -93,10 +93,10 @@ export default function Navbar() {
             <Link
               href=""
               className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
-              style={{ fontFamily: "var(--font-inter)", padding: "6px 6px 6px 20px", gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
+              style={{ fontFamily: "var(--font-inter)", paddingBlock: 6, paddingInlineStart: 20, paddingInlineEnd: 6, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
             >
               Contact us
-              <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 26, height: 26 }}>
+              <span className="flex items-center justify-center rounded-full bg-[#00FF7E] rtl:rotate-180" style={{ width: 26, height: 26 }}>
                 <ArrowRight size={13} color="#141127" strokeWidth={2.5} />
               </span>
             </Link>
@@ -222,11 +222,11 @@ export default function Navbar() {
               <Link
                 href=""
                 className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
-                style={{ fontFamily: "var(--font-inter)", padding: "8px 8px 8px 20px", gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
+                style={{ fontFamily: "var(--font-inter)", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
                 onClick={() => setOpen(false)}
               >
                 Contact us
-                <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 30, height: 30 }}>
+                <span className="flex items-center justify-center rounded-full bg-[#00FF7E] rtl:rotate-180" style={{ width: 30, height: 30 }}>
                   <ArrowRight size={14} color="#141127" strokeWidth={2.5} />
                 </span>
               </Link>

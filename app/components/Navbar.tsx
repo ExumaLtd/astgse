@@ -12,42 +12,20 @@ const Chevron = ({ open }: { open?: boolean }) => (
   </svg>
 );
 
-const dropdownStyle = {
-  backgroundColor: "#141127",
-  border: "1px solid rgba(255,255,255,0.12)",
-  borderRadius: 8,
-};
-
-const dropdownItemStyle = {
-  fontFamily: "var(--font-inter)",
-  fontSize: "0.9375rem",
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-};
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState("EN");
   const [langOpen, setLangOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   const langRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
-      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) setServicesOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const servicePages = [
-    { label: "Maintenance and diagnostics", href: "/services/maintenance-and-diagnostics" },
-  ];
 
   return (
     <>
@@ -61,34 +39,12 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div className="hidden lg:flex items-center" style={{ gap: 40 }}>
           <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
-
-            {/* Services with dropdown */}
-            <li ref={servicesRef} className="relative">
-              <button
-                onClick={() => setServicesOpen(!servicesOpen)}
-                className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200"
-                style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
-              >
+            <li>
+              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
                 Services
-                <Chevron open={servicesOpen} />
-              </button>
-              {servicesOpen && (
-                <div className="absolute top-full mt-3 flex flex-col overflow-hidden z-50 whitespace-nowrap" style={{ ...dropdownStyle, minWidth: 240, left: "50%", transform: "translateX(-50%)" }}>
-                  {servicePages.map((s) => (
-                    <Link
-                      key={s.href}
-                      href={s.href}
-                      onClick={() => setServicesOpen(false)}
-                      className="px-4 py-2.5 text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
-                      style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
-                    >
-                      {s.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
+                <Chevron />
+              </Link>
             </li>
-
             <li>
               <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}>
                 Equipment
@@ -136,13 +92,13 @@ export default function Navbar() {
                 <Chevron open={langOpen} />
               </button>
               {langOpen && (
-                <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ ...dropdownStyle, minWidth: 120, left: "50%", transform: "translateX(-50%)" }}>
+                <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ backgroundColor: "#141127", borderRadius: 8, left: "50%", transform: "translateX(-50%)" }}>
                   {["EN", "AR"].map((l) => (
                     <button
                       key={l}
                       onClick={() => { setLang(l); setLangOpen(false); }}
-                      className="text-left px-4 py-2 text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
-                      style={{ ...dropdownItemStyle, color: lang === l ? "#00FF7E" : "white" }}
+                      className="px-4 py-2 hover:bg-white/5 transition-colors duration-150 text-center"
+                      style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
                     >
                       {l}
                     </button>
@@ -179,35 +135,12 @@ export default function Navbar() {
 
           <div className="flex flex-col flex-1 overflow-y-auto px-[20px] md:px-[32px] pt-[40px] pb-[40px]">
             <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
-
-              {/* Services with mobile submenu */}
               <li>
-                <button
-                  onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                  className="flex items-center hover:text-[#00FF7E] transition-colors duration-200 w-full"
-                  style={{ gap: 12, background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "1.125rem", color: "white" }}
-                >
+                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Services
-                  <Chevron open={mobileServicesOpen} />
-                </button>
-                {mobileServicesOpen && (
-                  <ul className="flex flex-col mt-3 pl-4" style={{ gap: 16 }}>
-                    {servicePages.map((s) => (
-                      <li key={s.href}>
-                        <Link
-                          href={s.href}
-                          onClick={() => { setOpen(false); setMobileServicesOpen(false); }}
-                          className="text-white hover:text-[#00FF7E] transition-colors duration-200"
-                          style={{ fontFamily: "var(--font-inter)", fontSize: "1rem", color: "rgba(255,255,255,0.7)" }}
-                        >
-                          {s.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                  <Chevron />
+                </Link>
               </li>
-
               <li>
                 <Link href="/equipment" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Equipment
@@ -217,8 +150,6 @@ export default function Navbar() {
               <li><Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
               <li><Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
               <li><Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
-
-              {/* Language switcher */}
               <li>
                 <button
                   onClick={() => setLangOpen(!langOpen)}
@@ -230,13 +161,13 @@ export default function Navbar() {
                   <Chevron open={langOpen} />
                 </button>
                 {langOpen && (
-                  <ul className="flex flex-col mt-3 pl-4" style={{ gap: 16 }}>
+                  <ul className="flex flex-col mt-3 pl-4" style={{ gap: 12 }}>
                     {["EN", "AR"].map((l) => (
                       <li key={l}>
                         <button
                           onClick={() => { setLang(l); setLangOpen(false); }}
-                          className="text-white hover:text-[#00FF7E] transition-colors duration-150"
-                          style={{ ...dropdownItemStyle, fontSize: "1rem", color: lang === l ? "#00FF7E" : "rgba(255,255,255,0.7)", fontWeight: lang === l ? 600 : 400 }}
+                          className="hover:text-[#00FF7E] transition-colors duration-150"
+                          style={{ fontFamily: "var(--font-inter)", fontSize: "1rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "rgba(255,255,255,0.7)" }}
                         >
                           {l}
                         </button>

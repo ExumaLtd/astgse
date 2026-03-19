@@ -1,6 +1,8 @@
+import { homepage } from "./homepage";
 import { servicePage } from "./servicePage";
 import { listing } from "./listing";
+import { about } from "./about";
+import { newsroom } from "./newsroom";
 import { navigation } from "./navigation";
-import { homepage } from "./homepage";
 
-export const schemaTypes = [homepage, navigation, servicePage, listing];
+export const schemaTypes = [homepage, servicePage, listing, about, newsroom, navigation];

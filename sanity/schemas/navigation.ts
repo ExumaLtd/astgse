@@ -2,7 +2,7 @@ import { defineType, defineField, defineArrayMember } from "sanity";
 
 export const navigation = defineType({
   name: "navigation",
-  title: "Navigation",
+  title: "Menu",
   type: "document",
   fields: [
     defineField({

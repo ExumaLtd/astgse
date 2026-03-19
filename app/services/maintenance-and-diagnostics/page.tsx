@@ -117,10 +117,24 @@ export default async function MaintenanceAndDiagnostics() {
       {/* White section */}
       <div id="more" className="py-[100px] lg:py-[160px]" style={{ backgroundColor: "#ffffff" }}>
         <div className="max-w-[1440px] mx-auto px-[20px] md:px-[32px] lg:px-[80px]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 items-center" style={{ gap: 24 }}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-[20px] lg:gap-[24px]">
+
+            {/* Image — stacks above text on mobile, right column on desktop */}
+            <div className="order-first lg:order-none lg:col-span-6 lg:col-start-7">
+              <div className="overflow-hidden w-full" style={{ borderRadius: 22, aspectRatio: "628 / 418" }}>
+                <Image
+                  src={sectionImageUrl}
+                  alt="Servicing and inspection"
+                  width={628}
+                  height={418}
+                  className="w-full h-full object-cover"
+                  unoptimized={sectionImageUrl.startsWith("https://cdn.sanity.io")}
+                />
+              </div>
+            </div>
 
             {/* Left: text + CTA */}
-            <div className="lg:col-span-5 flex flex-col" style={{ gap: 50 }}>
+            <div className="lg:col-span-5 flex flex-col gap-[32px] lg:gap-[50px]">
               <div className="flex flex-col" style={{ gap: 30 }}>
                 <h2
                   className="text-[2rem] leading-[2.25rem] md:text-[2.75rem] md:leading-[3rem] lg:text-[3.375rem] lg:leading-[3.625rem]"
@@ -143,20 +157,6 @@ export default async function MaintenanceAndDiagnostics() {
                     <ArrowRight size={14} color="#00FF7E" strokeWidth={2.5} />
                   </span>
                 </a>
-              </div>
-            </div>
-
-            {/* Right: image */}
-            <div className="lg:col-span-6 lg:col-start-7">
-              <div className="overflow-hidden w-full" style={{ borderRadius: 22, aspectRatio: "628 / 418" }}>
-                <Image
-                  src={sectionImageUrl}
-                  alt="Servicing and inspection"
-                  width={628}
-                  height={418}
-                  className="w-full h-full object-cover"
-                  unoptimized={sectionImageUrl.startsWith("https://cdn.sanity.io")}
-                />
               </div>
             </div>
 

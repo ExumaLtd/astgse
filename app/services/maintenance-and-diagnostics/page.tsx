@@ -13,17 +13,6 @@ export default function MaintenanceAndDiagnostics() {
     <div>
       {/* Dark hero — locked to 100vh */}
       <div className="relative h-screen bg-blue text-white flex flex-col overflow-hidden">
-        {/* Background image */}
-        <Image
-          src="/images/iStock_Placeholder.avif"
-          alt=""
-          fill
-          className="object-cover object-center"
-          priority
-          aria-hidden="true"
-        />
-        {/* Dark overlay with blur */}
-        <div className="absolute inset-0 backdrop-blur-[8px]" style={{ backgroundColor: "rgba(20,17,39,0.50)" }} />
         <Navbar />
         <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">

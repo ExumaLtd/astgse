@@ -15,6 +15,7 @@ export default function Home() {
         muted
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: "30% center" }}
         src="/videos/gettyimages-2192368667-640_adpp.mp4"
       />
 

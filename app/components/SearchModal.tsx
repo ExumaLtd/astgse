@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
 import { client } from "@/sanity/client";
 
 type Result = {
@@ -25,6 +25,8 @@ const TYPE_HREFS: Record<string, string> = {
   listing: "/equipment",
   newsroom: "/newsroom",
 };
+
+const SUGGESTIONS = ["For hire", "For sale", "Brokerage", "Maintenance"];
 
 export default function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
@@ -71,6 +73,10 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     onClose();
   }
 
+  function handleSuggestion(s: string) {
+    setQuery(s);
+  }
+
   const grouped = Object.entries(TYPE_LABELS).map(([type, label]) => ({
     type,
     label,
@@ -81,7 +87,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop — blur + semi-transparent, same as hero overlay */}
+          {/* Backdrop */}
           <motion.div
             className="fixed inset-0 z-[100]"
             style={{ backgroundColor: "rgba(20,17,39,0.5)", backdropFilter: "blur(8px)" }}
@@ -106,90 +112,123 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                 borderRadius: 16,
                 width: "100%",
                 maxWidth: 720,
-                height: 720,
-                display: "flex",
-                flexDirection: "column",
-                overflow: "hidden",
+                position: "relative",
+                padding: "40px 40px 48px",
               }}
             >
-              {/* Header row — close */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                  padding: "0 32px",
-                  height: 56,
-                  flexShrink: 0,
-                }}
+              {/* Close */}
+              <button
+                onClick={onClose}
+                className="absolute text-white hover:text-[#00FF7E] transition-colors duration-200"
+                style={{ top: 24, right: 24, background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0 }}
               >
-                <button
-                  onClick={onClose}
-                  className="text-white hover:text-[#00FF7E] transition-colors duration-200"
-                  style={{ background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0 }}
-                >
-                  <X size={20} strokeWidth={1.5} />
-                </button>
-              </div>
+                <X size={18} strokeWidth={1.5} />
+              </button>
 
-              {/* Search */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", padding: "0 32px 32px" }}>
-                <Command shouldFilter={false}>
-                  {/* Input row */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <Search size={16} strokeWidth={1.5} color="white" style={{ flexShrink: 0 }} />
-                    <Command.Input
-                      value={query}
-                      onValueChange={setQuery}
-                      placeholder="Search ASTGSE"
-                      autoFocus
-                      style={{
-                        flex: 1,
-                        background: "none",
-                        border: "none",
-                        outline: "none",
-                        color: "white",
-                        fontSize: "1rem",
-                        fontFamily: "var(--font-inter)",
-                        padding: 0,
-                      }}
-                    />
-                  </div>
+              <Command shouldFilter={false}>
+                {/* Label */}
+                <p style={{
+                  color: "white",
+                  fontSize: "0.6875rem",
+                  fontFamily: "var(--font-inter)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  margin: "0 0 20px",
+                }}>
+                  I&apos;m searching for
+                </p>
 
+                {/* Large input + underline */}
+                <Command.Input
+                  value={query}
+                  onValueChange={setQuery}
+                  placeholder="Search ASTGSE"
+                  autoFocus
+                  style={{
+                    width: "100%",
+                    background: "none",
+                    border: "none",
+                    borderBottom: "0.5px solid rgba(255,255,255,0.4)",
+                    outline: "none",
+                    color: "white",
+                    fontSize: "2rem",
+                    fontFamily: "var(--font-almaren-nueva)",
+                    fontWeight: 21,
+                    padding: "0 0 16px",
+                    display: "block",
+                  }}
+                />
+
+                <Command.List style={{ marginTop: 32 }}>
                   {/* Results */}
-                  <Command.List style={{ flex: 1, overflowY: "auto", marginTop: query.trim() ? 32 : 0 }}>
-                    {loading && query.trim() && (
-                      <Command.Loading>
-                        <p style={{ color: "white", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>Searching…</p>
-                      </Command.Loading>
-                    )}
+                  {loading && query.trim() && (
+                    <Command.Loading>
+                      <p style={{ color: "white", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>Searching…</p>
+                    </Command.Loading>
+                  )}
 
-                    {!loading && query.trim() && results.length === 0 && (
-                      <Command.Empty>
-                        <p style={{ color: "white", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>
-                          No results for &ldquo;{query}&rdquo;
-                        </p>
-                      </Command.Empty>
-                    )}
+                  {!loading && query.trim() && results.length === 0 && (
+                    <Command.Empty>
+                      <p style={{ color: "white", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>
+                        No results for &ldquo;{query}&rdquo;
+                      </p>
+                    </Command.Empty>
+                  )}
 
-                    {grouped.map(({ type, label, items }) => (
-                      <Command.Group key={type} heading={label}>
-                        {items.map((r) => (
-                          <Command.Item
-                            key={r.slug}
-                            value={`${type}-${r.slug}`}
-                            onSelect={() => navigate(r)}
-                            className="search-item"
-                          >
-                            <span className="search-item-title">{r.title}</span>
-                            {r.excerpt && <span className="search-item-excerpt">{r.excerpt}</span>}
-                          </Command.Item>
-                        ))}
-                      </Command.Group>
-                    ))}
-                  </Command.List>
-                </Command>
-              </div>
+                  {grouped.map(({ type, label, items }) => (
+                    <Command.Group key={type} heading={label}>
+                      {items.map((r) => (
+                        <Command.Item
+                          key={r.slug}
+                          value={`${type}-${r.slug}`}
+                          onSelect={() => navigate(r)}
+                          className="search-item"
+                        >
+                          <span className="search-item-title">{r.title}</span>
+                          {r.excerpt && <span className="search-item-excerpt">{r.excerpt}</span>}
+                        </Command.Item>
+                      ))}
+                    </Command.Group>
+                  ))}
+                </Command.List>
+
+                {/* Suggestions — only when not typing */}
+                {!query.trim() && (
+                  <div style={{ marginTop: 36 }}>
+                    <p style={{
+                      color: "white",
+                      fontSize: "0.6875rem",
+                      fontFamily: "var(--font-inter)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      margin: "0 0 16px",
+                    }}>
+                      Or explore our suggestions
+                    </p>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                      {SUGGESTIONS.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => handleSuggestion(s)}
+                          className="hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-200"
+                          style={{
+                            background: "none",
+                            border: "1px solid rgba(255,255,255,0.4)",
+                            borderRadius: 100,
+                            color: "white",
+                            fontSize: "0.9375rem",
+                            fontFamily: "var(--font-inter)",
+                            padding: "6px 16px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </Command>
             </div>
           </motion.div>
         </>

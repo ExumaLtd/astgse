@@ -47,25 +47,25 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center" style={{ gap: 40 }}>
           <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
             <li>
-              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
+              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white transition-colors duration-200" style={{ gap: "12px" }}>
                 Services
                 <Chevron />
               </Link>
             </li>
             <li>
-              <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}>
+              <button className="flex items-center group text-white transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}>
                 Equipment
                 <Chevron />
               </button>
             </li>
             <li>
-              <Link href="/about" className="text-white hover:text-[#00FF7E] transition-colors duration-200">About</Link>
+              <Link href="/about" className="text-white transition-colors duration-200">About</Link>
             </li>
             <li>
-              <Link href="/careers" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Careers</Link>
+              <Link href="/careers" className="text-white transition-colors duration-200">Careers</Link>
             </li>
             <li>
-              <Link href="/newsroom" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Newsroom</Link>
+              <Link href="/newsroom" className="text-white transition-colors duration-200">Newsroom</Link>
             </li>
           </ul>
 
@@ -171,20 +171,20 @@ export default function Navbar() {
           <div className="page-px flex flex-col flex-1 overflow-y-auto pt-[40px] pb-[40px]">
             <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
               <li>
-                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Services
                   <Chevron />
                 </Link>
               </li>
               <li>
-                <Link href="/equipment" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                <Link href="/equipment" className="flex items-center group transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Equipment
                   <Chevron />
                 </Link>
               </li>
-              <li><Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
-              <li><Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
-              <li><Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
+              <li><Link href="/about" className="transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
+              <li><Link href="/careers" className="transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
+              <li><Link href="/newsroom" className="transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
             </ul>
 
             <div style={{ marginTop: 48 }}>

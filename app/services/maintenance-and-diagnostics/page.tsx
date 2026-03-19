@@ -12,7 +12,7 @@ export default function MaintenanceAndDiagnostics() {
   return (
     <div>
       {/* Dark hero — locked to 100vh */}
-      <div className="relative h-[calc(100vh+25px)] md:h-screen bg-blue text-white flex flex-col overflow-hidden">
+      <div className="relative h-screen bg-blue text-white flex flex-col overflow-hidden">
         <Navbar />
         <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
@@ -98,6 +98,9 @@ export default function MaintenanceAndDiagnostics() {
         </div>
         </div>{/* end z-10 wrapper */}
       </div>
+
+      {/* Blue breathing room below image on mobile */}
+      <div className="h-[25px] bg-blue md:hidden" />
 
       {/* White section */}
       <div id="more" className="py-[100px] lg:py-[160px]" style={{ backgroundColor: "#ffffff" }}>

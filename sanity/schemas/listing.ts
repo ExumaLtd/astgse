@@ -128,6 +128,6 @@ export const listing = defineType({
     { title: "Sale Price Low–High", name: "priceAsc", by: [{ field: "salePrice.amount", direction: "asc" }] },
   ],
   preview: {
-    select: { title: "title", subtitle: "status", media: "images.0" },
+    select: { title: "title", subtitle: "category", media: "images.0" },
   },
 });

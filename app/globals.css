@@ -59,6 +59,24 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Global page padding — use .page-px on any full-width container */
+.page-px {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+@media (min-width: 768px) {
+  .page-px {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+@media (min-width: 1024px) {
+  .page-px {
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

@@ -37,7 +37,7 @@ export default async function MaintenanceAndDiagnostics() {
         <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
 
         <main className="flex flex-col flex-1 min-h-0">
-          <div className="px-[20px] md:px-[32px] lg:px-[80px]">
+          <div className="page-px">
           {/* Breadcrumb */}
           <nav
             className="flex items-center gap-2 pt-4 pb-[40px] lg:pb-[80px]"
@@ -93,7 +93,7 @@ export default async function MaintenanceAndDiagnostics() {
           </div>
 
           {/* Hero image */}
-          <div className="flex-1 min-h-[250px] pb-[25px] lg:pb-[65px]" style={{ paddingLeft: 25, paddingRight: 25 }}>
+          <div className="page-px flex-1 min-h-[250px] pb-[25px] lg:pb-[65px]">
             <div className="overflow-hidden w-full h-full" style={{ borderRadius: 22 }}>
               <Image
                 src={heroImageUrl}
@@ -116,7 +116,7 @@ export default async function MaintenanceAndDiagnostics() {
 
       {/* White section */}
       <div id="more" className="py-[100px] lg:py-[160px]" style={{ backgroundColor: "#ffffff" }}>
-        <div className="max-w-[1440px] mx-auto px-[20px] md:px-[32px] lg:px-[80px]">
+        <div className="max-w-[1440px] mx-auto page-px">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-[20px] lg:gap-[24px]">
 
             {/* Image — stacks above text on mobile, right column on desktop */}

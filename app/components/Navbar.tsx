@@ -40,7 +40,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="flex items-center justify-between w-full relative z-50 px-[20px] md:px-[32px] lg:px-[40px] h-[80px]">
+      <nav className="page-px flex items-center justify-between w-full relative z-50 h-[80px]">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -164,7 +164,7 @@ export default function Navbar() {
       {/* Mobile menu overlay */}
       {open && (
         <div className="lg:hidden fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: "#141127" }}>
-          <div className="flex items-center justify-between px-[20px] md:px-[32px] h-[80px] shrink-0">
+          <div className="page-px flex items-center justify-between h-[80px] shrink-0">
             <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />

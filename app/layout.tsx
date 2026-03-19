@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Inter, DM_Mono, IBM_Plex_Sans_Arabic } from "next/fo
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -63,18 +62,6 @@ export default function RootLayout({
         {children}
         <Analytics />
         <SpeedInsights />
-        {/* Google Translate — hidden widget, controlled by language switcher */}
-        <div id="google_translate_element" style={{ display: "none" }} />
-        <Script id="google-translate-init" strategy="afterInteractive">{`
-          if (!window.location.pathname.startsWith('/studio')) {
-            function googleTranslateElementInit() {
-              new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'ar', autoDisplay: false }, 'google_translate_element');
-            }
-            var s = document.createElement('script');
-            s.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-            document.body.appendChild(s);
-          }
-        `}</Script>
       </body>
     </html>
   );

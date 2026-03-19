@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X, Globe } from "lucide-react";
+import { translatePage } from "@/app/utils/translate";
 
 const Chevron = ({ open }: { open?: boolean }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"
@@ -30,12 +31,7 @@ export default function Navbar() {
   function switchLanguage(l: string) {
     setLang(l);
     setLangOpen(false);
-    // Trigger Google Translate via its hidden select element
-    const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
-    if (select) {
-      select.value = l === "AR" ? "ar" : "en";
-      select.dispatchEvent(new Event("change"));
-    }
+    translatePage(l === "AR" ? "ar" : "en");
   }
 
   return (

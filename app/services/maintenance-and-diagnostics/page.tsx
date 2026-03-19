@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import Navbar from "@/app/components/Navbar";
+import ScrollButton from "@/app/components/ScrollButton";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 
@@ -77,16 +78,7 @@ export default async function MaintenanceAndDiagnostics() {
                 {heroBody}
               </p>
               <div>
-                <a
-                  href="#more"
-                  className="inline-flex items-center rounded-full text-[0.9375rem] text-white bg-transparent hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
-                  style={{ fontFamily: "var(--font-inter)", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
-                >
-                  Learn more
-                  <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 30, height: 30 }}>
-                    <ArrowDown size={14} color="#141127" strokeWidth={2.5} />
-                  </span>
-                </a>
+                <ScrollButton targetId="more" />
               </div>
             </div>
           </div>

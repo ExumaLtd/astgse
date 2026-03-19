@@ -21,7 +21,7 @@ export default function MaintenanceAndDiagnostics() {
           <div className="px-[20px] md:px-[32px] lg:px-[80px]">
           {/* Breadcrumb */}
           <nav
-            className="flex items-center gap-2 pt-4 pb-[80px]"
+            className="flex items-center gap-2 pt-4 pb-[40px] lg:pb-[80px]"
             style={{
               fontFamily: "var(--font-almaren-nueva)",
               fontSize: "0.875rem",
@@ -37,7 +37,7 @@ export default function MaintenanceAndDiagnostics() {
           </nav>
 
           {/* Hero — two column */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-[24px] pb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-[24px] pb-6 lg:pb-12">
             {/* Left: heading */}
             <div className="lg:col-span-5">
               <h1
@@ -51,7 +51,7 @@ export default function MaintenanceAndDiagnostics() {
             </div>
 
             {/* Right: body + CTA */}
-            <div className="lg:col-span-6 lg:col-start-7 flex flex-col justify-center" style={{ gap: 44 }}>
+            <div className="lg:col-span-6 lg:col-start-7 flex flex-col justify-center gap-[24px] lg:gap-[44px]">
               <p
                 className="text-white"
                 style={{ fontFamily: "var(--font-inter)", fontSize: "1.125rem", fontWeight: 400, lineHeight: "1.625rem" }}
@@ -81,8 +81,8 @@ export default function MaintenanceAndDiagnostics() {
           </div>
           </div>
 
-          {/* Full-width image — 25px from edges, 65px from bottom, fills remaining vh */}
-          <div className="flex-1 min-h-0" style={{ paddingLeft: 25, paddingRight: 25, paddingBottom: 65 }}>
+          {/* Full-width image — 25px from edges, 65px from bottom, fills remaining vh, min 250px */}
+          <div className="flex-1 min-h-[250px] pb-[25px] lg:pb-[65px]" style={{ paddingLeft: 25, paddingRight: 25 }}>
             <div className="overflow-hidden w-full h-full" style={{ borderRadius: 22 }}>
               <Image
                 src="/images/iStock_Placeholder.avif"

@@ -73,7 +73,7 @@ export default async function MaintenanceAndDiagnostics() {
             <div className="lg:col-span-6 lg:col-start-7 flex flex-col justify-center gap-[24px] lg:gap-[44px]">
               <p
                 className="text-white text-[0.9375rem] md:text-[1.125rem]"
-                style={{ fontFamily: "var(--font-inter)", fontWeight: 400, lineHeight: "1.625rem" }}
+                style={{ fontFamily: "var(--font-inter)", fontWeight: 400, lineHeight: "1.5rem" }}
               >
                 {heroBody}
               </p>

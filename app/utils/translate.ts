@@ -26,6 +26,8 @@ function getTextNodes(root: Element): Text[] {
       const parent = node.parentElement;
       if (!parent || skip.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
       if (!node.textContent?.trim()) return NodeFilter.FILTER_REJECT;
+      // Skip elements marked translate="no"
+      if (parent.closest("[translate='no']")) return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
     },
   });

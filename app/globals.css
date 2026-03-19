@@ -92,6 +92,9 @@ body {
 [cmdk-input]::placeholder {
   color: rgba(255, 255, 255, 0.35);
 }
+.search-modal-light [cmdk-input]::placeholder {
+  color: rgba(20, 17, 39, 0.2);
+}
 [cmdk-group-heading] {
   color: white;
   font-size: 0.6875rem;
@@ -99,6 +102,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0 0 8px;
+  font-weight: 600;
 }
 .search-item {
   display: flex;
@@ -127,4 +131,43 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Search modal — light theme (white popup) */
+.search-item-light {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #141127;
+  transition: color 0.15s;
+  border-radius: 0;
+  outline: none;
+}
+.search-item-light[data-selected="true"] .search-item-title-light,
+.search-item-light:hover .search-item-title-light {
+  color: #141127;
+}
+.search-item-title-light {
+  font-size: 1rem;
+  font-family: var(--font-inter);
+  color: #141127;
+  transition: color 0.15s;
+}
+.search-item-excerpt-light {
+  font-size: 0.875rem;
+  color: rgba(20, 17, 39, 0.5);
+  font-family: var(--font-inter);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+[cmdk-group-heading]:has(~ [cmdk-item].search-item-light),
+.search-item-light ~ [cmdk-group-heading] {
+  color: #141127;
+}
+.search-modal-light [cmdk-group-heading] {
+  color: #141127;
+  font-weight: 600;
 }

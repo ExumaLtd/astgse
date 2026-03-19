@@ -48,8 +48,31 @@ export const listing = defineType({
       type: "string",
       options: { list: ["New", "Used – Excellent", "Used – Good", "Used – Fair"], layout: "radio" },
     }),
-    defineField({ name: "price", title: "Price (£)", type: "number" }),
-    defineField({ name: "priceOnApplication", title: "Price on Application", type: "boolean", initialValue: false }),
+    defineField({
+      name: "salePrice",
+      title: "Sale Price",
+      type: "object",
+      fields: [
+        defineField({ name: "amount", title: "Price (£)", type: "number" }),
+        defineField({ name: "onApplication", title: "Price on Application", type: "boolean", initialValue: false }),
+      ],
+    }),
+    defineField({
+      name: "hirePrice",
+      title: "Hire Price",
+      type: "object",
+      fields: [
+        defineField({ name: "amount", title: "Price (£)", type: "number" }),
+        defineField({ name: "onApplication", title: "Price on Application", type: "boolean", initialValue: false }),
+        defineField({
+          name: "period",
+          title: "Per",
+          type: "string",
+          options: { list: ["Day", "Week", "Month", "Year"], layout: "radio" },
+          initialValue: "Day",
+        }),
+      ],
+    }),
     defineField({ name: "description", title: "Description", type: "text", rows: 5 }),
     defineField({
       name: "images",
@@ -102,7 +125,7 @@ export const listing = defineType({
   ],
   orderings: [
     { title: "Newest First", name: "createdAtDesc", by: [{ field: "_createdAt", direction: "desc" }] },
-    { title: "Price Low–High", name: "priceAsc", by: [{ field: "price", direction: "asc" }] },
+    { title: "Sale Price Low–High", name: "priceAsc", by: [{ field: "salePrice.amount", direction: "asc" }] },
   ],
   preview: {
     select: { title: "title", subtitle: "status", media: "images.0" },

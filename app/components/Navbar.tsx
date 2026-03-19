@@ -109,8 +109,7 @@ export default function Navbar() {
                       key={l}
                       onClick={() => switchLanguage(l)}
                       className="hover:text-[#00FF7E] transition-colors duration-150 text-center"
-                    style={{ padding: "8px 16px" }}
-                      style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
+                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
                     >
                       {l}
                     </button>

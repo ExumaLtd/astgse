@@ -142,7 +142,7 @@ export default function Navbar() {
                       key={l}
                       onClick={() => { setLang(l); setLangOpen(false); }}
                       className="text-left px-4 py-2 text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
-                      style={{ ...dropdownItemStyle, fontWeight: lang === l ? 600 : 400 }}
+                      style={{ ...dropdownItemStyle, color: lang === l ? "#00FF7E" : "white" }}
                     >
                       {l}
                     </button>

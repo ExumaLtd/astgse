@@ -28,11 +28,42 @@ const TYPE_HREFS: Record<string, string> = {
 };
 
 const SUGGESTIONS = [
-  { label: "Maintenance", href: "/services/maintenance-and-diagnostics" },
-  { label: "Brokerage", href: null },
-  { label: "For sale", href: null },
-  { label: "For hire", href: null },
+  { en: "Maintenance", ar: "الصيانة",  es: "Mantenimiento", fr: "Maintenance", href: "/services/maintenance-and-diagnostics" },
+  { en: "Brokerage",   ar: "السمسرة",  es: "Corretaje",     fr: "Courtage",    href: null },
+  { en: "For sale",    ar: "للبيع",    es: "En venta",      fr: "À vendre",    href: null },
+  { en: "For hire",    ar: "للإيجار",  es: "Para alquilar", fr: "À louer",     href: null },
 ];
+
+const UI: Record<string, Record<string, string>> = {
+  en: {
+    searching: "I'm searching for",
+    placeholder: "e.g. Maintenance support",
+    suggestions: "Or explore our suggestions",
+    loading: "Searching…",
+    noResults: "No results for",
+  },
+  ar: {
+    searching: "أبحث عن",
+    placeholder: "مثال: دعم الصيانة",
+    suggestions: "أو استكشف اقتراحاتنا",
+    loading: "جارٍ البحث…",
+    noResults: "لا توجد نتائج لـ",
+  },
+  es: {
+    searching: "Estoy buscando",
+    placeholder: "ej. Soporte de mantenimiento",
+    suggestions: "O explora nuestras sugerencias",
+    loading: "Buscando…",
+    noResults: "Sin resultados para",
+  },
+  fr: {
+    searching: "Je recherche",
+    placeholder: "ex. Support de maintenance",
+    suggestions: "Ou explorez nos suggestions",
+    loading: "Recherche…",
+    noResults: "Aucun résultat pour",
+  },
+};
 
 function fuzzyMatch(text: string, q: string): boolean {
   const t = text.toLowerCase();
@@ -67,7 +98,15 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
   const [results, setResults] = useState<Result[]>([]);
   const [allDocs, setAllDocs] = useState<Result[]>([]);
   const [loading, setLoading] = useState(false);
+  const [locale, setLocale] = useState("en");
   const router = useRouter();
+
+  useEffect(() => {
+    const stored = localStorage.getItem("astgse-lang")?.toLowerCase() || "en";
+    setLocale(UI[stored] ? stored : "en");
+  }, [open]);
+
+  const t = UI[locale] || UI.en;
 
   useEffect(() => {
     if (!open) {
@@ -192,6 +231,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
           {/* Full-screen white overlay */}
           <motion.div
             className="fixed inset-0 z-[100] flex flex-col"
+            dir={locale === "ar" ? "rtl" : "ltr"}
             style={{ backgroundColor: "#ffffff" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -237,14 +277,14 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                   letterSpacing: "0.1em",
                   margin: "0 0 20px",
                 }}>
-                  I&apos;m searching for
+                  {t.searching}
                 </p>
 
                 {/* Large input + underline */}
                 <Command.Input
                   value={query}
                   onValueChange={setQuery}
-                  placeholder="e.g. Maintenance support"
+                  placeholder={t.placeholder}
                   autoFocus
                   style={{
                     width: "100%",
@@ -265,14 +305,14 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                 <Command.List style={{ marginTop: query.trim() ? 24 : 0 }}>
                   {loading && query.trim() && (
                     <Command.Loading>
-                      <p style={{ color: "#141127", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>Searching…</p>
+                      <p style={{ color: "#141127", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>{t.loading}</p>
                     </Command.Loading>
                   )}
 
                   {!loading && query.trim() && results.length === 0 && (
                     <Command.Empty>
                       <p style={{ color: "#141127", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>
-                        No results for &ldquo;{query}&rdquo;
+                        {t.noResults} &ldquo;{query}&rdquo;
                       </p>
                     </Command.Empty>
                   )}
@@ -305,16 +345,19 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                     letterSpacing: "0.1em",
                     margin: "0 0 16px",
                   }}>
-                    Or explore our suggestions
+                    {t.suggestions}
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                    {SUGGESTIONS.map(({ label, href }) => {
+                    {SUGGESTIONS.map((s) => {
+                      const label = s[locale as keyof typeof s] as string || s.en;
                       const sharedClass = "inline-flex items-center";
                       const sharedStyle = {
                         borderRadius: 100,
                         fontSize: "0.9375rem",
                         fontFamily: "var(--font-inter)",
-                        padding: "8px 8px 8px 20px",
+                        paddingBlock: 8,
+                        paddingInlineStart: 20,
+                        paddingInlineEnd: 8,
                         gap: 12,
                         cursor: "pointer",
                         backgroundColor: "#00FF7E",
@@ -324,21 +367,21 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                       };
                       const arrow = (
                         <span
-                          className="flex items-center justify-center rounded-full"
+                          className="flex items-center justify-center rounded-full rtl:rotate-180"
                           style={{ width: 26, height: 26, flexShrink: 0, backgroundColor: "#141127", color: "#00FF7E" }}
                         >
                           <ArrowRight size={13} color="currentColor" strokeWidth={2.5} />
                         </span>
                       );
-                      if (href) {
+                      if (s.href) {
                         return (
-                          <a key={label} href={href} onClick={onClose} className={sharedClass} style={sharedStyle}>
+                          <a key={s.en} href={s.href} onClick={onClose} className={sharedClass} style={sharedStyle}>
                             {label}{arrow}
                           </a>
                         );
                       }
                       return (
-                        <button key={label} onClick={() => handleSuggestion(label)} className={sharedClass} style={sharedStyle}>
+                        <button key={s.en} onClick={() => handleSuggestion(s.en)} className={sharedClass} style={sharedStyle}>
                           {label}{arrow}
                         </button>
                       );

@@ -98,7 +98,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
           </button>
 
           {/* Centred search container */}
-          <div className="w-full px-[20px] md:px-[32px] lg:px-0" style={{ maxWidth: 600 }}>
+          <div className="w-full px-[20px] md:px-[32px] lg:px-0" style={{ maxWidth: 800 }}>
             <Command shouldFilter={false}>
 
               {/* Input row */}
@@ -107,7 +107,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                 <Command.Input
                   value={query}
                   onValueChange={setQuery}
-                  placeholder="Search…"
+                  placeholder="Search ASTGSE"
                   autoFocus
                   style={{
                     flex: 1,

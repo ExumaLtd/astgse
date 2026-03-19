@@ -88,6 +88,12 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
         >
+          {/* Logo — matches navbar position */}
+          <div className="absolute top-0 left-[20px] md:left-[32px] lg:left-[40px] h-[80px] flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} />
+          </div>
+
           {/* Close — matches navbar height and padding */}
           <button
             onClick={onClose}
@@ -102,7 +108,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
             <Command shouldFilter={false}>
 
               {/* Input row */}
-              <div style={{ display: "flex", alignItems: "center", gap: 16, borderBottom: "1px solid white", paddingBottom: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16, borderBottom: "0.5px solid white", paddingBottom: 16 }}>
                 <Search size={20} strokeWidth={1.5} color="white" style={{ flexShrink: 0 }} />
                 <Command.Input
                   value={query}
@@ -122,10 +128,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                 />
               </div>
 
-              {/* Divider — only when typing */}
-              {query.trim() && (
-                <div style={{ height: 1, backgroundColor: "rgba(255,255,255,0.12)", margin: "24px 0" }} />
-              )}
+              {query.trim() && <div style={{ marginTop: 24 }} />}
 
               {/* Results */}
               <Command.List>

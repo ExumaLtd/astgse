@@ -199,17 +199,30 @@ function parseSpecs(post, debug = false) {
   }
 
   // ── Status ───────────────────────────────────────────────────────────────
-  let status = "For Sale";
-  if (/\bfor hire\b/i.test(full)) status = "For Hire";
+  const status = [];
+  if (/\bfor sale\b/i.test(full)) status.push("For Sale");
+  if (/\bfor hire\b/i.test(full)) status.push("For Hire");
+  if (status.length === 0) status.push("For Sale"); // default
 
   // ── Description ──────────────────────────────────────────────────────────
-  // Extract text after "Description" label in content, before "Enquire" button
   let description = null;
+
+  // Try: text after "Description" label
   const descMatch = content.match(/\bDescription\b[:\s]+(.+?)(?=\s*\b(?:Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
   if (descMatch) {
     description = descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim();
   }
-  if (!description) description = null;
+
+  // Fallback: strip title + button text from content and use the remainder
+  if (!description) {
+    const title = stripHtml(post.title?.rendered || "");
+    let cleaned = content
+      .replace(new RegExp(`^\\s*${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*`, "i"), "")
+      .replace(STRIP_PHRASES, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (cleaned.length > 20) description = cleaned;
+  }
 
   return { make, model, year, mileage, hours, fuelType, transmission, quantity, location, serialNumber, price, priceOnApplication, status, description };
 }
@@ -311,7 +324,10 @@ async function main() {
 
   console.log("📦 Fetching all posts...");
   const allPosts = await fetchAllPosts();
-  const posts = allPosts.slice(0, 1); // TEST: import 1 only
+  const categoryNames = Object.fromEntries(Object.entries(categories).map(([id, name]) => [id, name]));
+  const posts = allPosts.filter((p) =>
+    (p.categories || []).some((id) => categoryNames[id] === "Ambulift")
+  );
   console.log(`\n✅ Found ${posts.length} posts total\n`);
 
   let created = 0;
@@ -341,7 +357,7 @@ async function main() {
         .find(Boolean) || "Other GSE";
 
       // Specs
-      const specs = parseSpecs(post, i === 0); // debug first post only
+      const specs = parseSpecs(post);
 
       // Images
       const images = await getPostImages(post);

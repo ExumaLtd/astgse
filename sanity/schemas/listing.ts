@@ -16,9 +16,13 @@ export const listing = defineType({
     defineField({
       name: "status",
       title: "Status",
-      type: "string",
-      options: { list: ["For Sale", "For Hire", "Sold"], layout: "radio" },
-      initialValue: "For Sale",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        list: ["For Sale", "For Hire", "Sold"],
+        layout: "grid",
+      },
+      initialValue: ["For Sale"],
     }),
     defineField({ name: "make", title: "Make / Manufacturer", type: "string" }),
     defineField({ name: "model", title: "Model", type: "string" }),

@@ -196,8 +196,10 @@ function parseSpecs(post) {
   if (priceMatch) price = parseInt(priceMatch[1].replace(/,/g, ""), 10) || null;
   else priceOnApplication = true;
 
-  let status = "For Sale";
-  if (/\bfor hire\b/i.test(full)) status = "For Hire";
+  const status = [];
+  if (/\bfor sale\b/i.test(full)) status.push("For Sale");
+  if (/\bfor hire\b/i.test(full)) status.push("For Hire");
+  if (status.length === 0) status.push("For Sale");
 
   let description = null;
   const descMatch = content.match(/\bDescription\b[:\s]+(.+?)(?=\s*\b(?:Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);

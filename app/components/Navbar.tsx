@@ -137,10 +137,10 @@ export default function Navbar() {
             >
               <button
                 className="group flex items-center text-white transition-colors duration-200 cursor-pointer"
-                style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+                style={{ background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
               >
-                <Globe size={14} strokeWidth={1.5} className="group-hover:text-[#00FF7E] transition-colors duration-200" />
-                <span>{lang}</span>
+                <Globe size={14} strokeWidth={1.5} className="shrink-0" />
+                <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 10, marginRight: 12 }}>{lang}</span>
                 <Chevron open={langOpen} />
               </button>
               {langOpen && (
@@ -169,10 +169,10 @@ export default function Navbar() {
             <button
               onClick={() => setLangOpen(!langOpen)}
               className="group flex items-center text-white transition-colors duration-200 cursor-pointer"
-              style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+              style={{ background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
             >
-              <Globe size={14} strokeWidth={1.5} className="group-hover:text-[#00FF7E] transition-colors duration-200" />
-              <span>{lang}</span>
+              <Globe size={14} strokeWidth={1.5} className="shrink-0" />
+              <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 10, marginRight: 12 }}>{lang}</span>
               <Chevron open={langOpen} />
             </button>
             {langOpen && (

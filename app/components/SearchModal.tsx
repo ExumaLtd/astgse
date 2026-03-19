@@ -88,11 +88,11 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15 }}
         >
-          {/* Close */}
+          {/* Close — matches navbar height and padding */}
           <button
             onClick={onClose}
-            className="absolute top-6 right-[40px] text-white hover:text-[#00FF7E] transition-colors duration-200"
-            style={{ background: "none", border: "none", cursor: "pointer", padding: 0, lineHeight: 0 }}
+            className="absolute top-0 right-[20px] md:right-[32px] lg:right-[40px] h-[80px] flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200"
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
             <X size={20} strokeWidth={1.5} />
           </button>
@@ -102,7 +102,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
             <Command shouldFilter={false}>
 
               {/* Input row */}
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16, borderBottom: "1px solid white", paddingBottom: 16 }}>
                 <Search size={20} strokeWidth={1.5} color="white" style={{ flexShrink: 0 }} />
                 <Command.Input
                   value={query}

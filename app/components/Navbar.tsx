@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Menu, X, Globe } from "lucide-react";
+import { ArrowRight, Menu, X, Globe, Search } from "lucide-react";
 import { translatePage } from "@/app/utils/translate";
 import SearchModal from "@/app/components/SearchModal";
 
@@ -205,6 +205,15 @@ export default function Navbar() {
               </div>
             )}
           </div>
+
+          <button
+            className="flex text-white hover:text-[#00FF7E] transition-colors duration-200"
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search"
+            style={{ padding: 0, lineHeight: 0, background: "none", border: "none" }}
+          >
+            <Search size={18} strokeWidth={1.5} />
+          </button>
 
           <button
             className="flex text-white hover:text-[#00FF7E] transition-colors duration-200"

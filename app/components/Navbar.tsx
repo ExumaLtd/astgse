@@ -27,6 +27,17 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  function switchLanguage(l: string) {
+    setLang(l);
+    setLangOpen(false);
+    // Trigger Google Translate via its hidden select element
+    const select = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
+    if (select) {
+      select.value = l === "AR" ? "ar" : "en";
+      select.dispatchEvent(new Event("change"));
+    }
+  }
+
   return (
     <>
       <nav className="flex items-center justify-between w-full relative z-50 px-[20px] md:px-[32px] lg:px-[40px] h-[80px]">
@@ -96,7 +107,7 @@ export default function Navbar() {
                   {["EN", "AR"].map((l) => (
                     <button
                       key={l}
-                      onClick={() => { setLang(l); setLangOpen(false); }}
+                      onClick={() => switchLanguage(l)}
                       className="px-4 py-2 hover:bg-white/5 transition-colors duration-150 text-center"
                       style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
                     >
@@ -165,7 +176,7 @@ export default function Navbar() {
                     {["EN", "AR"].map((l) => (
                       <li key={l}>
                         <button
-                          onClick={() => { setLang(l); setLangOpen(false); }}
+                          onClick={() => switchLanguage(l)}
                           className="hover:text-[#00FF7E] transition-colors duration-150"
                           style={{ fontFamily: "var(--font-inter)", fontSize: "1rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "rgba(255,255,255,0.7)" }}
                         >

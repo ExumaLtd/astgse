@@ -222,10 +222,21 @@ function parseSpecs(post) {
   else if (/\bmanual\b/i.test(full))     transmission = "Manual";
 
   let price = null;
+  let priceCurrency = "GBP";
   let priceOnApplication = false;
-  const priceMatch = full.match(/£\s*([\d,]+)/);
-  if (priceMatch) price = parseInt(priceMatch[1].replace(/,/g, ""), 10) || null;
-  else priceOnApplication = true;
+  const priceMatch = full.match(/(£|€|\$|USD|EUR|GBP|AED|SAR)\s*([\d,]+)|([\d,]+)\s*(£|€|\$|USD|EUR|GBP|AED|SAR)/i);
+  if (priceMatch) {
+    const symbol = (priceMatch[1] || priceMatch[4] || "").toUpperCase();
+    const digits  = (priceMatch[2] || priceMatch[3] || "").replace(/,/g, "");
+    price = parseInt(digits, 10) || null;
+    if (symbol === "€" || symbol === "EUR")      priceCurrency = "EUR";
+    else if (symbol === "$" || symbol === "USD") priceCurrency = "USD";
+    else if (symbol === "AED")                   priceCurrency = "AED";
+    else if (symbol === "SAR")                   priceCurrency = "SAR";
+    else                                         priceCurrency = "GBP";
+  } else {
+    priceOnApplication = true;
+  }
 
   const status = [];
   if (/\bfor sale\b/i.test(full)) status.push("For Sale");
@@ -237,10 +248,11 @@ function parseSpecs(post) {
   if (descMatch) description = descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim() || null;
 
   return {
-    make:         make         ? normaliseBrands(make)        : null,
-    model:        model        ? normaliseBrands(model)       : null,
-    description:  description  ? normaliseBrands(description) : null,
-    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber, price, priceOnApplication, status,
+    make:         make         ? normaliseText(make)        : null,
+    model:        model        ? normaliseText(model)       : null,
+    description:  description  ? normaliseText(description) : null,
+    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber,
+    price, priceCurrency, priceOnApplication, status,
   };
 }
 
@@ -310,7 +322,7 @@ async function main() {
         fuelType: specs.fuelType || undefined,
         transmission: specs.transmission || undefined,
         quantity: specs.quantity ?? undefined,
-        salePrice: { amount: specs.price || undefined, onApplication: specs.priceOnApplication },
+        salePrice: { amount: specs.price || undefined, currency: specs.priceCurrency || "GBP", onApplication: specs.priceOnApplication },
         description: specs.description || undefined,
         images: images.length > 0 ? images : undefined,
         location: specs.location || undefined,

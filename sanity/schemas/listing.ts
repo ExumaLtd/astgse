@@ -53,7 +53,20 @@ export const listing = defineType({
       title: "Sale Price",
       type: "object",
       fields: [
-        defineField({ name: "amount", title: "Price (£)", type: "number" }),
+        defineField({ name: "amount", title: "Amount", type: "number" }),
+        defineField({
+          name: "currency",
+          title: "Currency",
+          type: "string",
+          options: { list: [
+            { title: "£ GBP", value: "GBP" },
+            { title: "€ EUR", value: "EUR" },
+            { title: "$ USD", value: "USD" },
+            { title: "AED", value: "AED" },
+            { title: "SAR", value: "SAR" },
+          ], layout: "radio" },
+          initialValue: "GBP",
+        }),
         defineField({ name: "onApplication", title: "Price on Application", type: "boolean", initialValue: false }),
       ],
     }),
@@ -62,7 +75,20 @@ export const listing = defineType({
       title: "Hire Price",
       type: "object",
       fields: [
-        defineField({ name: "amount", title: "Price (£)", type: "number" }),
+        defineField({ name: "amount", title: "Amount", type: "number" }),
+        defineField({
+          name: "currency",
+          title: "Currency",
+          type: "string",
+          options: { list: [
+            { title: "£ GBP", value: "GBP" },
+            { title: "€ EUR", value: "EUR" },
+            { title: "$ USD", value: "USD" },
+            { title: "AED", value: "AED" },
+            { title: "SAR", value: "SAR" },
+          ], layout: "radio" },
+          initialValue: "GBP",
+        }),
         defineField({ name: "onApplication", title: "Price on Application", type: "boolean", initialValue: false }),
         defineField({
           name: "period",

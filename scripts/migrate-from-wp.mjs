@@ -222,10 +222,18 @@ function parseSpecs(post, debug = false) {
 
   // ── Price ────────────────────────────────────────────────────────────────
   let price = null;
+  let priceCurrency = "GBP";
   let priceOnApplication = false;
-  const priceMatch = full.match(/£\s*([\d,]+)/);
+  const priceMatch = full.match(/(£|€|\$|USD|EUR|GBP|AED|SAR)\s*([\d,]+)|([\d,]+)\s*(£|€|\$|USD|EUR|GBP|AED|SAR)/i);
   if (priceMatch) {
-    price = parseInt(priceMatch[1].replace(/,/g, ""), 10) || null;
+    const symbol = (priceMatch[1] || priceMatch[4] || "").toUpperCase();
+    const digits  = (priceMatch[2] || priceMatch[3] || "").replace(/,/g, "");
+    price = parseInt(digits, 10) || null;
+    if (symbol === "€" || symbol === "EUR")       priceCurrency = "EUR";
+    else if (symbol === "$" || symbol === "USD")  priceCurrency = "USD";
+    else if (symbol === "AED")                    priceCurrency = "AED";
+    else if (symbol === "SAR")                    priceCurrency = "SAR";
+    else                                          priceCurrency = "GBP";
   } else {
     priceOnApplication = true;
   }
@@ -257,10 +265,11 @@ function parseSpecs(post, debug = false) {
   }
 
   return {
-    make:         make         ? normaliseBrands(make)        : null,
-    model:        model        ? normaliseBrands(model)       : null,
-    description:  description  ? normaliseBrands(description) : null,
-    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber, price, priceOnApplication, status,
+    make:         make         ? normaliseText(make)        : null,
+    model:        model        ? normaliseText(model)       : null,
+    description:  description  ? normaliseText(description) : null,
+    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber,
+    price, priceCurrency, priceOnApplication, status,
   };
 }
 
@@ -416,7 +425,7 @@ async function main() {
         transmission: specs.transmission || undefined,
         quantity: specs.quantity ?? undefined,
         condition: undefined,
-        salePrice: { amount: specs.price || undefined, onApplication: specs.priceOnApplication },
+        salePrice: { amount: specs.price || undefined, currency: specs.priceCurrency || "GBP", onApplication: specs.priceOnApplication },
         description: specs.description || undefined,
         images: images.length > 0 ? images : undefined,
         location: specs.location || undefined,

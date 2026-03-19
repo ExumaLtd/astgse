@@ -311,7 +311,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Content */}
-            <div className="flex flex-1 items-start md:items-center justify-center px-[20px] md:px-[32px] pt-[40px] md:pt-0 md:pb-[80px]">
+            <div className="flex flex-1 items-start md:items-center justify-center px-[20px] md:px-[32px] pt-[20px] md:pt-0 md:pb-[80px] overflow-y-auto">
             <div
               className="w-full"
               style={{ maxWidth: 720 }}
@@ -386,7 +386,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                 </Command.List>
 
                 {/* Suggestions — always visible */}
-                <div style={{ marginTop: 50 }}>
+                <div className="mt-[40px] md:mt-[50px]">
                   <p style={{
                     color: "#141127",
                     fontSize: "0.75rem",

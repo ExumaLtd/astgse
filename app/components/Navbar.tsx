@@ -91,7 +91,7 @@ export default function Navbar() {
             <div ref={langRef} className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer"
+                className="flex items-center text-white transition-colors duration-200 cursor-pointer"
                 style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
               >
                 <Globe size={14} strokeWidth={1.5} />
@@ -104,8 +104,8 @@ export default function Navbar() {
                     <button
                       key={l}
                       onClick={() => switchLanguage(l)}
-                      className="hover:text-[#00FF7E] transition-colors duration-150 text-center"
-                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
+                      className={`hover:text-[#00FF7E] transition-colors duration-150 text-center ${lang === l ? "text-[#00FF7E]" : "text-white"}`}
+                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer" }}
                     >
                       {l}
                     </button>
@@ -121,7 +121,7 @@ export default function Navbar() {
           <div ref={langRef} className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer"
+              className="flex items-center text-white transition-colors duration-200 cursor-pointer"
               style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
             >
               <Globe size={14} strokeWidth={1.5} />
@@ -134,8 +134,8 @@ export default function Navbar() {
                   <button
                     key={l}
                     onClick={() => switchLanguage(l)}
-                    className="hover:text-[#00FF7E] transition-colors duration-150 text-center"
-                    style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
+                    className={`hover:text-[#00FF7E] transition-colors duration-150 text-center ${lang === l ? "text-[#00FF7E]" : "text-white"}`}
+                    style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer" }}
                   >
                     {l}
                   </button>

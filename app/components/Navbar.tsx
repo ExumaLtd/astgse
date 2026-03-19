@@ -6,6 +6,13 @@ import Link from "next/link";
 import { ArrowRight, Menu, X, Globe } from "lucide-react";
 import { translatePage } from "@/app/utils/translate";
 
+const LANGUAGES: { code: string; locale: string }[] = [
+  { code: "AR", locale: "ar" },
+  { code: "EN", locale: "en" },
+  { code: "ES", locale: "es" },
+  { code: "FR", locale: "fr" },
+];
+
 const Chevron = ({ open }: { open?: boolean }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"
     className="transition-transform duration-200"
@@ -22,6 +29,7 @@ export default function Navbar() {
 
   const desktopLangRef = useRef<HTMLDivElement>(null);
   const mobileLangRef = useRef<HTMLDivElement>(null);
+  const langLeaveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -35,9 +43,10 @@ export default function Navbar() {
 
   useEffect(() => {
     const stored = localStorage.getItem("astgse-lang");
-    if (stored === "AR") {
-      setLang("AR");
-      translatePage("ar");
+    const match = LANGUAGES.find((l) => l.code === stored);
+    if (match && match.code !== "EN") {
+      setLang(match.code);
+      translatePage(match.locale);
     }
   }, []);
 
@@ -47,11 +56,22 @@ export default function Navbar() {
     return lang === l ? "#00FF7E" : "white";
   }
 
-  function switchLanguage(l: string) {
-    setLang(l);
+  function switchLanguage(code: string) {
+    const match = LANGUAGES.find((l) => l.code === code);
+    if (!match) return;
+    setLang(code);
     setLangOpen(false);
-    localStorage.setItem("astgse-lang", l);
-    translatePage(l === "AR" ? "ar" : "en");
+    localStorage.setItem("astgse-lang", code);
+    translatePage(match.locale);
+  }
+
+  function handleLangEnter() {
+    if (langLeaveTimeout.current) clearTimeout(langLeaveTimeout.current);
+    setLangOpen(true);
+  }
+
+  function handleLangLeave() {
+    langLeaveTimeout.current = setTimeout(() => setLangOpen(false), 150);
   }
 
   return (
@@ -67,25 +87,25 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center" style={{ gap: 40 }}>
           <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
             <li>
-              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white transition-colors duration-200" style={{ gap: "12px" }}>
+              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
                 Services
                 <Chevron />
               </Link>
             </li>
             <li>
-              <button className="flex items-center group text-white transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}>
+              <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}>
                 Equipment
                 <Chevron />
               </button>
             </li>
             <li>
-              <Link href="/about" className="text-white transition-colors duration-200">About</Link>
+              <Link href="/about" className="text-white hover:text-[#00FF7E] transition-colors duration-200">About</Link>
             </li>
             <li>
-              <Link href="/careers" className="text-white transition-colors duration-200">Careers</Link>
+              <Link href="/careers" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Careers</Link>
             </li>
             <li>
-              <Link href="/newsroom" className="text-white transition-colors duration-200">Newsroom</Link>
+              <Link href="/newsroom" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Newsroom</Link>
             </li>
           </ul>
 
@@ -107,29 +127,33 @@ export default function Navbar() {
               </svg>
             </button>
 
-            {/* Language switcher */}
-            <div ref={desktopLangRef} className="relative">
+            {/* Language switcher — hover to open */}
+            <div
+              ref={desktopLangRef}
+              className="relative"
+              onMouseEnter={handleLangEnter}
+              onMouseLeave={handleLangLeave}
+            >
               <button
-                onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center text-white transition-colors duration-200 cursor-pointer"
+                className="group flex items-center text-white transition-colors duration-200 cursor-pointer"
                 style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
               >
-                <Globe size={14} strokeWidth={1.5} />
+                <Globe size={14} strokeWidth={1.5} className="group-hover:text-[#00FF7E] transition-colors duration-200" />
                 <span>{lang}</span>
                 <Chevron open={langOpen} />
               </button>
               {langOpen && (
                 <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ backgroundColor: "#141127", borderRadius: 8, left: "50%", transform: "translateX(-50%)" }}>
-                  {["EN", "AR"].map((l) => (
+                  {LANGUAGES.map(({ code }) => (
                     <button
-                      key={l}
-                      onClick={() => switchLanguage(l)}
-                      onMouseEnter={() => setHoveredLang(l)}
+                      key={code}
+                      onClick={() => switchLanguage(code)}
+                      onMouseEnter={() => setHoveredLang(code)}
                       onMouseLeave={() => setHoveredLang(null)}
                       className="transition-colors duration-150 text-center"
-                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(l) }}
+                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(code) }}
                     >
-                      {l}
+                      {code}
                     </button>
                   ))}
                 </div>
@@ -143,23 +167,25 @@ export default function Navbar() {
           <div ref={mobileLangRef} className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center text-white transition-colors duration-200 cursor-pointer"
+              className="group flex items-center text-white transition-colors duration-200 cursor-pointer"
               style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
             >
-              <Globe size={14} strokeWidth={1.5} />
+              <Globe size={14} strokeWidth={1.5} className="group-hover:text-[#00FF7E] transition-colors duration-200" />
               <span>{lang}</span>
               <Chevron open={langOpen} />
             </button>
             {langOpen && (
               <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ backgroundColor: "#141127", borderRadius: 8, right: 0 }}>
-                {["EN", "AR"].map((l) => (
+                {LANGUAGES.map(({ code }) => (
                   <button
-                    key={l}
-                    onClick={() => switchLanguage(l)}
-                    className="text-white hover:text-[#00FF7E] transition-colors duration-150 text-center"
-                    style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer" }}
+                    key={code}
+                    onClick={() => switchLanguage(code)}
+                    onMouseEnter={() => setHoveredLang(code)}
+                    onMouseLeave={() => setHoveredLang(null)}
+                    className="transition-colors duration-150 text-center"
+                    style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(code) }}
                   >
-                    {l}
+                    {code}
                   </button>
                 ))}
               </div>
@@ -202,20 +228,20 @@ export default function Navbar() {
           <div className="page-px flex flex-col flex-1 overflow-y-auto pt-[40px] pb-[40px]">
             <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
               <li>
-                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Services
                   <Chevron />
                 </Link>
               </li>
               <li>
-                <Link href="/equipment" className="flex items-center group transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                <Link href="/equipment" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Equipment
                   <Chevron />
                 </Link>
               </li>
-              <li><Link href="/about" className="transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
-              <li><Link href="/careers" className="transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
-              <li><Link href="/newsroom" className="transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
+              <li><Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
+              <li><Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
+              <li><Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
             </ul>
 
             <div style={{ marginTop: 48 }}>

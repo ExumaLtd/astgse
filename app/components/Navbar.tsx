@@ -33,6 +33,14 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const stored = localStorage.getItem("astgse-lang");
+    if (stored === "AR") {
+      setLang("AR");
+      translatePage("ar");
+    }
+  }, []);
+
   function langColor(l: string) {
     if (hoveredLang === l) return "#00FF7E";
     if (hoveredLang !== null) return "white";
@@ -42,12 +50,13 @@ export default function Navbar() {
   function switchLanguage(l: string) {
     setLang(l);
     setLangOpen(false);
+    localStorage.setItem("astgse-lang", l);
     translatePage(l === "AR" ? "ar" : "en");
   }
 
   return (
     <>
-      <nav className="page-px flex items-center justify-between w-full relative z-50 h-[80px]">
+      <nav dir="ltr" className="page-px flex items-center justify-between w-full relative z-50 h-[80px]">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -172,6 +181,7 @@ export default function Navbar() {
       <AnimatePresence>
       {open && (
         <motion.div
+          dir="ltr"
           className="lg:hidden fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: "#141127" }}
           initial={{ opacity: 0 }}

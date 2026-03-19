@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -99,11 +99,29 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
   const [allDocs, setAllDocs] = useState<Result[]>([]);
   const [loading, setLoading] = useState(false);
   const [locale, setLocale] = useState("en");
+  const [modalHeight, setModalHeight] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
     const stored = localStorage.getItem("astgse-lang")?.toLowerCase() || "en";
     setLocale(UI[stored] ? stored : "en");
+  }, [open]);
+
+  // Lock height to initial viewport so keyboard opening doesn't reflow the modal
+  useEffect(() => {
+    if (open) {
+      setModalHeight(window.innerHeight);
+    } else {
+      setModalHeight(null);
+    }
+  }, [open]);
+
+  // Only auto-focus on non-touch devices to prevent mobile keyboard causing layout shift
+  useEffect(() => {
+    if (open && !("ontouchstart" in window)) {
+      inputRef.current?.focus();
+    }
   }, [open]);
 
   const t = UI[locale] || UI.en;
@@ -230,13 +248,13 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
         <>
           {/* Full-screen white overlay */}
           <motion.div
-            className="fixed inset-0 z-[100] flex flex-col"
+            className="fixed top-0 left-0 right-0 z-[100] flex flex-col overflow-hidden"
             dir={locale === "ar" ? "rtl" : "ltr"}
-            style={{ backgroundColor: "#ffffff" }}
+            style={{ backgroundColor: "#ffffff", height: modalHeight ?? "100dvh" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
           >
             {/* Close — mirrors navbar height + padding */}
             <div className="px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between h-[80px] shrink-0">
@@ -282,10 +300,10 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
 
                 {/* Large input + underline */}
                 <Command.Input
+                  ref={inputRef}
                   value={query}
                   onValueChange={setQuery}
                   placeholder={t.placeholder}
-                  autoFocus
                   style={{
                     width: "100%",
                     background: "none",

@@ -260,7 +260,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
             </div>
 
             {/* Content */}
-            <div className="flex flex-1 items-start md:items-center justify-center px-[20px] md:px-[32px] pt-[30px] md:pt-0 md:pb-[80px]">
+            <div className="flex flex-1 items-start md:items-center justify-center px-[20px] md:px-[32px] pt-[40px] md:pt-0 md:pb-[80px]">
             <div
               className="w-full"
               style={{ maxWidth: 720 }}
@@ -275,7 +275,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                   fontFamily: "var(--font-inter)",
                   textTransform: "uppercase",
                   letterSpacing: "0.1em",
-                  margin: "0 0 20px",
+                  margin: "0 0 40px",
                 }}>
                   {t.searching}
                 </p>

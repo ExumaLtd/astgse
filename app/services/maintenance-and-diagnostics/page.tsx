@@ -41,7 +41,7 @@ export default async function MaintenanceAndDiagnostics() {
           <div className="page-px">
           {/* Breadcrumb */}
           <nav
-            className="flex items-center gap-[12px] pt-[10px] pb-[30px] lg:pb-[80px]"
+            className="flex items-center gap-[12px] pt-[10px] md:pt-4 pb-[30px] md:pb-[40px] lg:pb-[80px]"
             style={{ fontFamily: "var(--font-almaren-nueva)", fontSize: "0.875rem", fontWeight: 21 }}
             aria-label="Breadcrumb"
           >
@@ -72,8 +72,8 @@ export default async function MaintenanceAndDiagnostics() {
 
             <div className="lg:col-span-6 lg:col-start-7 flex flex-col justify-center gap-[24px] lg:gap-[44px]">
               <p
-                className="hidden md:block text-white"
-                style={{ fontFamily: "var(--font-inter)", fontSize: "1.125rem", fontWeight: 400, lineHeight: "1.625rem" }}
+                className="text-white text-[0.9375rem] md:text-[1.125rem]"
+                style={{ fontFamily: "var(--font-inter)", fontWeight: 400, lineHeight: "1.625rem" }}
               >
                 {heroBody}
               </p>
@@ -103,8 +103,6 @@ export default async function MaintenanceAndDiagnostics() {
         </div>
       </div>
 
-      {/* Blue breathing room on mobile */}
-      <div className="h-[25px] bg-blue md:hidden" />
 
       {/* White section */}
       <div id="more" className="py-[100px] lg:py-[160px]" style={{ backgroundColor: "#ffffff" }}>

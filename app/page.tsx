@@ -29,7 +29,7 @@ export default async function Home() {
           src={bgImage}
           alt="Hero background"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: "30% center" }}
+          style={{ objectPosition: "70% center" }}
         />
       ) : (
         <video
@@ -38,7 +38,7 @@ export default async function Home() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: "30% center" }}
+          style={{ objectPosition: "70% center" }}
           src="/videos/gettyimages-2192368667-640_adpp.mp4"
         />
       )}

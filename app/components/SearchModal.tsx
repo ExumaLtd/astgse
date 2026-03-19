@@ -197,8 +197,14 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     return () => clearTimeout(timeout);
   }, [query, allDocs]);
 
+  // Types that have individual detail pages — add to this set as pages are built
+  const TYPES_WITH_DETAIL_PAGES = new Set(["servicePage"]);
+
   function navigate(result: Result) {
-    router.push(`${TYPE_HREFS[result._type]}/${result.slug}`);
+    const href = TYPES_WITH_DETAIL_PAGES.has(result._type)
+      ? `${TYPE_HREFS[result._type]}/${result.slug}`
+      : "/";
+    router.push(href);
     onClose();
   }
 

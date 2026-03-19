@@ -31,6 +31,7 @@ function randomKey() {
 }
 
 const UK_ENGLISH = [
+  // American → British spellings
   [/\banalyze\b/gi, "analyse"],
   [/\banalyzing\b/gi, "analysing"],
   [/\bcenter\b/gi, "centre"],
@@ -51,6 +52,45 @@ const UK_ENGLISH = [
   [/\bspecialize\b/gi, "specialise"],
   [/\bstandardize\b/gi, "standardise"],
   [/\butilize\b/gi, "utilise"],
+  // Foreign language words (French/German/Spanish common in GSE listings)
+  [/\bcabine\b/gi, "cabin"],
+  [/\bcabines\b/gi, "cabins"],
+  [/\bautomatique\b/gi, "automatic"],
+  [/\bhydraulique\b/gi, "hydraulic"],
+  [/\bhydrauliques\b/gi, "hydraulics"],
+  [/\béquipement\b/gi, "equipment"],
+  [/\bequipement\b/gi, "equipment"],
+  [/\bvéhicule\b/gi, "vehicle"],
+  [/\bvehicule\b/gi, "vehicle"],
+  [/\bmoteur\b/gi, "engine"],
+  [/\bchassis tracteur\b/gi, "tractor chassis"],
+  [/\bpneumatique\b/gi, "pneumatic"],
+  [/\bélectrique\b/gi, "electric"],
+  [/\belectrique\b/gi, "electric"],
+  [/\bdiesel\b/gi, "Diesel"],
+  [/\bboîte automatique\b/gi, "automatic gearbox"],
+  [/\bboite automatique\b/gi, "automatic gearbox"],
+  [/\bkilomètres\b/gi, "kilometres"],
+  [/\bkilometres\b/gi, "kilometres"],
+  [/\bheures\b/gi, "hours"],
+  [/\bannée\b/gi, "year"],
+  [/\bannee\b/gi, "year"],
+  [/\bmarque\b/gi, "make"],
+  [/\bmodèle\b/gi, "model"],
+  [/\bmodele\b/gi, "model"],
+  // Common GSE misspellings
+  [/\bpush\s*-?\s*back\b/gi, "pushback"],
+  [/\bde-?icing\b/gi, "de-icing"],
+  [/\bbagagge\b/gi, "baggage"],
+  [/\bbagage\b/gi, "baggage"],
+  [/\bpassanger\b/gi, "passenger"],
+  [/\bmaintanence\b/gi, "maintenance"],
+  [/\bmaintainance\b/gi, "maintenance"],
+  [/\bhydrallic\b/gi, "hydraulic"],
+  [/\bhydralic\b/gi, "hydraulic"],
+  [/\btransmision\b/gi, "transmission"],
+  [/\bengione\b/gi, "engine"],
+  [/\bengien\b/gi, "engine"],
 ];
 
 function normaliseText(text) {

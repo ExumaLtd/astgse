@@ -100,6 +100,38 @@ const CATEGORY_MAP = {
 // ─── Spec parsing ─────────────────────────────────────────────────────────────
 
 /** Strip HTML tags and decode basic entities */
+const UK_ENGLISH = [
+  [/\banalyze\b/gi, "analyse"],
+  [/\banalyzing\b/gi, "analysing"],
+  [/\bcenter\b/gi, "centre"],
+  [/\bcenters\b/gi, "centres"],
+  [/\bcolor\b/gi, "colour"],
+  [/\bcolors\b/gi, "colours"],
+  [/\bfavor\b/gi, "favour"],
+  [/\bfavorite\b/gi, "favourite"],
+  [/\bharbor\b/gi, "harbour"],
+  [/\bhonor\b/gi, "honour"],
+  [/\blabor\b/gi, "labour"],
+  [/\bmaximize\b/gi, "maximise"],
+  [/\bminimize\b/gi, "minimise"],
+  [/\bneighbor\b/gi, "neighbour"],
+  [/\boptimize\b/gi, "optimise"],
+  [/\borganize\b/gi, "organise"],
+  [/\brecognize\b/gi, "recognise"],
+  [/\bspecialize\b/gi, "specialise"],
+  [/\bstandardize\b/gi, "standardise"],
+  [/\butilize\b/gi, "utilise"],
+];
+
+function normaliseText(text) {
+  let t = text.replace(/\bMercedes\b(?![-\s]Benz)/g, "Mercedes-Benz");
+  for (const [pattern, replacement] of UK_ENGLISH) t = t.replace(pattern, replacement);
+  return t;
+}
+
+// Keep alias for clarity
+const normaliseBrands = normaliseText;
+
 function stripHtml(html) {
   return html
     .replace(/<[^>]+>/g, " ")
@@ -224,7 +256,12 @@ function parseSpecs(post, debug = false) {
     if (cleaned.length > 20) description = cleaned;
   }
 
-  return { make, model, year, mileage, hours, fuelType, transmission, quantity, location, serialNumber, price, priceOnApplication, status, description };
+  return {
+    make:         make         ? normaliseBrands(make)        : null,
+    model:        model        ? normaliseBrands(model)       : null,
+    description:  description  ? normaliseBrands(description) : null,
+    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber, price, priceOnApplication, status,
+  };
 }
 
 // ─── Image upload ─────────────────────────────────────────────────────────────
@@ -337,7 +374,7 @@ async function main() {
   for (let i = 0; i < posts.length; i++) {
     const post = posts[i];
     const slug = toSanitySlug(post.slug);
-    const title = stripHtml(post.title?.rendered || "Untitled");
+    const title = normaliseBrands(stripHtml(post.title?.rendered || "Untitled"));
 
     process.stdout.write(`[${i + 1}/${posts.length}] ${title.slice(0, 60)}... `);
 

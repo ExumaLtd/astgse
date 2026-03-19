@@ -30,6 +30,37 @@ function randomKey() {
   return Math.random().toString(36).slice(2, 10);
 }
 
+const UK_ENGLISH = [
+  [/\banalyze\b/gi, "analyse"],
+  [/\banalyzing\b/gi, "analysing"],
+  [/\bcenter\b/gi, "centre"],
+  [/\bcenters\b/gi, "centres"],
+  [/\bcolor\b/gi, "colour"],
+  [/\bcolors\b/gi, "colours"],
+  [/\bfavor\b/gi, "favour"],
+  [/\bfavorite\b/gi, "favourite"],
+  [/\bharbor\b/gi, "harbour"],
+  [/\bhonor\b/gi, "honour"],
+  [/\blabor\b/gi, "labour"],
+  [/\bmaximize\b/gi, "maximise"],
+  [/\bminimize\b/gi, "minimise"],
+  [/\bneighbor\b/gi, "neighbour"],
+  [/\boptimize\b/gi, "optimise"],
+  [/\borganize\b/gi, "organise"],
+  [/\brecognize\b/gi, "recognise"],
+  [/\bspecialize\b/gi, "specialise"],
+  [/\bstandardize\b/gi, "standardise"],
+  [/\butilize\b/gi, "utilise"],
+];
+
+function normaliseText(text) {
+  let t = text.replace(/\bMercedes\b(?![-\s]Benz)/g, "Mercedes-Benz");
+  for (const [pattern, replacement] of UK_ENGLISH) t = t.replace(pattern, replacement);
+  return t;
+}
+
+const normaliseBrands = normaliseText;
+
 function stripHtml(html) {
   return html
     .replace(/<[^>]+>/g, " ")
@@ -205,7 +236,12 @@ function parseSpecs(post) {
   const descMatch = content.match(/\bDescription\b[:\s]+(.+?)(?=\s*\b(?:Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
   if (descMatch) description = descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim() || null;
 
-  return { make, model, year, mileage, hours, fuelType, transmission, quantity, location, serialNumber, price, priceOnApplication, status, description };
+  return {
+    make:         make         ? normaliseBrands(make)        : null,
+    model:        model        ? normaliseBrands(model)       : null,
+    description:  description  ? normaliseBrands(description) : null,
+    year, mileage, hours, fuelType, transmission, quantity, location, serialNumber, price, priceOnApplication, status,
+  };
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -249,7 +285,7 @@ async function main() {
     const slug = toSanitySlug(post.slug);
     if (sanitySlugs.has(slug)) continue; // already exists
 
-    const title = stripHtml(post.title?.rendered || "Untitled");
+    const title = normaliseBrands(stripHtml(post.title?.rendered || "Untitled"));
     process.stdout.write(`➕ Importing: ${title.slice(0, 60)}... `);
 
     try {

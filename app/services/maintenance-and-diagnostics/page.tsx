@@ -40,7 +40,7 @@ export default async function MaintenanceAndDiagnostics() {
           <div className="page-px">
           {/* Breadcrumb */}
           <nav
-            className="flex items-center gap-2 pt-4 pb-[40px] lg:pb-[80px]"
+            className="flex items-center gap-[12px] pt-4 pb-[40px] lg:pb-[80px]"
             style={{ fontFamily: "var(--font-almaren-nueva)", fontSize: "0.875rem", fontWeight: 21 }}
             aria-label="Breadcrumb"
           >

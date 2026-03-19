@@ -69,7 +69,7 @@ export const structure: StructureResolver = (S) =>
         S.document().schemaType("about").documentId("about")
       ),
       S.listItem().title("Newsroom").child(
-        S.documentTypeList("newsroom").title("Newsroom")
+        S.documentTypeList("post").title("Newsroom")
       ),
       S.listItem().title("Menu").child(
         S.document().schemaType("navigation").documentId("navigation")

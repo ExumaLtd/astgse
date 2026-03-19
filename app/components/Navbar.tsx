@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Menu, X, Globe } from "lucide-react";
 import { translatePage } from "@/app/utils/translate";
@@ -156,8 +157,16 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile menu overlay */}
+      <AnimatePresence>
       {open && (
-        <div className="lg:hidden fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: "#141127" }}>
+        <motion.div
+          className="lg:hidden fixed inset-0 z-50 flex flex-col"
+          style={{ backgroundColor: "#141127" }}
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+        >
           <div className="page-px flex items-center justify-between h-[80px] shrink-0">
             <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -201,8 +210,9 @@ export default function Navbar() {
               </Link>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </>
   );
 }

@@ -20,11 +20,14 @@ export default function Navbar() {
   const [langOpen, setLangOpen] = useState(false);
   const [hoveredLang, setHoveredLang] = useState<string | null>(null);
 
-  const langRef = useRef<HTMLDivElement>(null);
+  const desktopLangRef = useRef<HTMLDivElement>(null);
+  const mobileLangRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
+      const inDesktop = desktopLangRef.current?.contains(e.target as Node);
+      const inMobile = mobileLangRef.current?.contains(e.target as Node);
+      if (!inDesktop && !inMobile) setLangOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -96,7 +99,7 @@ export default function Navbar() {
             </button>
 
             {/* Language switcher */}
-            <div ref={langRef} className="relative">
+            <div ref={desktopLangRef} className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
                 className="flex items-center text-white transition-colors duration-200 cursor-pointer"
@@ -128,7 +131,7 @@ export default function Navbar() {
 
         {/* Mobile right — language + burger */}
         <div className="flex lg:hidden items-center" style={{ gap: 20 }}>
-          <div ref={langRef} className="relative">
+          <div ref={mobileLangRef} className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
               className="flex items-center text-white transition-colors duration-200 cursor-pointer"

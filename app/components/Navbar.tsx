@@ -18,6 +18,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState("EN");
   const [langOpen, setLangOpen] = useState(false);
+  const [hoveredLang, setHoveredLang] = useState<string | null>(null);
 
   const langRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +29,12 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  function langColor(l: string) {
+    if (hoveredLang === l) return "#00FF7E";
+    if (hoveredLang !== null) return "white";
+    return lang === l ? "#00FF7E" : "white";
+  }
 
   function switchLanguage(l: string) {
     setLang(l);
@@ -105,8 +112,10 @@ export default function Navbar() {
                     <button
                       key={l}
                       onClick={() => switchLanguage(l)}
-                      className="text-white hover:text-[#00FF7E] transition-colors duration-150 text-center"
-                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer" }}
+                      onMouseEnter={() => setHoveredLang(l)}
+                      onMouseLeave={() => setHoveredLang(null)}
+                      className="transition-colors duration-150 text-center"
+                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(l) }}
                     >
                       {l}
                     </button>

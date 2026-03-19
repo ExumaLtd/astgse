@@ -5,6 +5,8 @@ import { schemaTypes } from "./sanity/schemas";
 import { structure } from "./sanity/structure";
 
 export default defineConfig({
+  name: "astgse",
+  title: "ASTGSE | Studio",
   basePath: "/studio",
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kcmbd43u",
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",

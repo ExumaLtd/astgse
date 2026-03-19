@@ -112,11 +112,26 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     setLocale(UI[stored] ? stored : "en");
   }, [open]);
 
-  // Lock height to initial viewport so keyboard opening doesn't reflow the modal
+  // Lock height to initial viewport so keyboard opening doesn't reflow the modal.
+  // Also freeze the body with position:fixed (iOS-safe scroll lock) so the page
+  // behind the modal doesn't jump when the software keyboard appears.
   useEffect(() => {
     if (open) {
+      const scrollY = window.scrollY;
       setModalHeight(window.innerHeight);
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.overflow = "hidden";
     } else {
+      const top = Math.abs(parseInt(document.body.style.top || "0", 10));
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.overflow = "";
+      window.scrollTo(0, top);
       setModalHeight(null);
     }
   }, [open]);

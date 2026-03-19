@@ -112,19 +112,17 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                 overflow: "hidden",
               }}
             >
-              {/* Header row — logo + close */}
+              {/* Header row — close */}
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-end",
                   padding: "0 32px",
-                  height: 72,
+                  height: 56,
                   flexShrink: 0,
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} />
                 <button
                   onClick={onClose}
                   className="text-white hover:text-[#00FF7E] transition-colors duration-200"

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Menu, X, Globe } from "lucide-react";
 import { translatePage } from "@/app/utils/translate";
+import SearchModal from "@/app/components/SearchModal";
 
 const LANGUAGES: { code: string; locale: string }[] = [
   { code: "AR", locale: "ar" },
@@ -23,6 +24,7 @@ const Chevron = ({ open }: { open?: boolean }) => (
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [lang, setLang] = useState("EN");
   const [langOpen, setLangOpen] = useState(false);
   const [hoveredLang, setHoveredLang] = useState<string | null>(null);
@@ -40,6 +42,17 @@ export default function Navbar() {
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   useEffect(() => {
@@ -122,7 +135,7 @@ export default function Navbar() {
               </span>
             </Link>
 
-            <button className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">
+            <button onClick={() => setSearchOpen(true)} className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer" aria-label="Search">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M12.75 12.75L9.85667 9.85667M11.4167 6.08333C11.4167 9.02885 9.02885 11.4167 6.08333 11.4167C3.13781 11.4167 0.75 9.02885 0.75 6.08333C0.75 3.13781 3.13781 0.75 6.08333 0.75C9.02885 0.75 11.4167 3.13781 11.4167 6.08333Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -262,6 +275,8 @@ export default function Navbar() {
         </motion.div>
       )}
       </AnimatePresence>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

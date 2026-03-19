@@ -53,8 +53,8 @@ export async function translatePage(targetLang: string): Promise<void> {
     if (!originals.has(node)) originals.set(node, node.textContent || "");
   });
 
-  document.documentElement.setAttribute("dir", "rtl");
-  document.documentElement.setAttribute("lang", "ar");
+  document.documentElement.setAttribute("dir", targetLang === "ar" ? "rtl" : "ltr");
+  document.documentElement.setAttribute("lang", targetLang);
 
   const batchSize = 10;
   for (let i = 0; i < nodes.length; i += batchSize) {

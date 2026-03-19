@@ -4,56 +4,50 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X, Globe } from "lucide-react";
 
+const Chevron = ({ open }: { open?: boolean }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"
+    className="transition-transform duration-200"
+    style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}>
+    <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const dropdownStyle = {
+  backgroundColor: "#141127",
+  border: "1px solid rgba(255,255,255,0.12)",
+  borderRadius: 8,
+};
+
+const dropdownItemStyle = {
+  fontFamily: "var(--font-inter)",
+  fontSize: "0.9375rem",
+  background: "none",
+  border: "none",
+  cursor: "pointer",
+};
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState("EN");
   const [langOpen, setLangOpen] = useState(false);
-  const langRef = useRef<HTMLDivElement>(null);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
-  // Close language dropdown when clicking outside
+  const langRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLLIElement>(null);
+
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (langRef.current && !langRef.current.contains(e.target as Node)) {
-        setLangOpen(false);
-      }
+      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
+      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) setServicesOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const LanguageSwitcher = ({ mobile = false }: { mobile?: boolean }) => (
-    <div ref={mobile ? undefined : langRef} className="relative">
-      <button
-        onClick={() => setLangOpen(!langOpen)}
-        className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer"
-        style={{ gap: 6, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: mobile ? "1.125rem" : "0.9375rem" }}
-      >
-        <Globe size={14} strokeWidth={1.5} />
-        <span>{lang}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200" style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)" }}>
-          <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
-
-      {langOpen && (
-        <div
-          className="absolute top-full mt-2 flex flex-col overflow-hidden z-50"
-          style={{ backgroundColor: "#141127", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8, minWidth: 80, left: mobile ? 0 : "50%", transform: mobile ? "none" : "translateX(-50%)" }}
-        >
-          {["EN", "AR"].map((l) => (
-            <button
-              key={l}
-              onClick={() => { setLang(l); setLangOpen(false); }}
-              className="text-left px-4 py-2 text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
-              style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", fontWeight: lang === l ? 600 : 400 }}
-            >
-              {l === "EN" ? "English" : "العربية"}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const servicePages = [
+    { label: "Maintenance and diagnostics", href: "/services/maintenance-and-diagnostics" },
+  ];
 
   return (
     <>
@@ -64,23 +58,41 @@ export default function Navbar() {
           <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />
         </Link>
 
-        {/* Desktop nav — hidden below lg */}
+        {/* Desktop nav */}
         <div className="hidden lg:flex items-center" style={{ gap: 40 }}>
           <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
-            <li>
-              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
+
+            {/* Services with dropdown */}
+            <li ref={servicesRef} className="relative">
+              <button
+                onClick={() => setServicesOpen(!servicesOpen)}
+                className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200"
+                style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+              >
                 Services
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
-                  <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </Link>
+                <Chevron open={servicesOpen} />
+              </button>
+              {servicesOpen && (
+                <div className="absolute top-full mt-3 flex flex-col overflow-hidden z-50 whitespace-nowrap" style={{ ...dropdownStyle, minWidth: 240, left: "50%", transform: "translateX(-50%)" }}>
+                  {servicePages.map((s) => (
+                    <Link
+                      key={s.href}
+                      href={s.href}
+                      onClick={() => setServicesOpen(false)}
+                      className="px-4 py-2.5 text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
+                      style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+                    >
+                      {s.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </li>
+
             <li>
-              <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }}>
+              <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}>
                 Equipment
-                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
-                  <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+                <Chevron />
               </button>
             </li>
             <li>
@@ -112,11 +124,36 @@ export default function Navbar() {
               </svg>
             </button>
 
-            <LanguageSwitcher />
+            {/* Language switcher */}
+            <div ref={langRef} className="relative">
+              <button
+                onClick={() => setLangOpen(!langOpen)}
+                className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer"
+                style={{ gap: 6, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+              >
+                <Globe size={14} strokeWidth={1.5} />
+                <span>{lang}</span>
+                <Chevron open={langOpen} />
+              </button>
+              {langOpen && (
+                <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ ...dropdownStyle, minWidth: 120, left: "50%", transform: "translateX(-50%)" }}>
+                  {["EN", "AR"].map((l) => (
+                    <button
+                      key={l}
+                      onClick={() => { setLang(l); setLangOpen(false); }}
+                      className="text-left px-4 py-2 text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
+                      style={{ ...dropdownItemStyle, fontWeight: lang === l ? 600 : 400 }}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Burger — visible below lg */}
+        {/* Burger */}
         <button
           className="flex lg:hidden text-white hover:text-[#00FF7E] transition-colors duration-200"
           onClick={() => setOpen(true)}
@@ -129,56 +166,84 @@ export default function Navbar() {
 
       {/* Mobile menu overlay */}
       {open && (
-        <div
-          className="lg:hidden fixed inset-0 z-50 flex flex-col"
-          style={{ backgroundColor: "#141127" }}
-        >
-          {/* Header row */}
+        <div className="lg:hidden fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: "#141127" }}>
           <div className="flex items-center justify-between px-[20px] md:px-[32px] h-[80px] shrink-0">
             <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />
             </Link>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="Close menu"
-              className="text-white hover:text-[#00FF7E] transition-colors duration-200"
-              style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}
-            >
+            <button onClick={() => setOpen(false)} aria-label="Close menu" className="text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}>
               <X size={20} strokeWidth={1.5} />
             </button>
           </div>
 
-          {/* Nav content */}
           <div className="flex flex-col flex-1 overflow-y-auto px-[20px] md:px-[32px] pt-[40px] pb-[40px]">
             <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
+
+              {/* Services with mobile submenu */}
               <li>
-                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                <button
+                  onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                  className="flex items-center hover:text-[#00FF7E] transition-colors duration-200 w-full"
+                  style={{ gap: 12, background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "1.125rem", color: "white" }}
+                >
                   Services
-                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
-                    <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </Link>
+                  <Chevron open={mobileServicesOpen} />
+                </button>
+                {mobileServicesOpen && (
+                  <ul className="flex flex-col mt-3 pl-4" style={{ gap: 16 }}>
+                    {servicePages.map((s) => (
+                      <li key={s.href}>
+                        <Link
+                          href={s.href}
+                          onClick={() => { setOpen(false); setMobileServicesOpen(false); }}
+                          className="text-white hover:text-[#00FF7E] transition-colors duration-200"
+                          style={{ fontFamily: "var(--font-inter)", fontSize: "1rem", color: "rgba(255,255,255,0.7)" }}
+                        >
+                          {s.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
+
               <li>
                 <Link href="/equipment" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   Equipment
-                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none" className="transition-transform duration-200 group-hover:rotate-180">
-                    <path d="M0.75 0.75L4.75 4.75L8.75 0.75" stroke="#00FF7E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <Chevron />
                 </Link>
               </li>
+              <li><Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
+              <li><Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
+              <li><Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
+
+              {/* Language switcher */}
               <li>
-                <Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link>
-              </li>
-              <li>
-                <Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link>
-              </li>
-              <li>
-                <Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link>
-              </li>
-              <li>
-                <LanguageSwitcher mobile />
+                <button
+                  onClick={() => setLangOpen(!langOpen)}
+                  className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200"
+                  style={{ gap: 6, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "1.125rem", cursor: "pointer" }}
+                >
+                  <Globe size={14} strokeWidth={1.5} />
+                  <span>{lang}</span>
+                  <Chevron open={langOpen} />
+                </button>
+                {langOpen && (
+                  <ul className="flex flex-col mt-3 pl-4" style={{ gap: 16 }}>
+                    {["EN", "AR"].map((l) => (
+                      <li key={l}>
+                        <button
+                          onClick={() => { setLang(l); setLangOpen(false); }}
+                          className="text-white hover:text-[#00FF7E] transition-colors duration-150"
+                          style={{ ...dropdownItemStyle, fontSize: "1rem", color: lang === l ? "#00FF7E" : "rgba(255,255,255,0.7)", fontWeight: lang === l ? 600 : 400 }}
+                        >
+                          {l}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             </ul>
 

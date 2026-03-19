@@ -28,7 +28,21 @@ export const listing = defineType({
     defineField({ name: "model", title: "Model", type: "string" }),
     defineField({ name: "year", title: "Year", type: "number" }),
     defineField({ name: "hours", title: "Operation Hours", type: "number" }),
-    defineField({ name: "mileage", title: "Mileage (km)", type: "number" }),
+    defineField({
+      name: "mileage",
+      title: "Mileage",
+      type: "object",
+      fields: [
+        defineField({ name: "amount", title: "Amount", type: "number" }),
+        defineField({
+          name: "unit",
+          title: "Unit",
+          type: "string",
+          options: { list: ["km", "miles"], layout: "radio" },
+          initialValue: "km",
+        }),
+      ],
+    }),
     defineField({
       name: "fuelType",
       title: "Fuel Type",

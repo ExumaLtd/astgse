@@ -199,7 +199,9 @@ function parseSpecs(post) {
   const yearStr = extractField(specs, "Year");
   const year = yearStr ? parseInt(yearStr, 10) || null : null;
   const mileageStr = extractField(specs, "Mileage");
-  const mileage = mileageStr ? parseInt(mileageStr.replace(/[^\d]/g, ""), 10) || null : null;
+  const mileageAmount = mileageStr ? parseInt(mileageStr.replace(/[^\d]/g, ""), 10) || null : null;
+  const mileageUnit = mileageStr && /\bmiles?\b/i.test(mileageStr) ? "miles" : "km";
+  const mileage = mileageAmount ? { amount: mileageAmount, unit: mileageUnit } : null;
   const hoursStr = extractField(specs, "Operation hours", "Hours of Mileage", "Hours");
   const hours = hoursStr ? parseInt(hoursStr.replace(/[^\d]/g, ""), 10) || null : null;
   const location = extractField(specs, "Location");

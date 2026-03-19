@@ -108,7 +108,8 @@ export default function Navbar() {
                     <button
                       key={l}
                       onClick={() => switchLanguage(l)}
-                      className="px-4 py-2 hover:bg-white/5 transition-colors duration-150 text-center"
+                      className="hover:text-[#00FF7E] transition-colors duration-150 text-center"
+                    style={{ padding: "8px 16px" }}
                       style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
                     >
                       {l}
@@ -138,7 +139,8 @@ export default function Navbar() {
                   <button
                     key={l}
                     onClick={() => switchLanguage(l)}
-                    className="px-4 py-2 hover:bg-white/5 transition-colors duration-150 text-center"
+                    className="hover:text-[#00FF7E] transition-colors duration-150 text-center"
+                    style={{ padding: "8px 16px" }}
                     style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
                   >
                     {l}

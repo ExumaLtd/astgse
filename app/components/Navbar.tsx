@@ -120,15 +120,43 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Burger */}
-        <button
-          className="flex lg:hidden text-white hover:text-[#00FF7E] transition-colors duration-200"
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
-          style={{ padding: 0, lineHeight: 0, background: "none", border: "none" }}
-        >
-          <Menu size={20} strokeWidth={1.5} />
-        </button>
+        {/* Mobile right — language + burger */}
+        <div className="flex lg:hidden items-center" style={{ gap: 20 }}>
+          <div ref={langRef} className="relative">
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer"
+              style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+            >
+              <Globe size={14} strokeWidth={1.5} />
+              <span>{lang}</span>
+              <Chevron open={langOpen} />
+            </button>
+            {langOpen && (
+              <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ backgroundColor: "#141127", borderRadius: 8, right: 0 }}>
+                {["EN", "AR"].map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => switchLanguage(l)}
+                    className="px-4 py-2 hover:bg-white/5 transition-colors duration-150 text-center"
+                    style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "white" }}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            className="flex text-white hover:text-[#00FF7E] transition-colors duration-200"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            style={{ padding: 0, lineHeight: 0, background: "none", border: "none" }}
+          >
+            <Menu size={20} strokeWidth={1.5} />
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu overlay */}
@@ -161,32 +189,6 @@ export default function Navbar() {
               <li><Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
               <li><Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
               <li><Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
-              <li>
-                <button
-                  onClick={() => setLangOpen(!langOpen)}
-                  className="flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200"
-                  style={{ gap: 12, background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "1.125rem", cursor: "pointer" }}
-                >
-                  <Globe size={14} strokeWidth={1.5} />
-                  <span>{lang}</span>
-                  <Chevron open={langOpen} />
-                </button>
-                {langOpen && (
-                  <ul className="flex flex-col mt-3 pl-4" style={{ gap: 12 }}>
-                    {["EN", "AR"].map((l) => (
-                      <li key={l}>
-                        <button
-                          onClick={() => switchLanguage(l)}
-                          className="hover:text-[#00FF7E] transition-colors duration-150"
-                          style={{ fontFamily: "var(--font-inter)", fontSize: "1rem", background: "none", border: "none", cursor: "pointer", color: lang === l ? "#00FF7E" : "rgba(255,255,255,0.7)" }}
-                        >
-                          {l}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
             </ul>
 
             <div style={{ marginTop: 48 }}>

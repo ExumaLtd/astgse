@@ -38,17 +38,17 @@ function getTextNodes(root: Element): Text[] {
 const originals = new Map<Text, string>();
 
 export async function translatePage(targetLang: string): Promise<void> {
+  console.log("[translate] called with:", targetLang);
   const nodes = getTextNodes(document.body);
+  console.log("[translate] nodes found:", nodes.length);
 
   if (targetLang === "en") {
-    // Restore originals
     originals.forEach((original, node) => { node.textContent = original; });
     document.documentElement.removeAttribute("dir");
     document.documentElement.removeAttribute("lang");
     return;
   }
 
-  // Save originals on first translation
   nodes.forEach((node) => {
     if (!originals.has(node)) originals.set(node, node.textContent || "");
   });
@@ -56,13 +56,14 @@ export async function translatePage(targetLang: string): Promise<void> {
   document.documentElement.setAttribute("dir", "rtl");
   document.documentElement.setAttribute("lang", "ar");
 
-  // Translate in batches of 10
   const batchSize = 10;
   for (let i = 0; i < nodes.length; i += batchSize) {
     const batch = nodes.slice(i, i + batchSize);
     await Promise.all(batch.map(async (node) => {
       const original = originals.get(node) || node.textContent || "";
+      console.log("[translate] translating:", original.trim().slice(0, 40));
       node.textContent = await translateText(original, targetLang);
     }));
   }
+  console.log("[translate] done");
 }

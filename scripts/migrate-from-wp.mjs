@@ -215,11 +215,12 @@ function extractField(text, ...labels) {
 function parseSpecs(post, debug = false) {
   const content = stripHtml(post.content?.rendered || "");
   const excerpt = stripHtml(post.excerpt?.rendered || "");
-
-  // Specs live in the excerpt; content only has the description text
-  const specs = excerpt;
-  // Combine both for keyword detection (fuel, transmission etc.)
   const full = `${content} ${excerpt}`;
+
+  // Type A: specs are in excerpt (Make X Year Y format)
+  // Type B: specs are in content (Chassis: X, Engine: Y format)
+  // Use whichever has "Make" or "Chassis" labels
+  const specs = /\b(?:Make|Chassis)\b/i.test(excerpt) ? excerpt : content;
 
   if (debug) {
     console.log("\n── CONTENT ───────────────────────────────────");
@@ -229,9 +230,20 @@ function parseSpecs(post, debug = false) {
     console.log("──────────────────────────────────────────────\n");
   }
 
-  // ── Structured fields (from excerpt) ─────────────────────────────────────
-  const make  = extractField(specs, "Make", "Manufacturer");
-  const model = extractField(specs, "Model");
+  // ── Structured fields ────────────────────────────────────────────────────
+  let make  = extractField(specs, "Make", "Manufacturer");
+  let model = extractField(specs, "Model");
+
+  // Type B: "Chassis: Mercedes Benz Fuso 3s13" → make=Mercedes-Benz, model=Fuso 3s13
+  if (!make) {
+    const chassisVal = extractField(specs, "Chassis");
+    if (chassisVal) {
+      // Split on first space-separated word after brand
+      const parts = chassisVal.split(/\s+/);
+      make  = parts[0] || null;
+      model = parts.slice(1).join(" ") || null;
+    }
+  }
 
   const yearStr = extractField(specs, "Year");
   const year = yearStr ? parseInt(yearStr, 10) || null : null;
@@ -306,30 +318,42 @@ function parseSpecs(post, debug = false) {
   if (/\bfor hire\b/i.test(full)) status.push("For Hire");
   if (status.length === 0) status.push("For Sale"); // default
 
-  // ── Description ──────────────────────────────────────────────────────────
+  // ── Description + Specifications ─────────────────────────────────────────
   let description = null;
+  let specifications = null;
 
-  // Try: text after "Description" label
-  const descMatch = content.match(/\bDescription\b[:\s]+(.+?)(?=\s*\b(?:Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
+  // Try: text after "GENERAL DESCRIPTION" or "Description" label in content
+  const descMatch = content.match(/\b(?:GENERAL\s+)?DESCRIPTION\b[:\s]+(.+?)(?=\s*\b(?:WORKING RANGE|APPLICABLE REGULATIONS|STANDARD FEATURES|Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
   if (descMatch) {
-    description = descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim();
+    description = normaliseText(descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim());
   }
 
-  // Fallback: strip title + button text from content and use the remainder
+  // Fallback: strip title from content, use first 600 chars as description
   if (!description) {
-    const title = stripHtml(post.title?.rendered || "");
+    const titleText = stripHtml(post.title?.rendered || "");
     let cleaned = content
-      .replace(new RegExp(`^\\s*${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*`, "i"), "")
+      .replace(new RegExp(`^\\s*${titleText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*`, "i"), "")
       .replace(STRIP_PHRASES, "")
       .replace(/\s+/g, " ")
       .trim();
-    if (cleaned.length > 20) description = cleaned;
+    if (cleaned.length > 20) {
+      // First natural sentence break up to ~600 chars as description
+      const cutoff = cleaned.indexOf(". ", 200);
+      description = normaliseText(cutoff > 0 ? cleaned.slice(0, cutoff + 1) : cleaned.slice(0, 600));
+    }
+  }
+
+  // Specifications: capture technical content block (STANDARD FEATURES onwards)
+  const specsMatch = content.match(/\b(?:STANDARD FEATURES|TECHNICAL|SPECIFICATIONS|WORKING RANGE)\b(.+?)(?=\s*\bEnquire\b|$)/is);
+  if (specsMatch) {
+    specifications = normaliseText(specsMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim());
   }
 
   return {
-    make:         make         ? normaliseText(make)        : null,
-    model:        model        ? normaliseText(model)       : null,
-    description:  description  ? normaliseText(description) : null,
+    make:           make           ? normaliseText(make)           : null,
+    model:          model          ? normaliseText(model)          : null,
+    description:    description    ? description                   : null,
+    specifications: specifications ? specifications                : null,
     year, mileage, hours, fuelType, transmission, quantity, location, availableFrom, serialNumber,
     price, priceCurrency, priceOnApplication, status,
   };
@@ -489,6 +513,7 @@ async function main() {
         condition: undefined,
         salePrice: { amount: specs.price || undefined, currency: specs.priceCurrency || "GBP", onApplication: specs.priceOnApplication },
         description: specs.description || undefined,
+        specifications: specs.specifications || undefined,
         images: images.length > 0 ? images : undefined,
         location: specs.location || undefined,
         availableFrom: specs.availableFrom || undefined,

@@ -232,11 +232,19 @@ async function getPostImages(post) {
 function parseSpecs(post) {
   const content = stripHtml(post.content?.rendered || "");
   const excerpt = stripHtml(post.excerpt?.rendered || "");
-  const specs = excerpt;
   const full = `${content} ${excerpt}`;
+  const specs = /\b(?:Make|Chassis)\b/i.test(excerpt) ? excerpt : content;
 
-  const make  = extractField(specs, "Make", "Manufacturer");
-  const model = extractField(specs, "Model");
+  let make  = extractField(specs, "Make", "Manufacturer");
+  let model = extractField(specs, "Model");
+  if (!make) {
+    const chassisVal = extractField(specs, "Chassis");
+    if (chassisVal) {
+      const parts = chassisVal.split(/\s+/);
+      make  = parts[0] || null;
+      model = parts.slice(1).join(" ") || null;
+    }
+  }
   const yearStr = extractField(specs, "Year");
   const year = yearStr ? parseInt(yearStr, 10) || null : null;
   const mileageStr = extractField(specs, "Mileage");
@@ -301,13 +309,33 @@ function parseSpecs(post) {
   if (status.length === 0) status.push("For Sale");
 
   let description = null;
-  const descMatch = content.match(/\bDescription\b[:\s]+(.+?)(?=\s*\b(?:Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
-  if (descMatch) description = descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim() || null;
+  let specifications = null;
+
+  const descMatch = content.match(/\b(?:GENERAL\s+)?DESCRIPTION\b[:\s]+(.+?)(?=\s*\b(?:WORKING RANGE|APPLICABLE REGULATIONS|STANDARD FEATURES|Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
+  if (descMatch) {
+    description = normaliseText(descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim());
+  }
+  if (!description) {
+    const titleText = stripHtml(post.title?.rendered || "");
+    let cleaned = content
+      .replace(new RegExp(`^\\s*${titleText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*`, "i"), "")
+      .replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim();
+    if (cleaned.length > 20) {
+      const cutoff = cleaned.indexOf(". ", 200);
+      description = normaliseText(cutoff > 0 ? cleaned.slice(0, cutoff + 1) : cleaned.slice(0, 600));
+    }
+  }
+
+  const specsMatch = content.match(/\b(?:STANDARD FEATURES|TECHNICAL|SPECIFICATIONS|WORKING RANGE)\b(.+?)(?=\s*\bEnquire\b|$)/is);
+  if (specsMatch) {
+    specifications = normaliseText(specsMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim());
+  }
 
   return {
-    make:         make         ? normaliseText(make)        : null,
-    model:        model        ? normaliseText(model)       : null,
-    description:  description  ? normaliseText(description) : null,
+    make:           make           ? normaliseText(make)  : null,
+    model:          model          ? normaliseText(model) : null,
+    description:    description    || null,
+    specifications: specifications || null,
     year, mileage, hours, fuelType, transmission, quantity, location, availableFrom, serialNumber,
     price, priceCurrency, priceOnApplication, status,
   };
@@ -381,6 +409,7 @@ async function main() {
         quantity: specs.quantity ?? undefined,
         salePrice: { amount: specs.price || undefined, currency: specs.priceCurrency || "GBP", onApplication: specs.priceOnApplication },
         description: specs.description || undefined,
+        specifications: specs.specifications || undefined,
         images: images.length > 0 ? images : undefined,
         location: specs.location || undefined,
         availableFrom: specs.availableFrom || undefined,

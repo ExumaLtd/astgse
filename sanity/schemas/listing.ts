@@ -114,6 +114,7 @@ export const listing = defineType({
       ],
     }),
     defineField({ name: "description", title: "Description", type: "text", rows: 5 }),
+    defineField({ name: "specifications", title: "Full Specifications", type: "text", rows: 15 }),
     defineField({
       name: "images",
       title: "Images",

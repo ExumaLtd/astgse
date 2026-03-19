@@ -37,28 +37,28 @@ const SUGGESTIONS = [
 const UI: Record<string, Record<string, string>> = {
   en: {
     searching: "I'm searching for",
-    placeholder: "e.g. Maintenance support",
+    placeholder: "e.g. Maintenance",
     suggestions: "Or explore our suggestions",
     loading: "Searching…",
     noResults: "No results for",
   },
   ar: {
     searching: "أبحث عن",
-    placeholder: "مثال: دعم الصيانة",
+    placeholder: "مثال: الصيانة",
     suggestions: "أو استكشف اقتراحاتنا",
     loading: "جارٍ البحث…",
     noResults: "لا توجد نتائج لـ",
   },
   es: {
     searching: "Estoy buscando",
-    placeholder: "ej. Soporte de mantenimiento",
+    placeholder: "ej. Mantenimiento",
     suggestions: "O explora nuestras sugerencias",
     loading: "Buscando…",
     noResults: "Sin resultados para",
   },
   fr: {
     searching: "Je recherche",
-    placeholder: "ex. Support de maintenance",
+    placeholder: "ex. Maintenance",
     suggestions: "Ou explorez nos suggestions",
     loading: "Recherche…",
     noResults: "Aucun résultat pour",

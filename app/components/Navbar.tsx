@@ -100,13 +100,13 @@ export default function Navbar() {
               </button>
             </li>
             <li>
-              <Link href="/about" className="text-white hover:text-[#00FF7E] transition-colors duration-200">About</Link>
+              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">About</span>
             </li>
             <li>
-              <Link href="/careers" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Careers</Link>
+              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Careers</span>
             </li>
             <li>
-              <Link href="/newsroom" className="text-white hover:text-[#00FF7E] transition-colors duration-200">Newsroom</Link>
+              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Newsroom</span>
             </li>
           </ul>
 
@@ -140,7 +140,7 @@ export default function Navbar() {
                 style={{ background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
               >
                 <Globe size={14} strokeWidth={1.5} className="shrink-0" />
-                <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 10, marginRight: 12 }}>{lang}</span>
+                <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 8, marginRight: 12 }}>{lang}</span>
                 <Chevron open={langOpen} />
               </button>
               {langOpen && (
@@ -172,7 +172,7 @@ export default function Navbar() {
               style={{ background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
             >
               <Globe size={14} strokeWidth={1.5} className="shrink-0" />
-              <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 10, marginRight: 12 }}>{lang}</span>
+              <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 8, marginRight: 12 }}>{lang}</span>
               <Chevron open={langOpen} />
             </button>
             {langOpen && (
@@ -240,9 +240,9 @@ export default function Navbar() {
                   <Chevron />
                 </Link>
               </li>
-              <li><Link href="/about" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>About</Link></li>
-              <li><Link href="/careers" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Careers</Link></li>
-              <li><Link href="/newsroom" className="hover:text-[#00FF7E] transition-colors duration-200" onClick={() => setOpen(false)}>Newsroom</Link></li>
+              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">About</span></li>
+              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Careers</span></li>
+              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Newsroom</span></li>
             </ul>
 
             <div style={{ marginTop: 48 }}>

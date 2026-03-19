@@ -8,6 +8,12 @@ export const listing = defineType({
     defineField({ name: "title", title: "Title", type: "string" }),
     defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title" } }),
     defineField({
+      name: "published",
+      title: "Published (visible on website)",
+      type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
       name: "status",
       title: "Status",
       type: "string",
@@ -31,7 +37,7 @@ export const listing = defineType({
       type: "string",
       options: { list: ["Manual", "Automatic"], layout: "radio" },
     }),
-    defineField({ name: "quantity", title: "Quantity Available", type: "number" }),
+    defineField({ name: "quantity", title: "Quantity Available", type: "string" }),
     defineField({
       name: "condition",
       title: "Condition",

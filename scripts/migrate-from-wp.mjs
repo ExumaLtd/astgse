@@ -136,51 +136,62 @@ function extractField(text, ...labels) {
   return null;
 }
 
-function parseSpecs(post) {
-  const raw = stripHtml(post.content?.rendered || "");
+function parseSpecs(post, debug = false) {
+  const content = stripHtml(post.content?.rendered || "");
+  const excerpt = stripHtml(post.excerpt?.rendered || "");
 
-  // ── Structured fields ────────────────────────────────────────────────────
-  const make  = extractField(raw, "Make", "Manufacturer");
-  const model = extractField(raw, "Model");
+  // Specs live in the excerpt; content only has the description text
+  const specs = excerpt;
+  // Combine both for keyword detection (fuel, transmission etc.)
+  const full = `${content} ${excerpt}`;
 
-  const yearStr = extractField(raw, "Year");
+  if (debug) {
+    console.log("\n── CONTENT ───────────────────────────────────");
+    console.log(content);
+    console.log("── EXCERPT ───────────────────────────────────");
+    console.log(excerpt);
+    console.log("──────────────────────────────────────────────\n");
+  }
+
+  // ── Structured fields (from excerpt) ─────────────────────────────────────
+  const make  = extractField(specs, "Make", "Manufacturer");
+  const model = extractField(specs, "Model");
+
+  const yearStr = extractField(specs, "Year");
   const year = yearStr ? parseInt(yearStr, 10) || null : null;
 
-  const mileageStr = extractField(raw, "Mileage");
+  const mileageStr = extractField(specs, "Mileage");
   const mileage = mileageStr ? parseInt(mileageStr.replace(/[^\d]/g, ""), 10) || null : null;
 
-  const hoursStr = extractField(raw, "Operation hours", "Hours of Mileage", "Hours");
+  const hoursStr = extractField(specs, "Operation hours", "Hours of Mileage", "Hours");
   const hours = hoursStr ? parseInt(hoursStr.replace(/[^\d]/g, ""), 10) || null : null;
 
-  const location = extractField(raw, "Location");
-  const serialNumber = extractField(raw, "Serial number", "Serial");
+  const location = extractField(specs, "Location");
+  const serialNumber = extractField(specs, "Serial number", "Serial");
 
   // ── Quantity ─────────────────────────────────────────────────────────────
   let quantity = null;
-  const qtyMatch = raw.match(/(\d+)\s+units?\s+(?:in stock|available)/i);
-  if (qtyMatch) {
-    quantity = parseInt(qtyMatch[1], 10);
-  } else if (/multiple units/i.test(raw)) {
-    quantity = null; // multiple but unknown count
-  }
+  const qtyMatch = full.match(/(\d+)\s+units?\s+(?:in stock|available)/i);
+  if (qtyMatch) quantity = qtyMatch[1];
+  else if (/multiple units/i.test(full)) quantity = "Multiple";
 
   // ── Fuel type ────────────────────────────────────────────────────────────
   let fuelType = null;
-  if (/\bdiesel\b/i.test(raw))    fuelType = "Diesel";
-  else if (/\belectric\b/i.test(raw)) fuelType = "Electric";
-  else if (/\bpetrol\b/i.test(raw))   fuelType = "Petrol";
-  else if (/\bhybrid\b/i.test(raw))   fuelType = "Hybrid";
-  else if (/\blpg\b/i.test(raw))      fuelType = "LPG";
+  if (/\bdiesel\b/i.test(full))        fuelType = "Diesel";
+  else if (/\belectric\b/i.test(full)) fuelType = "Electric";
+  else if (/\bpetrol\b/i.test(full))   fuelType = "Petrol";
+  else if (/\bhybrid\b/i.test(full))   fuelType = "Hybrid";
+  else if (/\blpg\b/i.test(full))      fuelType = "LPG";
 
   // ── Transmission ─────────────────────────────────────────────────────────
   let transmission = null;
-  if (/\bauto(?:matic)?\b/i.test(raw))  transmission = "Automatic";
-  else if (/\bmanual\b/i.test(raw))     transmission = "Manual";
+  if (/\bauto(?:matic)?\b/i.test(full))  transmission = "Automatic";
+  else if (/\bmanual\b/i.test(full))     transmission = "Manual";
 
   // ── Price ────────────────────────────────────────────────────────────────
   let price = null;
   let priceOnApplication = false;
-  const priceMatch = raw.match(/£\s*([\d,]+)/);
+  const priceMatch = full.match(/£\s*([\d,]+)/);
   if (priceMatch) {
     price = parseInt(priceMatch[1].replace(/,/g, ""), 10) || null;
   } else {
@@ -189,18 +200,14 @@ function parseSpecs(post) {
 
   // ── Status ───────────────────────────────────────────────────────────────
   let status = "For Sale";
-  if (/\bfor hire\b/i.test(raw)) status = "For Hire";
+  if (/\bfor hire\b/i.test(full)) status = "For Hire";
 
   // ── Description ──────────────────────────────────────────────────────────
-  // Extract text after "Description" label, before the first spec label
+  // Extract text after "Description" label in content, before "Enquire" button
   let description = null;
-  const descMatch = raw.match(/\bDescription\b[:\s]+(.+?)(?=\s*\b(?:Make|Manufacturer|Model|Year|Mileage|Price|Shipping|Enquire)\b)/i);
+  const descMatch = content.match(/\bDescription\b[:\s]+(.+?)(?=\s*\b(?:Enquire|Make|Manufacturer|Model|Year|Price)\b|$)/i);
   if (descMatch) {
     description = descMatch[1].replace(STRIP_PHRASES, "").replace(/\s+/g, " ").trim();
-  }
-  // Fall back to excerpt if no inline description found
-  if (!description) {
-    description = stripHtml(post.excerpt?.rendered || "").replace(STRIP_PHRASES, "").trim();
   }
   if (!description) description = null;
 
@@ -334,7 +341,7 @@ async function main() {
         .find(Boolean) || "Other GSE";
 
       // Specs
-      const specs = parseSpecs(post);
+      const specs = parseSpecs(post, i === 0); // debug first post only
 
       // Images
       const images = await getPostImages(post);
@@ -344,6 +351,7 @@ async function main() {
         _type: "listing",
         title,
         slug: { _type: "slug", current: slug },
+        published: true,
         category: sanityCategory,
         status: specs.status,
         make: specs.make || undefined,
@@ -353,7 +361,7 @@ async function main() {
         hours: specs.hours || undefined,
         fuelType: specs.fuelType || undefined,
         transmission: specs.transmission || undefined,
-        quantity: specs.quantity || undefined,
+        quantity: specs.quantity ?? undefined,
         condition: undefined,
         price: specs.price || undefined,
         priceOnApplication: specs.priceOnApplication,

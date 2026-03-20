@@ -14,6 +14,15 @@ const LANGUAGES: { code: string; locale: string }[] = [
   { code: "FR", locale: "fr" },
 ];
 
+type LangCode = "en" | "ar" | "es" | "fr";
+
+const NAV_UI: Record<LangCode, { services: string; equipment: string; about: string; careers: string; newsroom: string; contact: string }> = {
+  en: { services: "Services", equipment: "Equipment", about: "About", careers: "Careers", newsroom: "Newsroom", contact: "Contact us" },
+  ar: { services: "الخدمات", equipment: "المعدات", about: "عن الشركة", careers: "وظائف", newsroom: "الأخبار", contact: "اتصل بنا" },
+  es: { services: "Servicios", equipment: "Equipamiento", about: "Acerca de", careers: "Empleos", newsroom: "Noticias", contact: "Contáctenos" },
+  fr: { services: "Services", equipment: "Équipements", about: "À propos", careers: "Carrières", newsroom: "Actualités", contact: "Nous contacter" },
+};
+
 const Chevron = ({ open }: { open?: boolean }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"
     className="transition-transform duration-200"
@@ -26,6 +35,8 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lang, setLang] = useState("EN");
+  const locale = (lang.toLowerCase()) as LangCode;
+  const t = NAV_UI[locale] ?? NAV_UI.en;
   const [langOpen, setLangOpen] = useState(false);
   const [hoveredLang, setHoveredLang] = useState<string | null>(null);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
@@ -102,24 +113,24 @@ export default function Navbar() {
           <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
             <li>
               <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }} onMouseEnter={() => setHoveredNav("services")} onMouseLeave={() => setHoveredNav(null)}>
-                Services
+                {t.services}
                 <Chevron open={hoveredNav === "services"} />
               </Link>
             </li>
             <li>
               <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }} onMouseEnter={() => setHoveredNav("equipment")} onMouseLeave={() => setHoveredNav(null)}>
-                Equipment
+                {t.equipment}
                 <Chevron open={hoveredNav === "equipment"} />
               </button>
             </li>
             <li>
-              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">About</span>
+              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span>
             </li>
             <li>
-              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Careers</span>
+              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span>
             </li>
             <li>
-              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Newsroom</span>
+              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span>
             </li>
           </ul>
 
@@ -129,7 +140,7 @@ export default function Navbar() {
               className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
               style={{ fontFamily: "var(--font-inter)", paddingBlock: 6, paddingInlineStart: 20, paddingInlineEnd: 6, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
             >
-              Contact us
+              {t.contact}
               <span className="flex items-center justify-center rounded-full bg-[#00FF7E] rtl:rotate-180" style={{ width: 26, height: 26 }}>
                 <ArrowRight size={13} color="#141127" strokeWidth={2.5} />
               </span>
@@ -230,7 +241,7 @@ export default function Navbar() {
       <AnimatePresence>
       {open && (
         <motion.div
-          dir="ltr"
+          dir={lang === "AR" ? "rtl" : "ltr"}
           className="lg:hidden fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: "#141127" }}
           initial={{ opacity: 0 }}
@@ -252,19 +263,19 @@ export default function Navbar() {
             <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
               <li>
                 <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
-                  Services
+                  {t.services}
                   <Chevron />
                 </Link>
               </li>
               <li>
                 <Link href="/equipment" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
-                  Equipment
+                  {t.equipment}
                   <Chevron />
                 </Link>
               </li>
-              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">About</span></li>
-              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Careers</span></li>
-              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">Newsroom</span></li>
+              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span></li>
+              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span></li>
+              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span></li>
             </ul>
 
             <div style={{ marginTop: 48 }}>
@@ -274,7 +285,7 @@ export default function Navbar() {
                 style={{ fontFamily: "var(--font-inter)", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
                 onClick={() => setOpen(false)}
               >
-                Contact us
+                {t.contact}
                 <span className="flex items-center justify-center rounded-full bg-[#00FF7E] rtl:rotate-180" style={{ width: 30, height: 30 }}>
                   <ArrowRight size={14} color="#141127" strokeWidth={2.5} />
                 </span>

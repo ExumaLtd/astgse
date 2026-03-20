@@ -70,43 +70,37 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full relative z-50 h-[80px]">
+      <nav className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full relative z-50 h-[80px]">
         {/* Logo */}
-        <Link href="/" className="shrink-0">
+        <Link href="/" className="navbar__logo shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden lg:flex items-center" style={{ gap: 40 }}>
-          <ul className="flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
+        <div className="navbar__desktop hidden lg:flex items-center" style={{ gap: 40 }}>
+          <ul className="navbar__links flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
             <li>
-              <Link href="/services/maintenance-and-diagnostics" className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }} onMouseEnter={() => setHoveredNav("services")} onMouseLeave={() => setHoveredNav(null)}>
+              <Link href="/services/maintenance-and-diagnostics" className="navbar__link flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }} onMouseEnter={() => setHoveredNav("services")} onMouseLeave={() => setHoveredNav(null)}>
                 {t.services}
                 <Chevron open={hoveredNav === "services"} />
               </Link>
             </li>
             <li>
-              <button className="flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }} onMouseEnter={() => setHoveredNav("equipment")} onMouseLeave={() => setHoveredNav(null)}>
+              <button className="navbar__link flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }} onMouseEnter={() => setHoveredNav("equipment")} onMouseLeave={() => setHoveredNav(null)}>
                 {t.equipment}
                 <Chevron open={hoveredNav === "equipment"} />
               </button>
             </li>
-            <li>
-              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span>
-            </li>
-            <li>
-              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span>
-            </li>
-            <li>
-              <span className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span>
-            </li>
+            <li><span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span></li>
+            <li><span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span></li>
+            <li><span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span></li>
           </ul>
 
-          <div className="flex items-center" style={{ gap: 28 }}>
+          <div className="navbar__actions flex items-center" style={{ gap: 28 }}>
             <Link
               href=""
-              className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
+              className="navbar__contact-btn inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
               style={{ fontFamily: "var(--font-inter)", paddingBlock: 6, paddingInlineStart: 20, paddingInlineEnd: 6, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
             >
               {t.contact}
@@ -115,23 +109,22 @@ export default function Navbar() {
               </span>
             </Link>
 
-            <button onClick={() => setSearchOpen(true)} className="text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer" aria-label="Search">
+            <button onClick={() => setSearchOpen(true)} className="navbar__search-btn text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer" aria-label="Search">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M12.75 12.75L9.85667 9.85667M11.4167 6.08333C11.4167 9.02885 9.02885 11.4167 6.08333 11.4167C3.13781 11.4167 0.75 9.02885 0.75 6.08333C0.75 3.13781 3.13781 0.75 6.08333 0.75C9.02885 0.75 11.4167 3.13781 11.4167 6.08333Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
 
-            {/* Language switcher — hover to open */}
             <LanguageSwitcher lang={lang} onSwitch={switchLanguage} trigger="hover" dropdownAlign="left" />
           </div>
         </div>
 
-        {/* Mobile right — language + burger */}
-        <div className="flex lg:hidden items-center" style={{ gap: 20 }}>
+        {/* Mobile right controls */}
+        <div className="navbar__mobile flex lg:hidden items-center" style={{ gap: 20 }}>
           <LanguageSwitcher lang={lang} onSwitch={switchLanguage} trigger="click" dropdownAlign="right" />
 
           <button
-            className="flex text-white hover:text-[#00FF7E] transition-colors duration-200"
+            className="navbar__mobile-search flex text-white hover:text-[#00FF7E] transition-colors duration-200"
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
             style={{ padding: 0, lineHeight: 0, background: "none", border: "none" }}
@@ -140,7 +133,7 @@ export default function Navbar() {
           </button>
 
           <button
-            className="flex text-white hover:text-[#00FF7E] transition-colors duration-200"
+            className="navbar__burger flex text-white hover:text-[#00FF7E] transition-colors duration-200"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
             style={{ padding: 0, lineHeight: 0, background: "none", border: "none" }}
@@ -155,46 +148,46 @@ export default function Navbar() {
       {open && (
         <motion.div
           dir={lang === "AR" ? "rtl" : "ltr"}
-          className="lg:hidden fixed inset-0 z-50 flex flex-col"
+          className="mobile-menu lg:hidden fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: "#141127" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
-          <div className="page-px flex items-center justify-between h-[80px] shrink-0">
-            <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
+          <div className="mobile-menu__header page-px flex items-center justify-between h-[80px] shrink-0">
+            <Link href="/" onClick={() => setOpen(false)} className="mobile-menu__logo shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />
             </Link>
-            <button onClick={() => setOpen(false)} aria-label="Close menu" className="text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}>
+            <button onClick={() => setOpen(false)} aria-label="Close menu" className="mobile-menu__close text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ padding: 0, lineHeight: 0, display: "flex", background: "none", border: "none" }}>
               <X size={20} strokeWidth={1.5} />
             </button>
           </div>
 
-          <div className="page-px flex flex-col flex-1 overflow-y-auto pt-[40px] pb-[40px]">
-            <ul className="flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
+          <div className="mobile-menu__body page-px flex flex-col flex-1 overflow-y-auto pt-[40px] pb-[40px]">
+            <ul className="mobile-menu__links flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
               <li>
-                <Link href="/services/maintenance-and-diagnostics" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                <Link href="/services/maintenance-and-diagnostics" className="mobile-menu__link flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   {t.services}
                   <Chevron />
                 </Link>
               </li>
               <li>
-                <Link href="/equipment" className="flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
+                <Link href="/equipment" className="mobile-menu__link flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
                   {t.equipment}
                   <Chevron />
                 </Link>
               </li>
-              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span></li>
-              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span></li>
-              <li><span className="hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span></li>
+              <li><span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span></li>
+              <li><span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span></li>
+              <li><span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span></li>
             </ul>
 
-            <div style={{ marginTop: 48 }}>
+            <div className="mobile-menu__cta" style={{ marginTop: 48 }}>
               <Link
                 href=""
-                className="inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
+                className="mobile-menu__contact-btn inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
                 style={{ fontFamily: "var(--font-inter)", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
                 onClick={() => setOpen(false)}
               >

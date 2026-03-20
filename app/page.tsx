@@ -26,44 +26,41 @@ export default async function Home() {
   const bgImage = data?.backgroundImage ? urlFor(data.backgroundImage).width(1920).url() : null;
 
   return (
-    <div className="relative h-screen overflow-hidden bg-blue flex flex-col">
+    <div className="home-page relative h-screen overflow-hidden bg-blue flex flex-col">
+
       {/* Background — image if set, otherwise video */}
       {bgImage ? (
         <img
           src={bgImage}
           alt="Hero background"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="home-page__bg absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: "84% center" }}
         />
       ) : (
         <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay loop muted playsInline
+          className="home-page__bg absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: "84% center" }}
           src="/videos/gettyimages-2192368667-640_adpp.mp4"
         />
       )}
 
-      {/* Overlay with blur */}
-      <div className="absolute inset-0 backdrop-blur-[8px]" style={{ backgroundColor: "rgba(20,17,39,0.50)" }} />
+      {/* Overlay */}
+      <div className="home-page__overlay absolute inset-0 backdrop-blur-[8px]" style={{ backgroundColor: "rgba(20,17,39,0.50)" }} />
 
-      {/* Navbar — full width */}
       <Navbar />
 
-      {/* Content */}
-      <div className="page-px relative z-10 flex flex-col flex-1 w-full" style={{ paddingBottom: 65 }}>
-        <div className="flex flex-1 items-center">
+      {/* Hero content */}
+      <div className="home-hero page-px relative z-10 flex flex-col flex-1 w-full" style={{ paddingBottom: 65 }}>
+        <div className="home-hero__heading-wrap flex flex-1 items-center">
           <h1
-            className="text-white text-[2.75rem] leading-[3rem] md:text-[3.25rem] md:leading-[3.625rem] lg:text-[4.375rem] lg:leading-[5rem]"
+            className="home-hero__heading text-white text-[2.75rem] leading-[3rem] md:text-[3.25rem] md:leading-[3.625rem] lg:text-[4.375rem] lg:leading-[5rem]"
             style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21 }}
           >
             {lines.map((line: string, i: number) => (
-              <span key={i} style={{ display: "block", whiteSpace: "nowrap" }}>
+              <span key={i} className="home-hero__heading-line" style={{ display: "block", whiteSpace: "nowrap" }}>
                 {i === 0 ? (
-                  <span style={{ backgroundColor: "#00FF7E", color: "#141127" }}>{line}</span>
+                  <span className="home-hero__heading-highlight" style={{ backgroundColor: "#00FF7E", color: "#141127" }}>{line}</span>
                 ) : line}
               </span>
             ))}
@@ -71,7 +68,7 @@ export default async function Home() {
         </div>
 
         <p
-          className="text-white"
+          className="home-hero__subtext text-white"
           style={{
             fontFamily: "var(--font-dm-mono)",
             fontSize: "0.9375rem",
@@ -84,6 +81,7 @@ export default async function Home() {
           {subtext}
         </p>
       </div>
+
     </div>
   );
 }

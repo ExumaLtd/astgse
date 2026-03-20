@@ -1,73 +1,20 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ArrowRight } from "lucide-react";
 import { client } from "@/sanity/client";
-
-type Result = {
-  _type: string;
-  title: string;
-  slug: string;
-  excerpt?: string;
-  make?: string;
-  model?: string;
-  category?: string;
-  description?: string;
-};
-
-const TYPE_LABELS: Record<string, string> = {
-  servicePage: "Services",
-  listing: "Equipment",
-  post: "News",
-};
-
-const TYPE_HREFS: Record<string, string> = {
-  servicePage: "/services",
-  listing: "/equipment",
-  post: "/newsroom",
-};
-
-const SUGGESTIONS = [
-  { en: "Maintenance", ar: "الصيانة",  es: "Mantenimiento", fr: "Maintenance", href: "/services/maintenance-and-diagnostics" },
-  { en: "Brokerage",   ar: "السمسرة",  es: "Corretaje",     fr: "Courtage",    href: null },
-  { en: "For sale",    ar: "للبيع",    es: "En venta",      fr: "À vendre",    href: null },
-  { en: "For hire",    ar: "للإيجار",  es: "Para alquilar", fr: "À louer",     href: null },
-];
-
-const UI: Record<string, Record<string, string>> = {
-  en: {
-    searching: "I'm searching for",
-    placeholder: "e.g. Diagnostics",
-    suggestions: "Or explore our suggestions",
-    loading: "Searching…",
-    noResults: "No results for",
-  },
-  ar: {
-    searching: "أبحث عن",
-    placeholder: "مثال: التشخيص",
-    suggestions: "أو استكشف اقتراحاتنا",
-    loading: "جارٍ البحث…",
-    noResults: "لا توجد نتائج لـ",
-  },
-  es: {
-    searching: "Estoy buscando",
-    placeholder: "ej. Diagnósticos",
-    suggestions: "O explora nuestras sugerencias",
-    loading: "Buscando…",
-    noResults: "Sin resultados para",
-  },
-  fr: {
-    searching: "Je recherche",
-    placeholder: "ex. Diagnostics",
-    suggestions: "Ou explorez nos suggestions",
-    loading: "Recherche…",
-    noResults: "Aucun résultat pour",
-  },
-};
+import type { SearchResult as Result } from "@/app/types/search";
+import {
+  TYPE_LABELS,
+  TYPE_HREFS,
+  TYPES_WITH_DETAIL_PAGES,
+  SUGGESTIONS,
+  SEARCH_UI as UI,
+} from "@/app/constants/search";
 
 function fuzzyMatch(text: string, q: string): boolean {
   const t = text.toLowerCase();
@@ -95,6 +42,12 @@ function levenshtein(a: string, b: string): number {
     for (let j = 1; j <= n; j++)
       dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
   return dp[m][n];
+}
+
+function searchFields(r: Result) {
+  return [r.title, r.make, r.model, r.category, r.description, r.excerpt]
+    .filter(Boolean)
+    .join(" ");
 }
 
 export default function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -145,6 +98,10 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
 
   const t = UI[locale] || UI.en;
 
+  // Strip any HTML tags from display-only copy of query to prevent XSS if
+  // the value is ever used in a context other than React JSX text nodes
+  const safeQuery = query.replace(/<[^>]*>/g, "");
+
   useEffect(() => {
     if (!open) {
       setQuery("");
@@ -180,25 +137,20 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
         try {
           const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${lang}&tl=en&dt=t&q=${encodeURIComponent(searchQuery)}`;
           const res = await fetch(url);
-          const data = await res.json();
-          searchQuery = data[0]?.map((item: [string]) => item[0]).join("") || searchQuery;
+          if (res.ok) {
+            const data = await res.json();
+            searchQuery = data[0]?.map((item: [string]) => item[0]).join("") || searchQuery;
+          }
         } catch {
           // fall back to original query
         }
       }
-      const searchFields = (r: Result) =>
-        [r.title, r.make, r.model, r.category, r.description, r.excerpt]
-          .filter(Boolean)
-          .join(" ");
       const filtered = allDocs.filter((r) => fuzzyMatch(searchFields(r), searchQuery));
       setResults(filtered.slice(0, 20));
       setLoading(false);
     }, 150);
     return () => clearTimeout(timeout);
   }, [query, allDocs]);
-
-  // Types that have individual detail pages — add to this set as pages are built
-  const TYPES_WITH_DETAIL_PAGES = new Set(["servicePage"]);
 
   function navigate(result: Result) {
     const href = TYPES_WITH_DETAIL_PAGES.has(result._type)
@@ -269,11 +221,12 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     return <>{parts}</>;
   }
 
-  const grouped = Object.entries(TYPE_LABELS).map(([type, label]) => ({
-    type,
-    label,
-    items: results.filter((r) => r._type === type),
-  })).filter((g) => g.items.length > 0);
+  const grouped = useMemo(
+    () => Object.entries(TYPE_LABELS)
+      .map(([type, label]) => ({ type, label, items: results.filter((r) => r._type === type) }))
+      .filter((g) => g.items.length > 0),
+    [results]
+  );
 
   return (
     <AnimatePresence>
@@ -362,7 +315,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
                   {!loading && query.trim() && results.length === 0 && (
                     <Command.Empty>
                       <p style={{ color: "#141127", fontSize: "1rem", fontFamily: "var(--font-inter)", margin: 0 }}>
-                        {t.noResults} &ldquo;{query}&rdquo;
+                        {t.noResults} &ldquo;{safeQuery}&rdquo;
                       </p>
                     </Command.Empty>
                   )}

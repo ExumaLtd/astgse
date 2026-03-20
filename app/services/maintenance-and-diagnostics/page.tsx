@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowRight } from "lucide-react";
-import Navbar from "@/app/components/Navbar";
-import ScrollButton from "@/app/components/ScrollButton";
+import Navbar from "@/app/components/navigation/Navbar";
+import ScrollButton from "@/app/components/ui/ScrollButton";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 
@@ -14,7 +14,11 @@ export const metadata = {
 export const revalidate = 60;
 
 async function getPage() {
-  return client.fetch(`*[_type == "servicePage" && slug.current == "maintenance-and-diagnostics"][0]`);
+  try {
+    return await client.fetch(`*[_type == "servicePage" && slug.current == "maintenance-and-diagnostics"][0]`);
+  } catch {
+    return null;
+  }
 }
 
 export default async function MaintenanceAndDiagnostics() {

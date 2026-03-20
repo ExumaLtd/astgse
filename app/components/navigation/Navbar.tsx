@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Menu, X, Globe, Search } from "lucide-react";
+import { ArrowRight, Menu, X, Search } from "lucide-react";
 import { translatePage } from "@/app/utils/translate";
-import SearchModal from "@/app/components/SearchModal";
+import SearchModal from "@/app/components/navigation/SearchModal";
+import LanguageSwitcher from "./LanguageSwitcher";
 
-const LANGUAGES: { code: string; locale: string }[] = [
+const LANGUAGES = [
   { code: "AR", locale: "ar" },
   { code: "EN", locale: "en" },
   { code: "ES", locale: "es" },
@@ -37,23 +38,7 @@ export default function Navbar() {
   const [lang, setLang] = useState("EN");
   const locale = (lang.toLowerCase()) as LangCode;
   const t = NAV_UI[locale] ?? NAV_UI.en;
-  const [langOpen, setLangOpen] = useState(false);
-  const [hoveredLang, setHoveredLang] = useState<string | null>(null);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
-
-  const desktopLangRef = useRef<HTMLDivElement>(null);
-  const mobileLangRef = useRef<HTMLDivElement>(null);
-  const langLeaveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      const inDesktop = desktopLangRef.current?.contains(e.target as Node);
-      const inMobile = mobileLangRef.current?.contains(e.target as Node);
-      if (!inDesktop && !inMobile) setLangOpen(false);
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -75,28 +60,12 @@ export default function Navbar() {
     }
   }, []);
 
-  function langColor(l: string) {
-    if (hoveredLang === l) return "#00FF7E";
-    if (hoveredLang !== null) return "white";
-    return lang === l ? "#00FF7E" : "white";
-  }
-
   function switchLanguage(code: string) {
     const match = LANGUAGES.find((l) => l.code === code);
     if (!match) return;
     setLang(code);
-    setLangOpen(false);
     localStorage.setItem("astgse-lang", code);
     translatePage(match.locale);
-  }
-
-  function handleLangEnter() {
-    if (langLeaveTimeout.current) clearTimeout(langLeaveTimeout.current);
-    setLangOpen(true);
-  }
-
-  function handleLangLeave() {
-    langLeaveTimeout.current = setTimeout(() => setLangOpen(false), 150);
   }
 
   return (
@@ -153,69 +122,13 @@ export default function Navbar() {
             </button>
 
             {/* Language switcher — hover to open */}
-            <div
-              ref={desktopLangRef}
-              className="relative"
-              onMouseEnter={handleLangEnter}
-              onMouseLeave={handleLangLeave}
-            >
-              <button
-                className="group flex items-center text-white transition-colors duration-200 cursor-pointer"
-                style={{ background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
-              >
-                <Globe size={14} strokeWidth={1.5} className="shrink-0" />
-                <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 8, marginRight: 12 }}>{lang}</span>
-                <Chevron open={langOpen} />
-              </button>
-              {langOpen && (
-                <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ backgroundColor: "#141127", borderRadius: 8, left: "50%", transform: "translateX(-50%)" }}>
-                  {LANGUAGES.map(({ code }) => (
-                    <button
-                      key={code}
-                      onClick={() => switchLanguage(code)}
-                      onMouseEnter={() => setHoveredLang(code)}
-                      onMouseLeave={() => setHoveredLang(null)}
-                      className="transition-colors duration-150 text-center"
-                      style={{ padding: "8px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(code) }}
-                    >
-                      {code}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <LanguageSwitcher lang={lang} onSwitch={switchLanguage} trigger="hover" dropdownAlign="left" />
           </div>
         </div>
 
         {/* Mobile right — language + burger */}
         <div className="flex lg:hidden items-center" style={{ gap: 20 }}>
-          <div ref={mobileLangRef} className="relative">
-            <button
-              onClick={() => setLangOpen(!langOpen)}
-              className="group flex items-center text-white transition-colors duration-200 cursor-pointer"
-              style={{ background: "none", border: "none", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
-            >
-              <Globe size={14} strokeWidth={1.5} className="shrink-0" />
-              <span className="group-hover:text-[#00FF7E] transition-colors duration-200" style={{ marginLeft: 8, marginRight: 12 }}>{lang}</span>
-              <Chevron open={langOpen} />
-            </button>
-            {langOpen && (
-              <div className="absolute top-full mt-2 flex flex-col overflow-hidden z-50" style={{ backgroundColor: "#141127", borderRadius: 8, right: 0 }}>
-                {LANGUAGES.map(({ code }) => (
-                  <button
-                    key={code}
-                    onClick={() => switchLanguage(code)}
-                    onMouseEnter={() => setHoveredLang(code)}
-                    onMouseLeave={() => setHoveredLang(null)}
-                    className="transition-colors duration-150 text-center"
-                    style={{ padding: "6px 16px", fontFamily: "var(--font-inter)", fontSize: "0.9375rem", background: "none", border: "none", cursor: "pointer", color: langColor(code) }}
-                  >
-                    {code}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <LanguageSwitcher lang={lang} onSwitch={switchLanguage} trigger="click" dropdownAlign="right" />
 
           <button
             className="flex text-white hover:text-[#00FF7E] transition-colors duration-200"

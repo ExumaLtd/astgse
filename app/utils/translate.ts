@@ -1,5 +1,7 @@
 // Unofficial Google Translate API — same backend, no widget, no toolbar
+
 const CACHE = new Map<string, string>();
+const TRANSLATE_TIMEOUT_MS = 8_000;
 
 async function translateText(text: string, targetLang: string): Promise<string> {
   if (!text.trim()) return text;
@@ -8,12 +10,20 @@ async function translateText(text: string, targetLang: string): Promise<string> 
 
   try {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: AbortSignal.timeout(TRANSLATE_TIMEOUT_MS) });
+
+    // Only cache on success — don't cache rate-limited or error responses
+    if (!res.ok) return text;
+
     const data = await res.json();
-    const translated = data[0]?.map((item: [string]) => item[0]).join("") || text;
+    // Validate expected response shape before using it
+    if (!Array.isArray(data) || !Array.isArray(data[0])) return text;
+
+    const translated = data[0].map((item: [string]) => item[0]).join("") || text;
     CACHE.set(key, translated);
     return translated;
   } catch {
+    // Network error, timeout, or parse failure — return original silently
     return text;
   }
 }
@@ -26,7 +36,6 @@ function getTextNodes(root: Element): Text[] {
       const parent = node.parentElement;
       if (!parent || skip.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
       if (!node.textContent?.trim()) return NodeFilter.FILTER_REJECT;
-      // Skip elements marked translate="no"
       if (parent.closest("[translate='no']")) return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
     },
@@ -36,13 +45,21 @@ function getTextNodes(root: Element): Text[] {
   return nodes;
 }
 
-// Store originals so we can restore them
+// Store originals so we can restore them on switch back to English
 const originals = new Map<Text, string>();
 
-export async function translatePage(targetLang: string): Promise<void> {
-  console.log("[translate] called with:", targetLang);
+export function translatePage(targetLang: string): void {
+  // Defer to idle so the language switcher click response feels instant
+  const run = () => _translatePage(targetLang);
+  if (typeof requestIdleCallback !== "undefined") {
+    requestIdleCallback(run, { timeout: 1000 });
+  } else {
+    setTimeout(run, 0);
+  }
+}
+
+async function _translatePage(targetLang: string): Promise<void> {
   const nodes = getTextNodes(document.body);
-  console.log("[translate] nodes found:", nodes.length);
 
   if (targetLang === "en") {
     originals.forEach((original, node) => { node.textContent = original; });
@@ -58,14 +75,13 @@ export async function translatePage(targetLang: string): Promise<void> {
   document.documentElement.setAttribute("dir", targetLang === "ar" ? "rtl" : "ltr");
   document.documentElement.setAttribute("lang", targetLang);
 
-  const batchSize = 10;
-  for (let i = 0; i < nodes.length; i += batchSize) {
-    const batch = nodes.slice(i, i + batchSize);
+  // Translate in batches of 10 to avoid overwhelming the API
+  const BATCH_SIZE = 10;
+  for (let i = 0; i < nodes.length; i += BATCH_SIZE) {
+    const batch = nodes.slice(i, i + BATCH_SIZE);
     await Promise.all(batch.map(async (node) => {
       const original = originals.get(node) || node.textContent || "";
-      console.log("[translate] translating:", original.trim().slice(0, 40));
       node.textContent = await translateText(original, targetLang);
     }));
   }
-  console.log("[translate] done");
 }

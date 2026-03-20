@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/app/components/navigation/Navbar";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 
@@ -10,7 +10,11 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 async function getHomepage() {
-  return client.fetch(`*[_type == "homepage"][0]`);
+  try {
+    return await client.fetch(`*[_type == "homepage"][0]`);
+  } catch {
+    return null;
+  }
 }
 
 export default async function Home() {

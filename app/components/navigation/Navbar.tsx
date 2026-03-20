@@ -70,7 +70,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full relative z-50 h-[80px]">
+      <nav className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full relative z-50 h-[80px]" translate="no">
         {/* Logo */}
         <Link href="/" className="navbar__logo shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -148,6 +148,7 @@ export default function Navbar() {
       {open && (
         <motion.div
           dir={lang === "AR" ? "rtl" : "ltr"}
+          translate="no"
           className="mobile-menu lg:hidden fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: "#141127" }}
           initial={{ opacity: 0 }}

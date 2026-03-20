@@ -3,6 +3,10 @@
 const CACHE = new Map<string, string>();
 const TRANSLATE_TIMEOUT_MS = 8_000;
 
+// Tracks the most recently requested language — any in-flight translation
+// for a different language will abort mid-batch rather than overwriting.
+let _activeLang = "en";
+
 async function translateText(text: string, targetLang: string): Promise<string> {
   if (!text.trim()) return text;
   const key = `${targetLang}:${text}`;
@@ -59,12 +63,15 @@ export function translatePage(targetLang: string): void {
 }
 
 async function _translatePage(targetLang: string): Promise<void> {
+  // Register this as the active translation — any older in-flight run will bail
+  _activeLang = targetLang;
+
   const nodes = getTextNodes(document.body);
 
   if (targetLang === "en") {
     originals.forEach((original, node) => { node.textContent = original; });
     document.documentElement.removeAttribute("dir");
-    document.documentElement.removeAttribute("lang");
+    document.documentElement.setAttribute("lang", "en");
     return;
   }
 
@@ -78,10 +85,16 @@ async function _translatePage(targetLang: string): Promise<void> {
   // Translate in batches of 10 to avoid overwhelming the API
   const BATCH_SIZE = 10;
   for (let i = 0; i < nodes.length; i += BATCH_SIZE) {
+    // Bail if the user switched language again while we were mid-batch
+    if (_activeLang !== targetLang) return;
+
     const batch = nodes.slice(i, i + BATCH_SIZE);
     await Promise.all(batch.map(async (node) => {
       const original = originals.get(node) || node.textContent || "";
-      node.textContent = await translateText(original, targetLang);
+      const translated = await translateText(original, targetLang);
+      // Check again after the async fetch — another switch may have happened
+      if (_activeLang !== targetLang) return;
+      node.textContent = translated;
     }));
   }
 }

@@ -59,6 +59,7 @@ export default function LanguageSwitcher({
     <div
       ref={containerRef}
       className="relative"
+      translate="no"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

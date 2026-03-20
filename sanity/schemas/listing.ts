@@ -5,8 +5,8 @@ export const listing = defineType({
   title: "Equipment",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Title", type: "string" }),
-    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title" } }),
+    defineField({ name: "title", title: "Title", type: "string", validation: (Rule) => Rule.required() }),
+    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title" }, validation: (Rule) => Rule.required() }),
     defineField({
       name: "published",
       title: "Published (visible on website)",
@@ -114,6 +114,13 @@ export const listing = defineType({
       ],
     }),
     defineField({ name: "description", title: "Description", type: "text", rows: 5 }),
+    defineField({
+      name: "metaDescription",
+      title: "SEO Meta Description",
+      type: "text",
+      rows: 2,
+      description: "Shown in Google search results. 150–160 characters recommended. Leave blank to auto-generate from title, make, model and category.",
+    }),
     defineField({ name: "specifications", title: "Full Specifications", type: "text", rows: 15 }),
     defineField({
       name: "images",

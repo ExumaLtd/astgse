@@ -6,9 +6,12 @@ import ScrollButton from "@/app/components/ui/ScrollButton";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://astgse.com";
+
 export const metadata = {
   title: { absolute: "ASTGSE | Maintenance and diagnostics" },
   description: "AST's diagnostic capability spans multiple manufacturers and equipment types. We diagnose what others can't — then we fix it.",
+  alternates: { canonical: `${BASE_URL}/services/maintenance-and-diagnostics` },
 };
 
 export const revalidate = 60;
@@ -100,7 +103,6 @@ export default async function MaintenanceAndDiagnostics() {
                     height={875}
                     className="maintenance-hero__image w-full h-full object-cover object-center"
                     priority
-                    unoptimized={heroImageUrl.startsWith("https://cdn.sanity.io")}
                   />
                 </div>
               </div>
@@ -124,7 +126,6 @@ export default async function MaintenanceAndDiagnostics() {
                   width={628}
                   height={418}
                   className="maintenance-section__image w-full h-full object-cover"
-                  unoptimized={sectionImageUrl.startsWith("https://cdn.sanity.io")}
                 />
               </div>
             </div>

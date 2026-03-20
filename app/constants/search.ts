@@ -11,7 +11,7 @@ export const TYPE_HREFS: Record<string, string> = {
 };
 
 // Types that have built individual detail pages — add to this set as pages are built
-export const TYPES_WITH_DETAIL_PAGES = new Set(["servicePage"]);
+export const TYPES_WITH_DETAIL_PAGES = new Set(["servicePage", "listing"]);
 
 export const SUGGESTIONS = [
   { en: "Maintenance", ar: "الصيانة",  es: "Mantenimiento", fr: "Maintenance", href: "/services/maintenance-and-diagnostics" },

@@ -3,8 +3,11 @@ import Navbar from "@/app/components/navigation/Navbar";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://astgse.com";
+
 export const metadata: Metadata = {
   title: { absolute: "ASTGSE | Homepage" },
+  alternates: { canonical: BASE_URL },
 };
 
 export const revalidate = 60;

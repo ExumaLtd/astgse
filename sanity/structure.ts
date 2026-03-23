@@ -96,6 +96,24 @@ export const structure: StructureResolver = (S) =>
               .defaultOrdering([{ field: "firstSeenAt", direction: "desc" }])
           ),
           S.divider(),
+          S.listItem().title("By continent").child(
+            S.list().title("By continent").items(
+              ["Africa", "Asia", "Europe", "North America", "Oceania", "South America"].map(c =>
+                S.listItem().title(c).child(
+                  S.documentList().title(c)
+                    .filter('_type == "contact" && continent == $continent')
+                    .params({ continent: c })
+                    .defaultOrdering([{ field: "lastSeenAt", direction: "desc" }])
+                )
+              )
+            )
+          ),
+          S.listItem().title("By country").child(
+            S.documentList().title("By country")
+              .filter('_type == "contact" && defined(country)')
+              .defaultOrdering([{ field: "country", direction: "asc" }])
+          ),
+          S.divider(),
           S.listItem().title("By source").child(
             S.list().title("By source").items([
               S.listItem().title("Google").child(

@@ -55,15 +55,24 @@ async function toEnglish(text: string, sourceLang: string): Promise<string> {
   }
 }
 
-async function getLocation(ip: string): Promise<string> {
-  if (!ip || ip === "127.0.0.1" || ip === "::1") return "";
+const CONTINENT_MAP: Record<string, string> = {
+  AF: "Africa", AN: "Antarctica", AS: "Asia", EU: "Europe",
+  NA: "North America", OC: "Oceania", SA: "South America",
+};
+
+async function getLocation(ip: string): Promise<{ display: string; country: string; continent: string }> {
+  if (!ip || ip === "127.0.0.1" || ip === "::1") return { display: "", country: "", continent: "" };
   try {
-    const res = await fetch(`http://ip-api.com/json/${ip}?fields=city,country`, { signal: AbortSignal.timeout(3_000) });
-    if (!res.ok) return "";
-    const { city, country } = await res.json() as { city?: string; country?: string };
-    return [city, country].filter(Boolean).join(", ");
+    const res = await fetch(`http://ip-api.com/json/${ip}?fields=city,country,continentCode`, { signal: AbortSignal.timeout(3_000) });
+    if (!res.ok) return { display: "", country: "", continent: "" };
+    const { city, country, continentCode } = await res.json() as { city?: string; country?: string; continentCode?: string };
+    return {
+      display: [city, country].filter(Boolean).join(", "),
+      country: country ?? "",
+      continent: CONTINENT_MAP[continentCode ?? ""] ?? "",
+    };
   } catch {
-    return "";
+    return { display: "", country: "", continent: "" };
   }
 }
 
@@ -133,7 +142,7 @@ export async function submitContact(
 
   const headersList = await headers();
   const ip = (headersList.get("x-forwarded-for") ?? "").split(",")[0].trim() || headersList.get("x-real-ip") || "";
-  const location = await getLocation(ip);
+  const { display: location, country, continent } = await getLocation(ip);
 
   const tz       = (formData.get("timezone")  as string | null) ?? "";
   const referrer  = (formData.get("referrer")  as string | null) ?? "";
@@ -167,7 +176,7 @@ export async function submitContact(
   const contactId = `contact-${email.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
   const contactPromise = writeClient
     .createIfNotExists({ _id: contactId, _type: "contact", email, firstSeenAt: now.toISOString(), enquiryCount: 0 })
-    .then(() => writeClient.patch(contactId).set({ name, phone: phone || undefined, company: company || undefined, lastSeenAt: now.toISOString(), referrer: referrer || undefined }).inc({ enquiryCount: 1 }).commit())
+    .then(() => writeClient.patch(contactId).set({ name, phone: phone || undefined, company: company || undefined, lastSeenAt: now.toISOString(), referrer: referrer || undefined, country: country || undefined, continent: continent || undefined }).inc({ enquiryCount: 1 }).commit())
     .catch(() => {});
 
   // Save to Sanity and send email in parallel — Sanity save is non-fatal

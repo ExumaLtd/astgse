@@ -15,7 +15,9 @@ export const contact = defineType({
     defineField({ name: "email",   title: "Email",   type: "string" }),
     defineField({ name: "phone",   title: "Phone",   type: "string" }),
     defineField({ name: "company", title: "Company", type: "string" }),
-    defineField({ name: "referrer", title: "Source", type: "string", readOnly: true }),
+    defineField({ name: "country",   title: "Country",   type: "string", readOnly: true }),
+    defineField({ name: "continent", title: "Continent", type: "string", readOnly: true }),
+    defineField({ name: "referrer",  title: "Source",    type: "string", readOnly: true }),
     defineField({
       name: "firstSeenAt",
       title: "First enquiry",

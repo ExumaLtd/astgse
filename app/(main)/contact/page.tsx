@@ -197,7 +197,7 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <div className="contact-page min-h-screen bg-blue text-white flex flex-col">
+    <div className="contact-page min-h-screen bg-blue text-white flex flex-col pt-[80px]">
       <main className="contact-page__main page-px flex flex-col flex-1 max-w-[1440px] mx-auto w-full pb-[40px] md:pb-[80px]" translate="no">
 
         {/* Breadcrumb */}

@@ -40,7 +40,7 @@ export default function CookiePolicy() {
   const t = UI[lang];
 
   return (
-    <div className="min-h-screen bg-blue text-white flex flex-col">
+    <div className="min-h-screen bg-blue text-white flex flex-col pt-[80px]">
       
       <main
         dir={isRtl(lang) ? "rtl" : "ltr"}

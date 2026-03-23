@@ -91,7 +91,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
 
   return (
     <>
-      <nav className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full relative z-50 h-[80px] bg-[#141127]" translate="no">
+      <nav className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full absolute inset-x-0 top-0 z-50 h-[80px]" translate="no">
         {/* Logo */}
         <Link href="/" className="navbar__logo shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}

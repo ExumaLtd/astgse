@@ -23,13 +23,15 @@ function esc(str: string): string {
     .replace(/'/g, "&#x27;");
 }
 
+const ALLOWED_LANGS = ["EN", "AR", "ES", "FR"] as const;
+
 const schema = z.object({
   name:    z.string().min(1, "Name is required").max(100),
   email:   z.string().email("Invalid email address"),
   phone:   z.string().regex(/^[\d+ ]{7,20}$/, "Please enter a valid phone number").optional().or(z.literal("")),
   company: z.string().max(100).optional(),
   message: z.string().min(10, "Message must be at least 10 characters").max(2000),
-  lang:    z.string().optional(),
+  lang:    z.enum(ALLOWED_LANGS).optional().default("EN"),
 });
 
 const LANG_TO_LOCALE: Record<string, string> = {
@@ -38,15 +40,32 @@ const LANG_TO_LOCALE: Record<string, string> = {
 
 async function toEnglish(text: string, sourceLang: string): Promise<string> {
   if (!sourceLang || sourceLang === "en") return text;
+  // Guard: only translate reasonable lengths to avoid abuse of the translate endpoint
+  const truncated = text.slice(0, 500);
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=en&dt=t&q=${encodeURIComponent(text)}`;
-    const res = await fetch(url, { signal: AbortSignal.timeout(8_000) });
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=en&dt=t&q=${encodeURIComponent(truncated)}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(5_000) });
     if (!res.ok) return text;
     const data = await res.json();
     if (!Array.isArray(data) || !Array.isArray(data[0])) return text;
-    return data[0].map((item: [string]) => item[0]).join("") || text;
+    // If message was longer than 500 chars, append the rest untranslated
+    const translated = data[0].map((item: [string]) => item[0]).join("") || truncated;
+    return text.length > 500 ? translated + text.slice(500) : translated;
   } catch {
     return text;
+  }
+}
+
+async function isRateLimited(email: string): Promise<boolean> {
+  try {
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const count = await writeClient.fetch<number>(
+      `count(*[_type == "contactSubmission" && email == $email && submittedAt > $since])`,
+      { email, since: oneHourAgo }
+    );
+    return count >= 3;
+  } catch {
+    return false; // fail open — don't block legitimate submissions if check fails
   }
 }
 
@@ -80,6 +99,7 @@ export async function submitContact(
     phone:   formData.get("phone"),
     company: formData.get("company"),
     message: formData.get("message"),
+    lang:    formData.get("lang"),
   };
 
   const parsed = schema.safeParse(raw);
@@ -93,6 +113,12 @@ export async function submitContact(
   }
 
   const { name, email, phone, company, message, lang } = parsed.data;
+
+  // Rate limit: max 3 submissions per email per hour
+  if (await isRateLimited(email)) {
+    return { success: false, error: "Too many submissions. Please try again later." };
+  }
+
   const locale = LANG_TO_LOCALE[lang?.toUpperCase() ?? "EN"] ?? "en";
 
   // Translate message to English if submitted in another language

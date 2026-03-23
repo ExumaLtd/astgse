@@ -24,6 +24,21 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://static.cloudflareinsights.com https://www.googletagmanager.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://cdn.sanity.io https://astgse.exuma.co.uk https://astgse.com",
+              "font-src 'self' data:",
+              "connect-src 'self' https://*.sentry.io https://challenges.cloudflare.com https://translate.googleapis.com https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+              "frame-src https://challenges.cloudflare.com",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+            ].join("; "),
+          },
         ],
       },
     ];

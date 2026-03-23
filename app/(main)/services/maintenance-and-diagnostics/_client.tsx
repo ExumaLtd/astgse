@@ -42,7 +42,7 @@ export default function MaintenancePageClient({
       {/* ── Dark hero section ─────────────────────────────────────────────── */}
       <section className="maintenance-hero relative bg-blue text-white flex flex-col overflow-hidden md:h-screen">
 
-        <div className="relative z-10 flex flex-col md:flex-1 md:min-h-0">
+        <div className="relative z-10 flex flex-col md:flex-1 md:min-h-0 pt-[80px]">
           <div className="max-w-[1440px] mx-auto w-full flex flex-col md:flex-1 md:min-h-0">
             <main className="flex flex-col pb-[40px] md:pb-0 md:flex-1 md:min-h-0">
 

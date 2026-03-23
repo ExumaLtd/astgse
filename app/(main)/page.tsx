@@ -52,7 +52,7 @@ export default async function Home() {
 
 
       {/* Hero content */}
-      <div className="home-hero page-px relative z-10 flex flex-col flex-1 w-full" style={{ paddingBottom: 65 }}>
+      <div className="home-hero page-px relative z-10 flex flex-col flex-1 w-full pt-[80px]" style={{ paddingBottom: 65 }}>
         <div className="home-hero__heading-wrap flex flex-1 items-center">
           <h1
             className="home-hero__heading text-white text-[2.75rem] leading-[3rem] md:text-[3.25rem] md:leading-[3.625rem] lg:text-[4.375rem] lg:leading-[5rem]"

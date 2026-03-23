@@ -218,11 +218,11 @@ export default function ContactPage() {
               {t.subtext}
             </p>
 
-            <div className="contact-page__details flex flex-col gap-[16px] text-[1.2rem] lg:text-[1.625rem] leading-[1.5rem] lg:leading-[1.875rem]" style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21 }}>
-              <a href="mailto:enquiries@astgse.com" translate="no" dir="ltr" className="contact-page__email flex items-center gap-[12px] text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ justifyContent: rtl ? "flex-end" : "flex-start" }}>
+            <div className="contact-page__details flex flex-col gap-[16px] text-[1.075rem] lg:text-[1.5rem] leading-[1.375rem] lg:leading-[1.75rem]" style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21 }}>
+              <a href="mailto:enquiries@astgse.com" translate="no" dir="ltr" className="contact-page__email flex items-center gap-[12px] underline decoration-[0.5px] underline-offset-4 text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ justifyContent: rtl ? "flex-end" : "flex-start" }}>
                 enquiries@astgse.com
               </a>
-              <a href="tel:+447544309803" translate="no" dir="ltr" className="contact-page__phone flex items-center gap-[12px] text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ justifyContent: rtl ? "flex-end" : "flex-start" }}>
+              <a href="tel:+447544309803" translate="no" dir="ltr" className="contact-page__phone flex items-center gap-[12px] underline decoration-[0.5px] underline-offset-4 text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ justifyContent: rtl ? "flex-end" : "flex-start" }}>
                 +44 (0)7544 309803
               </a>
             </div>

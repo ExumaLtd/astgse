@@ -23,7 +23,7 @@ const CONTACT_UI: Record<LangCode, {
   errors: Record<string, string>;
 }> = {
   EN: {
-    heading1Green: "Speak", heading1Rest: " to", heading2: "our team today",
+    heading1Green: "Speak", heading1Rest: " to our", heading2: "team today",
     subtext: "Whether you're looking to source equipment, need a maintenance quote, or want to discuss contract support, our team is ready to help.",
     labelName: "Name *", labelEmail: "Email *", labelPhone: "Phone", labelCompany: "Company", labelMessage: "Message *",
     placeholderName: "First and last", placeholderEmail: "name@example.com", placeholderCompany: "Example Co", placeholderMessage: "How can we help?",
@@ -184,7 +184,7 @@ export default function ContactPage() {
 
         {/* Breadcrumb */}
         <nav
-          className="contact-breadcrumb flex items-center gap-[12px] pt-[10px] md:pt-4 mb-[40px] md:mb-[64px]"
+          className="contact-breadcrumb flex items-center gap-[12px] pt-[10px] md:pt-4 mb-[30px] md:mb-[64px]"
           style={{ fontFamily: "var(--font-almaren-nueva)", fontSize: "0.875rem", fontWeight: 21 }}
           aria-label="Breadcrumb"
         >
@@ -193,10 +193,10 @@ export default function ContactPage() {
           <span style={{ color: "#ffffff" }}>{t.breadcrumbContact}</span>
         </nav>
 
-        <div className="contact-page__grid grid grid-cols-1 lg:grid-cols-2 gap-[64px] lg:gap-[120px]" dir={rtl ? "rtl" : "ltr"}>
+        <div className="contact-page__grid grid grid-cols-1 lg:grid-cols-2 gap-[40px] lg:gap-[120px]" dir={rtl ? "rtl" : "ltr"}>
 
           {/* Left — heading + info */}
-          <div className="contact-page__intro flex flex-col gap-[32px]">
+          <div className="contact-page__intro flex flex-col gap-[20px] md:gap-[32px]">
             <h1
               className="contact-page__heading text-[2rem] leading-[2.25rem] md:text-[2.75rem] md:leading-[3rem] lg:text-[3.375rem] lg:leading-[3.625rem]"
               style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21 }}
@@ -218,7 +218,7 @@ export default function ContactPage() {
               {t.subtext}
             </p>
 
-            <div className="contact-page__details flex flex-col gap-[16px]" style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21, fontSize: "1.625rem", lineHeight: "1.875rem" }}>
+            <div className="contact-page__details flex flex-col gap-[16px] text-[1.2rem] lg:text-[1.625rem] leading-[1.5rem] lg:leading-[1.875rem]" style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21 }}>
               <a href="mailto:enquiries@astgse.com" translate="no" dir="ltr" className="contact-page__email flex items-center gap-[12px] text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ justifyContent: rtl ? "flex-end" : "flex-start" }}>
                 enquiries@astgse.com
               </a>

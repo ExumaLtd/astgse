@@ -4,7 +4,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { useLang } from "@/app/hooks/useLang";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Grip } from "lucide-react";
 import Navbar from "@/app/components/navigation/Navbar";
 import { submitContact, type ContactFormState } from "@/app/actions/contact";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -23,7 +23,7 @@ const CONTACT_UI: Record<LangCode, {
   errors: Record<string, string>;
 }> = {
   EN: {
-    heading1Green: "Speak", heading1Rest: " to", heading2: "our team",
+    heading1Green: "Speak", heading1Rest: " to", heading2: "our team today",
     subtext: "Whether you're looking to source equipment, need a maintenance quote, or want to discuss contract support, our team is ready to help.",
     labelName: "Name *", labelEmail: "Email *", labelPhone: "Phone", labelCompany: "Company", labelMessage: "Message *",
     placeholderName: "First and last", placeholderEmail: "name@example.com", placeholderCompany: "Example Co", placeholderMessage: "How can we help?",
@@ -44,7 +44,7 @@ const CONTACT_UI: Record<LangCode, {
     },
   },
   AR: {
-    heading1Green: "تواصل", heading1Rest: "", heading2: "معنا.",
+    heading1Green: "تواصل", heading1Rest: "", heading2: "معنا اليوم.",
     subtext: "سواء كنت تبحث عن معدات محددة، أو تحتاج إلى عرض أسعار للصيانة، أو تريد فقط مناقشة خياراتك — نحن هنا.",
     labelName: "الاسم *", labelEmail: "البريد الإلكتروني *", labelPhone: "الهاتف", labelCompany: "الشركة", labelMessage: "الرسالة *",
     placeholderName: "اسمك", placeholderEmail: "عنوان بريدك الإلكتروني", placeholderCompany: "شركتك", placeholderMessage: "أخبرنا بما تحتاجه...",
@@ -65,7 +65,7 @@ const CONTACT_UI: Record<LangCode, {
     },
   },
   ES: {
-    heading1Green: "Ponte", heading1Rest: " en", heading2: "contacto.",
+    heading1Green: "Ponte", heading1Rest: " en", heading2: "contacto hoy.",
     subtext: "Si buscas un equipo específico, necesitas un presupuesto de mantenimiento, o simplemente quieres explorar tus opciones — estamos aquí.",
     labelName: "Nombre *", labelEmail: "Correo *", labelPhone: "Teléfono", labelCompany: "Empresa", labelMessage: "Mensaje *",
     placeholderName: "Tu nombre", placeholderEmail: "Tu correo electrónico", placeholderCompany: "Tu empresa", placeholderMessage: "Cuéntanos qué necesitas...",
@@ -86,7 +86,7 @@ const CONTACT_UI: Record<LangCode, {
     },
   },
   FR: {
-    heading1Green: "Entrer", heading1Rest: " en", heading2: "contact.",
+    heading1Green: "Entrer", heading1Rest: " en", heading2: "contact aujourd'hui.",
     subtext: "Que vous recherchiez un équipement spécifique, ayez besoin d'un devis de maintenance, ou souhaitiez simplement discuter de vos options — nous sommes là.",
     labelName: "Nom *", labelEmail: "Email *", labelPhone: "Téléphone", labelCompany: "Entreprise", labelMessage: "Message *",
     placeholderName: "Votre nom", placeholderEmail: "Votre adresse email", placeholderCompany: "Votre entreprise", placeholderMessage: "Dites-nous ce dont vous avez besoin...",
@@ -126,6 +126,8 @@ export default function ContactPage() {
   const [timezone, setTimezone] = useState("");
   const [consent, setConsent] = useState(false);
   const [messageFocused, setMessageFocused] = useState(false);
+  const [messageHeight, setMessageHeight] = useState<number | null>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
 
   const t = CONTACT_UI[lang];
   const rtl = isRtl(lang);
@@ -155,6 +157,19 @@ export default function ContactPage() {
 
   const setField = (name: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setFields(f => ({ ...f, [name]: e.target.value }));
+
+  function startMessageResize(e: React.MouseEvent) {
+    e.preventDefault();
+    const startY = e.clientY;
+    const startH = messageRef.current?.offsetHeight ?? 144;
+    const onMove = (ev: MouseEvent) => setMessageHeight(Math.max(100, startH + ev.clientY - startY));
+    const onUp = () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }
 
   useEffect(() => {
     setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
@@ -249,26 +264,37 @@ export default function ContactPage() {
                   >
                     {t.labelMessage.replace(" *", "")} <sup style={{ color: "#00FF7E" }}>*</sup>
                   </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={6}
-                    placeholder={t.placeholderMessage}
-                    value={fields.message}
-                    onChange={setField("message")}
-                    onFocus={() => setMessageFocused(true)}
-                    onBlur={() => setMessageFocused(false)}
-                    className="contact-form__textarea w-full resize-none text-white placeholder-white/30 transition-colors duration-200"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: state.fieldErrors?.message ? "1px solid #ff4d4d" : messageFocused ? "1px solid #00FF7E" : "1px solid transparent",
-                      borderRadius: 8,
-                      padding: "14px 16px",
-                      fontFamily: "var(--font-inter)",
-                      fontSize: "0.9375rem",
-                      outline: "none",
-                    }}
-                  />
+                  <div className="relative">
+                    <textarea
+                      ref={messageRef}
+                      id="message"
+                      name="message"
+                      placeholder={t.placeholderMessage}
+                      value={fields.message}
+                      onChange={setField("message")}
+                      onFocus={() => setMessageFocused(true)}
+                      onBlur={() => setMessageFocused(false)}
+                      className="contact-form__textarea w-full resize-none text-white placeholder-white/30 transition-colors duration-200"
+                      style={{
+                        background: "rgba(255,255,255,0.05)",
+                        border: state.fieldErrors?.message ? "1px solid #ff4d4d" : messageFocused ? "1px solid #00FF7E" : "1px solid transparent",
+                        borderRadius: 8,
+                        padding: "14px 16px",
+                        paddingBottom: "28px",
+                        fontFamily: "var(--font-inter)",
+                        fontSize: "0.9375rem",
+                        outline: "none",
+                        height: messageHeight ? `${messageHeight}px` : "144px",
+                      }}
+                    />
+                    <span
+                      className="absolute bottom-2 right-2 cursor-ns-resize opacity-30 hover:opacity-60 transition-opacity select-none"
+                      style={{ color: "white", touchAction: "none" }}
+                      onMouseDown={startMessageResize}
+                    >
+                      <Grip size={14} />
+                    </span>
+                  </div>
                   {state.fieldErrors?.message && (
                     <span className="contact-form__error" style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem", color: "#ff4d4d" }}>
                       {t.errors[state.fieldErrors.message] ?? state.fieldErrors.message}

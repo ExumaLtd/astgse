@@ -5,5 +5,6 @@ import { about } from "./about";
 import { newsroom } from "./newsroom";
 import { navigation } from "./navigation";
 import { contactSubmission } from "./contactSubmission";
+import { contact } from "./contact";
 
-export const schemaTypes = [homepage, servicePage, listing, about, newsroom, navigation, contactSubmission];
+export const schemaTypes = [homepage, servicePage, listing, about, newsroom, navigation, contactSubmission, contact];

@@ -163,6 +163,13 @@ export async function submitContact(
   const safeCompany = company ? esc(company) : null;
   const safeMessage = esc(englishMessage);
 
+  // Upsert contact record — non-fatal
+  const contactId = `contact-${email.toLowerCase().replace(/[^a-z0-9]/g, "-")}`;
+  const contactPromise = writeClient
+    .createIfNotExists({ _id: contactId, _type: "contact", email, firstSeenAt: now.toISOString(), enquiryCount: 0 })
+    .then(() => writeClient.patch(contactId).set({ name, phone: phone || undefined, company: company || undefined, lastSeenAt: now.toISOString(), referrer: referrer || undefined }).inc({ enquiryCount: 1 }).commit())
+    .catch(() => {});
+
   // Save to Sanity and send email in parallel — Sanity save is non-fatal
   const sanityPromise = writeClient.create({
     _type: "contactSubmission",
@@ -212,7 +219,7 @@ export async function submitContact(
           </div>
         </div>
       `,
-    }), sanityPromise]);
+    }), sanityPromise, contactPromise]);
 
     if (sendError) {
       console.error("Resend error:", JSON.stringify(sendError, null, 2));

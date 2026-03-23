@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io https://astgse.exuma.co.uk https://astgse.com",
               "font-src 'self' data:",
-              "connect-src 'self' https://*.sentry.io https://challenges.cloudflare.com https://translate.googleapis.com https://vitals.vercel-insights.com https://va.vercel-scripts.com https://*.sanity.io",
+              "connect-src 'self' https://*.sentry.io https://challenges.cloudflare.com https://translate.googleapis.com https://vitals.vercel-insights.com https://va.vercel-scripts.com https://*.sanity.io wss://*.sanity.io",
               "frame-src https://challenges.cloudflare.com",
               "object-src 'none'",
               "base-uri 'self'",

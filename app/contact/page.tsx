@@ -208,8 +208,8 @@ export default function ContactPage() {
               className="contact-page__subtext text-white"
               style={{
                 fontFamily: "var(--font-inter)",
-                fontSize: "1.125rem",
-                lineHeight: "1.875rem",
+                fontSize: "1rem",
+                lineHeight: "1.5rem",
                 maxWidth: "28rem",
                 color: "#ffffff",
               }}
@@ -217,7 +217,7 @@ export default function ContactPage() {
               {t.subtext}
             </p>
 
-            <div className="contact-page__details flex flex-col gap-[16px]" style={{ fontFamily: "var(--font-inter)", fontSize: "1.125rem", lineHeight: "1.875rem" }}>
+            <div className="contact-page__details flex flex-col gap-[16px]" style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21, fontSize: "1.625rem", lineHeight: "1.875rem" }}>
               <a href="mailto:enquiries@astgse.com" translate="no" dir="ltr" className="contact-page__email flex items-center gap-[12px] text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ justifyContent: rtl ? "flex-end" : "flex-start" }}>
                 enquiries@astgse.com
               </a>
@@ -264,7 +264,7 @@ export default function ContactPage() {
                   >
                     {t.labelMessage.replace(" *", "")} <sup style={{ color: "#00FF7E" }}>*</sup>
                   </label>
-                  <div className="relative">
+                  <div style={{ display: "grid" }}>
                     <textarea
                       ref={messageRef}
                       id="message"
@@ -276,20 +276,20 @@ export default function ContactPage() {
                       onBlur={() => setMessageFocused(false)}
                       className="contact-form__textarea w-full resize-none text-white placeholder-white/30 transition-colors duration-200"
                       style={{
+                        gridArea: "1/1",
                         background: "rgba(255,255,255,0.05)",
                         border: state.fieldErrors?.message ? "1px solid #ff4d4d" : messageFocused ? "1px solid #00FF7E" : "1px solid transparent",
                         borderRadius: 8,
-                        padding: "14px 16px",
-                        paddingBottom: "28px",
+                        padding: "14px 16px 28px",
                         fontFamily: "var(--font-inter)",
                         fontSize: "0.9375rem",
                         outline: "none",
-                        height: messageHeight ? `${messageHeight}px` : "144px",
+                        height: messageHeight ? `${messageHeight}px` : "120px",
                       }}
                     />
                     <span
-                      className="absolute bottom-2 right-2 cursor-ns-resize opacity-30 hover:opacity-60 transition-opacity select-none"
-                      style={{ color: "white", touchAction: "none" }}
+                      className="cursor-ns-resize opacity-30 hover:opacity-60 transition-opacity select-none"
+                      style={{ gridArea: "1/1", alignSelf: "end", justifySelf: "end", margin: 7, color: "white", touchAction: "none" }}
                       onMouseDown={startMessageResize}
                     >
                       <Grip size={14} />

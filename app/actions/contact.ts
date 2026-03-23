@@ -185,10 +185,10 @@ export async function submitContact(
 
   try {
     const [{ error: sendError }] = await Promise.all([resend.emails.send({
-      from:    "ASTGSE Enquiry <noreply@exuma.co.uk>",
+      from:    "ASTGSE <noreply@exuma.co.uk>",
       to:      "jonathon@exuma.co.uk",
       replyTo: email,
-      subject: `💬 Website enquiry / ${name}`,
+      subject: `💬 New website enquiry`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#141127;">
           <div style="background:#141127;padding:24px 32px;">
@@ -201,8 +201,8 @@ export async function submitContact(
               <tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="padding:8px 0;"><a href="mailto:${safeEmail}" style="color:#141127;">${safeEmail}</a></td></tr>
               ${safePhone   ? `<tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="padding:8px 0;">${safePhone}</td></tr>` : ""}
               ${safeCompany ? `<tr><td style="padding:8px 0;color:#6b7280;">Company</td><td style="padding:8px 0;">${safeCompany}</td></tr>` : ""}
-              <tr><td style="padding:8px 0;color:#6b7280;">Local time</td><td style="padding:8px 0;">${esc(localTime)}${tz ? ` <span style="color:#6b7280;">(${esc(tz)})</span>` : ""}</td></tr>
               <tr><td style="padding:8px 0;color:#6b7280;">GMT</td><td style="padding:8px 0;">${esc(gmtTime)}</td></tr>
+              ${location ? `<tr><td style="padding:8px 0;color:#6b7280;">Country</td><td style="padding:8px 0;">${esc(location)}</td></tr>` : ""}
             </table>
             <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
             <p style="margin:0;font-size:0.9375rem;line-height:1.6;white-space:pre-wrap;">${safeMessage}</p>

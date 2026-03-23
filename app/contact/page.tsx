@@ -156,8 +156,10 @@ export default function ContactPage() {
     }
   }, [state.success]);
 
-  const setField = (name: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const setField = (name: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFields(f => ({ ...f, [name]: e.target.value }));
+    setClientErrors(errs => { const next = { ...errs }; delete next[name]; return next; });
+  };
 
   function startMessageResize(e: React.MouseEvent) {
     e.preventDefault();
@@ -243,8 +245,8 @@ export default function ContactPage() {
             >
 
                 <div className="contact-form__row grid grid-cols-1 sm:grid-cols-2 gap-[24px]">
-                  <Field label={t.labelName} name="name" autoComplete="name" placeholder={t.placeholderName} value={fields.name} onChange={setField("name")} error={clientErrors.name ?? state.fieldErrors?.name} errors={t.errors} />
-                  <Field label={t.labelEmail} name="email" type="email" autoComplete="email" placeholder={t.placeholderEmail} value={fields.email} onChange={setField("email")} error={clientErrors.email ?? state.fieldErrors?.email} inputDir="ltr" errors={t.errors} />
+                  <Field label={t.labelName} name="name" autoComplete="name" placeholder={t.placeholderName} value={fields.name} onChange={setField("name")} onClearError={() => setClientErrors(e => { const n = { ...e }; delete n.name; return n; })} error={clientErrors.name ?? state.fieldErrors?.name} errors={t.errors} />
+                  <Field label={t.labelEmail} name="email" type="email" autoComplete="email" placeholder={t.placeholderEmail} value={fields.email} onChange={setField("email")} onClearError={() => setClientErrors(e => { const n = { ...e }; delete n.email; return n; })} error={clientErrors.email ?? state.fieldErrors?.email} inputDir="ltr" errors={t.errors} />
                 </div>
 
                 <div className="contact-form__row grid grid-cols-1 sm:grid-cols-2 gap-[24px]">
@@ -259,8 +261,10 @@ export default function ContactPage() {
                     onChange={(e) => {
                       const val = e.target.value.replace(/[^\d+ ]/g, "").replace(/(?!^)\+/g, "").slice(0, 20);
                       setFields(f => ({ ...f, phone: val }));
+                      setClientErrors(errs => { const next = { ...errs }; delete next.phone; return next; });
                     }}
-                    error={state.fieldErrors?.phone}
+                    error={clientErrors.phone ?? state.fieldErrors?.phone}
+                    onClearError={() => setClientErrors(e => { const n = { ...e }; delete n.phone; return n; })}
                     inputDir="ltr"
                     errors={t.errors}
                   />
@@ -283,7 +287,7 @@ export default function ContactPage() {
                       placeholder={t.placeholderMessage}
                       value={fields.message}
                       onChange={setField("message")}
-                      onFocus={() => setMessageFocused(true)}
+                      onFocus={() => { setMessageFocused(true); setClientErrors(e => { const n = { ...e }; delete n.message; return n; }); }}
                       onBlur={() => setMessageFocused(false)}
                       className="contact-form__textarea w-full resize-none text-white placeholder-white/30 transition-colors duration-200"
                       style={{
@@ -334,7 +338,7 @@ export default function ContactPage() {
                 {/* Consent checkbox */}
                 <div className="flex flex-col gap-[8px]">
                   <label className="flex items-start gap-[12px] cursor-pointer" style={{ fontFamily: "var(--font-inter)", fontSize: "0.8125rem", color: "#ffffff", lineHeight: 1.5 }}>
-                    <input type="checkbox" name="consent" checked={consent} onChange={e => setConsent(e.target.checked)} className="sr-only" />
+                    <input type="checkbox" name="consent" checked={consent} onChange={e => { setConsent(e.target.checked); setClientErrors(errs => { const next = { ...errs }; delete next.consent; return next; }); }} className="sr-only" />
                     <span
                       className="mt-[2px] shrink-0 flex items-center justify-center transition-colors duration-200"
                       style={{ width: 18, height: 18, border: `1px solid ${consent ? "#00FF7E" : "transparent"}`, borderRadius: 4, backgroundColor: consent ? "#00FF7E" : "rgba(255,255,255,0.05)" }}
@@ -388,10 +392,10 @@ export default function ContactPage() {
 }
 
 function Field({
-  label, name, type = "text", autoComplete, placeholder, pattern, maxLength, value, onChange, error, inputDir, errors,
+  label, name, type = "text", autoComplete, placeholder, pattern, maxLength, value, onChange, onClearError, error, inputDir, errors,
 }: {
   label: string; name: string; type?: string; autoComplete?: string; placeholder?: string;
-  pattern?: string; maxLength?: number; value?: string; onChange?: React.ChangeEventHandler<HTMLInputElement>; error?: string; inputDir?: "ltr" | "rtl"; errors?: Record<string, string>;
+  pattern?: string; maxLength?: number; value?: string; onChange?: React.ChangeEventHandler<HTMLInputElement>; onClearError?: () => void; error?: string; inputDir?: "ltr" | "rtl"; errors?: Record<string, string>;
 }) {
   const [focused, setFocused] = useState(false);
   return (
@@ -413,8 +417,9 @@ function Field({
         maxLength={maxLength}
         value={value}
         onChange={onChange}
+        onInput={onChange as React.FormEventHandler<HTMLInputElement>}
         dir={inputDir}
-        onFocus={() => setFocused(true)}
+        onFocus={() => { setFocused(true); onClearError?.(); }}
         onBlur={() => setFocused(false)}
         className="contact-form__input w-full text-white placeholder-white/30 transition-colors duration-200"
         style={{

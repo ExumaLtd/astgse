@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Navbar from "@/app/components/navigation/Navbar";
+import { type NavData } from "@/sanity/lib/getNavigation";
 import ScrollButton from "@/app/components/ui/ScrollButton";
 import { type LC, isRtl } from "@/app/i18n/config";
 import { useLang } from "@/app/hooks/useLang";
@@ -23,6 +24,7 @@ type Props = {
   heroImageUrl: string;
   sectionImageUrl: string;
   heroLines: string[];
+  navData?: NavData;
 };
 
 export default function MaintenancePageClient({
@@ -33,6 +35,7 @@ export default function MaintenancePageClient({
   heroImageUrl,
   sectionImageUrl,
   heroLines,
+  navData,
 }: Props) {
   const lang = useLang();
   const t = UI[lang];
@@ -42,7 +45,7 @@ export default function MaintenancePageClient({
 
       {/* ── Dark hero section ─────────────────────────────────────────────── */}
       <section className="maintenance-hero relative bg-blue text-white flex flex-col overflow-hidden md:h-screen">
-        <Navbar />
+        <Navbar navData={navData} />
 
         <div className="relative z-10 flex flex-col md:flex-1 md:min-h-0">
           <div className="max-w-[1440px] mx-auto w-full flex flex-col md:flex-1 md:min-h-0">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
+import { getNavigation } from "@/sanity/lib/getNavigation";
 import EquipmentListingClient from "./_client";
 
 export const revalidate = 60;
@@ -100,7 +101,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function EquipmentListingPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const listing = await getListing(slug);
+  const [listing, navData] = await Promise.all([getListing(slug), getNavigation()]);
   if (!listing) notFound();
 
   const title = [listing.year, listing.make, listing.model, listing.title].filter(Boolean).join(" ");
@@ -139,7 +140,7 @@ export default async function EquipmentListingPage({ params }: { params: Promise
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <EquipmentListingClient listing={listing} heroImage={heroImage} title={title} />
+      <EquipmentListingClient listing={listing} heroImage={heroImage} title={title} navData={navData ?? undefined} />
     </>
   );
 }

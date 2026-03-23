@@ -1,5 +1,6 @@
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
+import { getNavigation } from "@/sanity/lib/getNavigation";
 import MaintenancePageClient from "./_client";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://astgse.com";
@@ -21,7 +22,7 @@ async function getPage() {
 }
 
 export default async function MaintenanceAndDiagnostics() {
-  const data = await getPage();
+  const [data, navData] = await Promise.all([getPage(), getNavigation()]);
 
   const heroHeading    = data?.heroHeading    || "We diagnose\nwhat others can't.\nThen we fix it.";
   const heroBody       = data?.heroBody       || "Most GSE maintenance providers service one brand, follow one process, and stop when it gets complicated. We don't. AST's diagnostic capability spans multiple manufacturers and equipment types, which means when your ground fleet has a problem, we can actually find it.";
@@ -40,6 +41,7 @@ export default async function MaintenanceAndDiagnostics() {
       heroImageUrl={heroImageUrl}
       sectionImageUrl={sectionImageUrl}
       heroLines={heroLines}
+      navData={navData ?? undefined}
     />
   );
 }

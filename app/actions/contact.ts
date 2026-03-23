@@ -3,6 +3,7 @@
 import { Resend } from "resend";
 import { z } from "zod";
 import { createClient } from "next-sanity";
+import { headers } from "next/headers";
 import { LANG_TO_LOCALE } from "@/app/i18n/config";
 
 const writeClient = createClient({
@@ -51,6 +52,18 @@ async function toEnglish(text: string, sourceLang: string): Promise<string> {
     return text.length > 500 ? translated + text.slice(500) : translated;
   } catch {
     return text;
+  }
+}
+
+async function getLocation(ip: string): Promise<string> {
+  if (!ip || ip === "127.0.0.1" || ip === "::1") return "";
+  try {
+    const res = await fetch(`http://ip-api.com/json/${ip}?fields=city,country`, { signal: AbortSignal.timeout(3_000) });
+    if (!res.ok) return "";
+    const { city, country } = await res.json() as { city?: string; country?: string };
+    return [city, country].filter(Boolean).join(", ");
+  } catch {
+    return "";
   }
 }
 
@@ -118,6 +131,10 @@ export async function submitContact(
     }
   }
 
+  const headersList = await headers();
+  const ip = (headersList.get("x-forwarded-for") ?? "").split(",")[0].trim() || headersList.get("x-real-ip") || "";
+  const location = await getLocation(ip);
+
   const tz = (formData.get("timezone") as string | null) ?? "";
   const now = new Date();
   const gmtTime = now.toUTCString();
@@ -153,6 +170,7 @@ export async function submitContact(
     company: company || undefined,
     message: englishMessage,
     submittedLang: lang?.toUpperCase() ?? "EN",
+    location: location || undefined,
     timezone: tz || undefined,
     localTime,
     submittedAt: now.toISOString(),

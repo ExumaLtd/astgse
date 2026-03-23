@@ -37,6 +37,13 @@ export const contactSubmission = defineType({
       type: "string",
     }),
     defineField({
+      name: "location",
+      title: "Location",
+      type: "string",
+      description: "City and country derived from IP address at time of submission.",
+      readOnly: true,
+    }),
+    defineField({
       name: "timezone",
       title: "Timezone",
       type: "string",

@@ -128,6 +128,7 @@ export default function ContactPage() {
   const [messageFocused, setMessageFocused] = useState(false);
   const [messageHeight, setMessageHeight] = useState<number | null>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
+  const [clientErrors, setClientErrors] = useState<Record<string, string>>({});
 
   const t = CONTACT_UI[lang];
   const rtl = isRtl(lang);
@@ -229,11 +230,21 @@ export default function ContactPage() {
 
           {/* Right — form */}
           <div className="contact-page__form-wrap">
-            <form ref={formRef} action={action} autoComplete="on" className="contact-form flex flex-col gap-[24px]">
+            <form ref={formRef} action={action} autoComplete="on" className="contact-form flex flex-col gap-[24px]"
+              onSubmit={(e) => {
+                const errs: Record<string, string> = {};
+                if (!fields.name.trim())    errs.name    = t.errors.name_required;
+                if (!fields.email.trim())   errs.email   = t.errors.email_invalid;
+                if (!fields.message.trim() || fields.message.trim().length < 10) errs.message = t.errors.message_short;
+                if (!consent)               errs.consent = t.errors.consent_required;
+                if (Object.keys(errs).length) { e.preventDefault(); setClientErrors(errs); }
+                else setClientErrors({});
+              }}
+            >
 
                 <div className="contact-form__row grid grid-cols-1 sm:grid-cols-2 gap-[24px]">
-                  <Field label={t.labelName} name="name" autoComplete="name" placeholder={t.placeholderName} value={fields.name} onChange={setField("name")} error={state.fieldErrors?.name} errors={t.errors} />
-                  <Field label={t.labelEmail} name="email" type="email" autoComplete="email" placeholder={t.placeholderEmail} value={fields.email} onChange={setField("email")} error={state.fieldErrors?.email} inputDir="ltr" errors={t.errors} />
+                  <Field label={t.labelName} name="name" autoComplete="name" placeholder={t.placeholderName} value={fields.name} onChange={setField("name")} error={clientErrors.name ?? state.fieldErrors?.name} errors={t.errors} />
+                  <Field label={t.labelEmail} name="email" type="email" autoComplete="email" placeholder={t.placeholderEmail} value={fields.email} onChange={setField("email")} error={clientErrors.email ?? state.fieldErrors?.email} inputDir="ltr" errors={t.errors} />
                 </div>
 
                 <div className="contact-form__row grid grid-cols-1 sm:grid-cols-2 gap-[24px]">
@@ -278,7 +289,7 @@ export default function ContactPage() {
                       style={{
                         gridArea: "1/1",
                         background: "rgba(255,255,255,0.05)",
-                        border: state.fieldErrors?.message ? "1px solid #ff4d4d" : messageFocused ? "1px solid #00FF7E" : "1px solid transparent",
+                        border: (clientErrors.message ?? state.fieldErrors?.message) ? "1px solid #ff4d4d" : messageFocused ? "1px solid #00FF7E" : "1px solid transparent",
                         borderRadius: 8,
                         padding: "14px 16px 28px",
                         fontFamily: "var(--font-inter)",
@@ -295,9 +306,9 @@ export default function ContactPage() {
                       <Grip size={14} />
                     </span>
                   </div>
-                  {state.fieldErrors?.message && (
+                  {(clientErrors.message ?? state.fieldErrors?.message) && (
                     <span className="contact-form__error" style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem", color: "#ff4d4d" }}>
-                      {t.errors[state.fieldErrors.message] ?? state.fieldErrors.message}
+                      {clientErrors.message ?? t.errors[state.fieldErrors!.message!] ?? state.fieldErrors?.message}
                     </span>
                   )}
                 </div>
@@ -337,9 +348,9 @@ export default function ContactPage() {
                       <a href="/cookie-policy" className="text-white underline hover:text-[#00FF7E] transition-colors duration-200">{t.consentCookie}</a>.
                     </span>
                   </label>
-                  {state.fieldErrors?.consent && (
+                  {(clientErrors.consent ?? state.fieldErrors?.consent) && (
                     <span style={{ fontFamily: "var(--font-inter)", fontSize: "0.875rem", color: "#ff4d4d", paddingLeft: 30 }}>
-                      {t.errors[state.fieldErrors.consent] ?? state.fieldErrors.consent}
+                      {clientErrors.consent ?? t.errors[state.fieldErrors!.consent!] ?? state.fieldErrors?.consent}
                     </span>
                   )}
                 </div>

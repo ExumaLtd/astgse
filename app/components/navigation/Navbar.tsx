@@ -8,7 +8,7 @@ import { translatePage } from "@/app/utils/translate";
 import SearchModal from "@/app/components/navigation/SearchModal";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { type LC, LANGUAGES, isRtl, LANG_STORAGE_KEY, LANG_CHANGE_EVENT } from "@/app/i18n/config";
-import { type NavData } from "@/sanity/lib/getNavigation";
+import { type NavData, type NavItem } from "@/sanity/lib/getNavigation";
 
 type LangCode = "en" | "ar" | "es" | "fr";
 
@@ -34,6 +34,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
   const locale = (lang.toLowerCase()) as LangCode;
   const t = NAV_UI[locale] ?? NAV_UI.en;
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -65,16 +66,18 @@ export default function Navbar({ navData }: { navData?: NavData }) {
   }
 
   // Derive labels from Sanity or fall back to hardcoded
-  const navItems = navData?.navItems ?? [
-    { labelEN: t.services,  labelAR: NAV_UI.ar.services,  labelES: NAV_UI.es.services,  labelFR: NAV_UI.fr.services,  href: "/services/maintenance-and-diagnostics", hasChevron: true },
-    { labelEN: t.equipment, labelAR: NAV_UI.ar.equipment, labelES: NAV_UI.es.equipment, labelFR: NAV_UI.fr.equipment, href: "/equipment", hasChevron: true },
-    { labelEN: t.about,     labelAR: NAV_UI.ar.about,     labelES: NAV_UI.es.about,     labelFR: NAV_UI.fr.about,     href: "", hasChevron: false },
-    { labelEN: t.careers,   labelAR: NAV_UI.ar.careers,   labelES: NAV_UI.es.careers,   labelFR: NAV_UI.fr.careers,   href: "", hasChevron: false },
-    { labelEN: t.newsroom,  labelAR: NAV_UI.ar.newsroom,  labelES: NAV_UI.es.newsroom,  labelFR: NAV_UI.fr.newsroom,  href: "/newsroom", hasChevron: false },
+  const navItems: NavItem[] = navData?.navItems ?? [
+    { labelEN: t.services,  labelAR: NAV_UI.ar.services,  labelES: NAV_UI.es.services,  labelFR: NAV_UI.fr.services,  href: "", children: [
+      { labelEN: "Maintenance & Diagnostics", labelAR: "الصيانة والتشخيص", labelES: "Mantenimiento y diagnóstico", labelFR: "Maintenance et diagnostics", href: "/services/maintenance-and-diagnostics" },
+    ]},
+    { labelEN: t.equipment, labelAR: NAV_UI.ar.equipment, labelES: NAV_UI.es.equipment, labelFR: NAV_UI.fr.equipment, href: "/equipment" },
+    { labelEN: t.about,     labelAR: NAV_UI.ar.about,     labelES: NAV_UI.es.about,     labelFR: NAV_UI.fr.about,     href: "" },
+    { labelEN: t.careers,   labelAR: NAV_UI.ar.careers,   labelES: NAV_UI.es.careers,   labelFR: NAV_UI.fr.careers,   href: "" },
+    { labelEN: t.newsroom,  labelAR: NAV_UI.ar.newsroom,  labelES: NAV_UI.es.newsroom,  labelFR: NAV_UI.fr.newsroom,  href: "/newsroom" },
   ];
 
   type LangKey = "EN" | "AR" | "ES" | "FR";
-  function getLabel(item: typeof navItems[0]): string {
+  function getLabel(item: NavItem | { labelEN: string; labelAR: string; labelES: string; labelFR: string }): string {
     const map: Record<LangKey, string> = { EN: item.labelEN, AR: item.labelAR, ES: item.labelES, FR: item.labelFR };
     return map[lang] ?? item.labelEN;
   }
@@ -96,26 +99,63 @@ export default function Navbar({ navData }: { navData?: NavData }) {
         {/* Desktop nav */}
         <div className="navbar__desktop hidden lg:flex items-center" style={{ gap: 40 }}>
           <ul className="navbar__links flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
-            {navItems.map((item) => (
-              <li key={item.labelEN}>
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className="navbar__link flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200"
-                    style={{ gap: "12px" }}
-                    onMouseEnter={() => item.hasChevron ? setHoveredNav(item.labelEN) : undefined}
-                    onMouseLeave={() => item.hasChevron ? setHoveredNav(null) : undefined}
-                  >
-                    {getLabel(item)}
-                    {item.hasChevron && <Chevron open={hoveredNav === item.labelEN} />}
-                  </Link>
-                ) : (
-                  <span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">
-                    {getLabel(item)}
-                  </span>
-                )}
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const hasChildren = item.children && item.children.length > 0;
+              const isHovered = hoveredNav === item.labelEN;
+              return (
+                <li key={item.labelEN} className="relative"
+                  onMouseEnter={() => hasChildren ? setHoveredNav(item.labelEN) : undefined}
+                  onMouseLeave={() => hasChildren ? setHoveredNav(null) : undefined}
+                >
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className="navbar__link flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200"
+                      style={{ gap: "8px" }}
+                    >
+                      {getLabel(item)}
+                      {hasChildren && <Chevron open={isHovered} />}
+                    </Link>
+                  ) : (
+                    <button
+                      className="navbar__link flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer bg-transparent border-0 p-0"
+                      style={{ gap: "8px", font: "inherit" }}
+                    >
+                      {getLabel(item)}
+                      {hasChildren && <Chevron open={isHovered} />}
+                    </button>
+                  )}
+
+                  {/* Dropdown */}
+                  {hasChildren && (
+                    <AnimatePresence>
+                      {isHovered && (
+                        <motion.ul
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 6 }}
+                          transition={{ duration: 0.15, ease: "easeOut" }}
+                          className="absolute top-full left-0 mt-3 min-w-[220px] rounded-xl overflow-hidden"
+                          style={{ background: "#1e1a38", border: "1px solid rgba(255,255,255,0.08)" }}
+                        >
+                          {item.children!.map((child) => (
+                            <li key={child.labelEN}>
+                              <Link
+                                href={child.href}
+                                className="block px-5 py-3 text-[0.875rem] text-white hover:text-[#00FF7E] hover:bg-white/5 transition-colors duration-150"
+                                style={{ fontFamily: "var(--font-inter)" }}
+                              >
+                                {getLabel(child)}
+                              </Link>
+                            </li>
+                          ))}
+                        </motion.ul>
+                      )}
+                    </AnimatePresence>
+                  )}
+                </li>
+              );
+            })}
           </ul>
 
           <div className="navbar__actions flex items-center" style={{ gap: 28 }}>
@@ -189,25 +229,63 @@ export default function Navbar({ navData }: { navData?: NavData }) {
 
           <div className="mobile-menu__body page-px flex flex-col flex-1 overflow-y-auto pt-[40px] pb-[40px]">
             <ul className="mobile-menu__links flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
-              {navItems.map((item) => (
-                <li key={item.labelEN}>
-                  {item.href ? (
-                    <Link
-                      href={item.href}
-                      className="mobile-menu__link flex items-center group hover:text-[#00FF7E] transition-colors duration-200"
-                      style={{ gap: 12 }}
-                      onClick={() => setOpen(false)}
-                    >
-                      {getLabel(item)}
-                      {item.hasChevron && <Chevron />}
-                    </Link>
-                  ) : (
-                    <span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">
-                      {getLabel(item)}
-                    </span>
-                  )}
-                </li>
-              ))}
+              {navItems.map((item) => {
+                const hasChildren = item.children && item.children.length > 0;
+                const isExpanded = expandedMobile === item.labelEN;
+                return (
+                  <li key={item.labelEN}>
+                    {hasChildren ? (
+                      <>
+                        <button
+                          className="mobile-menu__link flex items-center w-full text-left hover:text-[#00FF7E] transition-colors duration-200 bg-transparent border-0 p-0"
+                          style={{ gap: 12, font: "inherit", color: "inherit", fontSize: "inherit" }}
+                          onClick={() => setExpandedMobile(isExpanded ? null : item.labelEN)}
+                        >
+                          {getLabel(item)}
+                          <Chevron open={isExpanded} />
+                        </button>
+                        <AnimatePresence>
+                          {isExpanded && (
+                            <motion.ul
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2, ease: "easeInOut" }}
+                              className="overflow-hidden"
+                              style={{ marginTop: 12, paddingLeft: 16 }}
+                            >
+                              {item.children!.map((child) => (
+                                <li key={child.labelEN} style={{ marginBottom: 12 }}>
+                                  <Link
+                                    href={child.href}
+                                    className="text-[1rem] text-white/70 hover:text-[#00FF7E] transition-colors duration-150"
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    {getLabel(child)}
+                                  </Link>
+                                </li>
+                              ))}
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : item.href ? (
+                      <Link
+                        href={item.href}
+                        className="mobile-menu__link flex items-center hover:text-[#00FF7E] transition-colors duration-200"
+                        style={{ gap: 12 }}
+                        onClick={() => setOpen(false)}
+                      >
+                        {getLabel(item)}
+                      </Link>
+                    ) : (
+                      <span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">
+                        {getLabel(item)}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
 
             <div className="mobile-menu__cta" style={{ marginTop: 48 }}>

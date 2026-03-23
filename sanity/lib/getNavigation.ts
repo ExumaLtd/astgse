@@ -7,13 +7,21 @@ const client = createClient({
   useCdn: true,
 });
 
+export type NavChild = {
+  labelEN: string;
+  labelAR: string;
+  labelES: string;
+  labelFR: string;
+  href: string;
+};
+
 export type NavItem = {
   labelEN: string;
   labelAR: string;
   labelES: string;
   labelFR: string;
   href: string;
-  hasChevron: boolean;
+  children?: NavChild[];
 };
 
 export type NavData = {
@@ -28,7 +36,13 @@ export type NavData = {
 export async function getNavigation(): Promise<NavData | null> {
   try {
     return await client.fetch<NavData>(
-      `*[_type == "navigation" && _id == "navigation"][0]`,
+      `*[_type == "navigation" && _id == "navigation"][0]{
+        navItems[]{
+          labelEN, labelAR, labelES, labelFR, href,
+          children[]{ labelEN, labelAR, labelES, labelFR, href }
+        },
+        contactLabelEN, contactLabelAR, contactLabelES, contactLabelFR, contactHref
+      }`,
       {},
       { next: { revalidate: 60 } }
     );

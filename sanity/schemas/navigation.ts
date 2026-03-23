@@ -1,5 +1,18 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 
+const childItem = defineArrayMember({
+  type: "object",
+  name: "childItem",
+  fields: [
+    defineField({ name: "labelEN", title: "Label (EN)", type: "string" }),
+    defineField({ name: "labelAR", title: "Label (AR)", type: "string" }),
+    defineField({ name: "labelES", title: "Label (ES)", type: "string" }),
+    defineField({ name: "labelFR", title: "Label (FR)", type: "string" }),
+    defineField({ name: "href", title: "Link", type: "string" }),
+  ],
+  preview: { select: { title: "labelEN", subtitle: "href" } },
+});
+
 export const navigation = defineType({
   name: "navigation",
   title: "Menu",
@@ -8,19 +21,36 @@ export const navigation = defineType({
     defineField({
       name: "navItems",
       title: "Nav items",
+      description: "Drag to reorder. Add sub-items to create a dropdown.",
       type: "array",
       of: [
         defineArrayMember({
           type: "object",
+          name: "navItem",
           fields: [
             defineField({ name: "labelEN", title: "Label (EN)", type: "string" }),
             defineField({ name: "labelAR", title: "Label (AR)", type: "string" }),
             defineField({ name: "labelES", title: "Label (ES)", type: "string" }),
             defineField({ name: "labelFR", title: "Label (FR)", type: "string" }),
-            defineField({ name: "href", title: "Link", type: "string" }),
-            defineField({ name: "hasChevron", title: "Show chevron", type: "boolean", initialValue: false }),
+            defineField({ name: "href", title: "Link (leave blank if this is a dropdown parent)", type: "string" }),
+            defineField({
+              name: "children",
+              title: "Sub-items",
+              description: "Add sub-items to show a dropdown. Drag to reorder.",
+              type: "array",
+              of: [childItem],
+            }),
           ],
-          preview: { select: { title: "labelEN", subtitle: "href" } },
+          preview: {
+            select: { title: "labelEN", subtitle: "href", children: "children" },
+            prepare({ title, href, children }) {
+              const count = Array.isArray(children) ? children.length : 0;
+              return {
+                title: title || "Untitled",
+                subtitle: count > 0 ? `${count} sub-item${count !== 1 ? "s" : ""}` : (href || "No link"),
+              };
+            },
+          },
         }),
       ],
     }),

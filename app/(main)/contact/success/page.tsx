@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Navbar from "@/app/components/navigation/Navbar";
-import { type NavData } from "@/sanity/lib/getNavigation";
 import { type LC, isRtl } from "@/app/i18n/config";
 import { useLang } from "@/app/hooks/useLang";
 
@@ -53,13 +51,13 @@ const UI: Record<LC, {
   },
 };
 
-export default function ContactSuccess({ navData }: { navData?: NavData }) {
+export default function ContactSuccess() {
   const lang = useLang();
   const t = UI[lang];
 
   return (
     <div className="min-h-screen bg-blue text-white flex flex-col">
-      <Navbar navData={navData} />
+      
       <main
         dir={isRtl(lang) ? "rtl" : "ltr"}
         translate="no"

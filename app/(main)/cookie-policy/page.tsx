@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Navbar from "@/app/components/navigation/Navbar";
-import { type NavData } from "@/sanity/lib/getNavigation";
 import { type LC, isRtl } from "@/app/i18n/config";
 import { useLang } from "@/app/hooks/useLang";
 
@@ -10,40 +8,40 @@ const UI: Record<LC, { breadHome: string; breadLegal: string; breadCurrent: stri
   EN: {
     breadHome: "Home",
     breadLegal: "Legal",
-    breadCurrent: "Privacy policy",
-    heading: "Privacy policy",
-    body: "This privacy policy will be updated before launch. If you have any questions in the meantime, please contact us at",
+    breadCurrent: "Cookie policy",
+    heading: "Cookie policy",
+    body: "This cookie policy will be updated before launch. If you have any questions in the meantime, please contact us at",
   },
   AR: {
     breadHome: "الرئيسية",
     breadLegal: "قانوني",
-    breadCurrent: "سياسة الخصوصية",
-    heading: "سياسة الخصوصية",
-    body: "ستتم تحديث سياسة الخصوصية هذه قبل الإطلاق. إذا كانت لديك أي أسئلة في الوقت الحالي، يرجى التواصل معنا على",
+    breadCurrent: "سياسة ملفات تعريف الارتباط",
+    heading: "سياسة ملفات تعريف الارتباط",
+    body: "ستتم تحديث سياسة ملفات تعريف الارتباط هذه قبل الإطلاق. إذا كانت لديك أي أسئلة في الوقت الحالي، يرجى التواصل معنا على",
   },
   ES: {
     breadHome: "Inicio",
     breadLegal: "Legal",
-    breadCurrent: "Política de privacidad",
-    heading: "Política de privacidad",
-    body: "Esta política de privacidad se actualizará antes del lanzamiento. Si tiene alguna pregunta mientras tanto, póngase en contacto con nosotros en",
+    breadCurrent: "Política de cookies",
+    heading: "Política de cookies",
+    body: "Esta política de cookies se actualizará antes del lanzamiento. Si tiene alguna pregunta mientras tanto, póngase en contacto con nosotros en",
   },
   FR: {
     breadHome: "Accueil",
     breadLegal: "Légal",
-    breadCurrent: "Politique de confidentialité",
-    heading: "Politique de confidentialité",
-    body: "Cette politique de confidentialité sera mise à jour avant le lancement. Si vous avez des questions entre-temps, veuillez nous contacter à",
+    breadCurrent: "Politique de cookies",
+    heading: "Politique de cookies",
+    body: "Cette politique de cookies sera mise à jour avant le lancement. Si vous avez des questions entre-temps, veuillez nous contacter à",
   },
 };
 
-export default function PrivacyPolicy({ navData }: { navData?: NavData }) {
+export default function CookiePolicy() {
   const lang = useLang();
   const t = UI[lang];
 
   return (
     <div className="min-h-screen bg-blue text-white flex flex-col">
-      <Navbar navData={navData} />
+      
       <main
         dir={isRtl(lang) ? "rtl" : "ltr"}
         translate="no"

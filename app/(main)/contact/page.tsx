@@ -5,8 +5,6 @@ import { useLang } from "@/app/hooks/useLang";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Check, Grip } from "lucide-react";
-import Navbar from "@/app/components/navigation/Navbar";
-import { type NavData } from "@/sanity/lib/getNavigation";
 import { submitContact, type ContactFormState } from "@/app/actions/contact";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { type LC as LangCode, isRtl } from "@/app/i18n/config";
@@ -118,7 +116,7 @@ const PHONE_PLACEHOLDERS: Record<string, string> = {
 
 const STORAGE_KEY = "astgse-contact-draft";
 
-export default function ContactPage({ navData }: { navData?: NavData }) {
+export default function ContactPage() {
   const [state, action, pending] = useActionState(submitContact, initial);
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
@@ -200,8 +198,6 @@ export default function ContactPage({ navData }: { navData?: NavData }) {
 
   return (
     <div className="contact-page min-h-screen bg-blue text-white flex flex-col">
-      <Navbar navData={navData} />
-
       <main className="contact-page__main page-px flex flex-col flex-1 max-w-[1440px] mx-auto w-full pb-[40px] md:pb-[80px]" translate="no">
 
         {/* Breadcrumb */}

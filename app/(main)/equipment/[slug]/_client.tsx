@@ -3,8 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import Navbar from "@/app/components/navigation/Navbar";
-import { type NavData } from "@/sanity/lib/getNavigation";
 import { type LC, isRtl } from "@/app/i18n/config";
 import { useLang } from "@/app/hooks/useLang";
 
@@ -90,10 +88,9 @@ type Props = {
   listing: Listing;
   heroImage: string | null;
   title: string;
-  navData?: NavData;
 };
 
-export default function EquipmentListingClient({ listing, heroImage, title, navData }: Props) {
+export default function EquipmentListingClient({ listing, heroImage, title }: Props) {
   const lang = useLang();
   const t = UI[lang];
 
@@ -104,8 +101,6 @@ export default function EquipmentListingClient({ listing, heroImage, title, navD
     <div className="listing-page" dir={isRtl(lang) ? "rtl" : "ltr"}>
       {/* Hero */}
       <section className="listing-hero relative bg-blue text-white flex flex-col" style={{ minHeight: "100svh" }}>
-        <Navbar navData={navData} />
-
         <div className="relative z-10 flex flex-col flex-1">
           <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1">
             <main className="flex flex-col flex-1 page-px pb-[60px]">

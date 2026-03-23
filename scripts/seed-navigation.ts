@@ -25,7 +25,7 @@ async function seed() {
           { _key: "maintenance", labelEN: "Maintenance & Diagnostics", labelAR: "الصيانة والتشخيص", labelES: "Mantenimiento y diagnóstico", labelFR: "Maintenance et diagnostics", href: "/services/maintenance-and-diagnostics" },
         ],
       },
-      { _key: "equipment", labelEN: "Equipment", labelAR: "المعدات",   labelES: "Equipamiento", labelFR: "Équipements", href: "/equipment", hasChevron: true,  children: [] },
+      { _key: "equipment", labelEN: "Equipment", labelAR: "المعدات",   labelES: "Equipamiento", labelFR: "Équipements", href: "",           hasChevron: true,  children: [] },
       { _key: "about",     labelEN: "About",     labelAR: "عن الشركة", labelES: "Acerca de",    labelFR: "À propos",   href: "",           hasChevron: false, children: [] },
       { _key: "careers",   labelEN: "Careers",   labelAR: "وظائف",     labelES: "Empleos",      labelFR: "Carrières",  href: "",           hasChevron: false, children: [] },
       { _key: "newsroom",  labelEN: "Newsroom",  labelAR: "الأخبار",   labelES: "Noticias",     labelFR: "Actualités", href: "/newsroom",  hasChevron: false, children: [] },

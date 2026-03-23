@@ -36,6 +36,19 @@ export const contact = defineType({
       type: "number",
       readOnly: true,
     }),
+    defineField({
+      name: "subscribedToMailingList",
+      title: "Subscribed to mailing list",
+      type: "boolean",
+      initialValue: false,
+    }),
+    defineField({
+      name: "doNotContact",
+      title: "Do not contact",
+      description: "GDPR opt-out — do not include in any marketing communications.",
+      type: "boolean",
+      initialValue: false,
+    }),
   ],
   preview: {
     select: { name: "name", email: "email", company: "company", count: "enquiryCount" },

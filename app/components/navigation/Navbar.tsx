@@ -8,6 +8,7 @@ import { translatePage } from "@/app/utils/translate";
 import SearchModal from "@/app/components/navigation/SearchModal";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { type LC, LANGUAGES, isRtl, LANG_STORAGE_KEY, LANG_CHANGE_EVENT } from "@/app/i18n/config";
+import { type NavData } from "@/sanity/lib/getNavigation";
 
 type LangCode = "en" | "ar" | "es" | "fr";
 
@@ -26,7 +27,7 @@ const Chevron = ({ open }: { open?: boolean }) => (
   </svg>
 );
 
-export default function Navbar() {
+export default function Navbar({ navData }: { navData?: NavData }) {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lang, setLang] = useState<LC>("EN");
@@ -63,6 +64,26 @@ export default function Navbar() {
     window.dispatchEvent(new CustomEvent(LANG_CHANGE_EVENT, { detail: code }));
   }
 
+  // Derive labels from Sanity or fall back to hardcoded
+  const navItems = navData?.navItems ?? [
+    { labelEN: t.services,  labelAR: NAV_UI.ar.services,  labelES: NAV_UI.es.services,  labelFR: NAV_UI.fr.services,  href: "/services/maintenance-and-diagnostics", hasChevron: true },
+    { labelEN: t.equipment, labelAR: NAV_UI.ar.equipment, labelES: NAV_UI.es.equipment, labelFR: NAV_UI.fr.equipment, href: "/equipment", hasChevron: true },
+    { labelEN: t.about,     labelAR: NAV_UI.ar.about,     labelES: NAV_UI.es.about,     labelFR: NAV_UI.fr.about,     href: "", hasChevron: false },
+    { labelEN: t.careers,   labelAR: NAV_UI.ar.careers,   labelES: NAV_UI.es.careers,   labelFR: NAV_UI.fr.careers,   href: "", hasChevron: false },
+    { labelEN: t.newsroom,  labelAR: NAV_UI.ar.newsroom,  labelES: NAV_UI.es.newsroom,  labelFR: NAV_UI.fr.newsroom,  href: "/newsroom", hasChevron: false },
+  ];
+
+  type LangKey = "EN" | "AR" | "ES" | "FR";
+  function getLabel(item: typeof navItems[0]): string {
+    const map: Record<LangKey, string> = { EN: item.labelEN, AR: item.labelAR, ES: item.labelES, FR: item.labelFR };
+    return map[lang] ?? item.labelEN;
+  }
+
+  const contactLabel = navData
+    ? ({ EN: navData.contactLabelEN, AR: navData.contactLabelAR, ES: navData.contactLabelES, FR: navData.contactLabelFR } as Record<LangKey, string>)[lang] ?? navData.contactLabelEN
+    : t.contact;
+  const contactHref = navData?.contactHref ?? "/contact";
+
   return (
     <>
       <nav className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full relative z-50 h-[80px]" translate="no">
@@ -75,30 +96,35 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div className="navbar__desktop hidden lg:flex items-center" style={{ gap: 40 }}>
           <ul className="navbar__links flex items-center text-white text-[0.9375rem]" style={{ fontFamily: "var(--font-inter)", gap: "40px" }}>
-            <li>
-              <Link href="/services/maintenance-and-diagnostics" className="navbar__link flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px" }} onMouseEnter={() => setHoveredNav("services")} onMouseLeave={() => setHoveredNav(null)}>
-                {t.services}
-                <Chevron open={hoveredNav === "services"} />
-              </Link>
-            </li>
-            <li>
-              <button className="navbar__link flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: "12px", background: "none", border: "none", padding: 0, cursor: "pointer", fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }} onMouseEnter={() => setHoveredNav("equipment")} onMouseLeave={() => setHoveredNav(null)}>
-                {t.equipment}
-                <Chevron open={hoveredNav === "equipment"} />
-              </button>
-            </li>
-            <li><span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span></li>
-            <li><span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span></li>
-            <li><span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span></li>
+            {navItems.map((item) => (
+              <li key={item.labelEN}>
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className="navbar__link flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200"
+                    style={{ gap: "12px" }}
+                    onMouseEnter={() => item.hasChevron ? setHoveredNav(item.labelEN) : undefined}
+                    onMouseLeave={() => item.hasChevron ? setHoveredNav(null) : undefined}
+                  >
+                    {getLabel(item)}
+                    {item.hasChevron && <Chevron open={hoveredNav === item.labelEN} />}
+                  </Link>
+                ) : (
+                  <span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">
+                    {getLabel(item)}
+                  </span>
+                )}
+              </li>
+            ))}
           </ul>
 
           <div className="navbar__actions flex items-center" style={{ gap: 28 }}>
             <Link
-              href="/contact"
+              href={contactHref}
               className="navbar__contact-btn inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
               style={{ fontFamily: "var(--font-inter)", paddingBlock: 6, paddingInlineStart: 20, paddingInlineEnd: 6, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
             >
-              {t.contact}
+              {contactLabel}
               <span className="flex items-center justify-center rounded-full bg-[#00FF7E] rtl:rotate-180" style={{ width: 26, height: 26 }}>
                 <ArrowRight size={13} color="#141127" strokeWidth={2.5} />
               </span>
@@ -163,31 +189,35 @@ export default function Navbar() {
 
           <div className="mobile-menu__body page-px flex flex-col flex-1 overflow-y-auto pt-[40px] pb-[40px]">
             <ul className="mobile-menu__links flex flex-col text-white" style={{ fontFamily: "var(--font-inter)", gap: 24, fontSize: "1.125rem" }}>
-              <li>
-                <Link href="/services/maintenance-and-diagnostics" className="mobile-menu__link flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
-                  {t.services}
-                  <Chevron />
-                </Link>
-              </li>
-              <li>
-                <Link href="/equipment" className="mobile-menu__link flex items-center group hover:text-[#00FF7E] transition-colors duration-200" style={{ gap: 12 }} onClick={() => setOpen(false)}>
-                  {t.equipment}
-                  <Chevron />
-                </Link>
-              </li>
-              <li><span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.about}</span></li>
-              <li><span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.careers}</span></li>
-              <li><span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">{t.newsroom}</span></li>
+              {navItems.map((item) => (
+                <li key={item.labelEN}>
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className="mobile-menu__link flex items-center group hover:text-[#00FF7E] transition-colors duration-200"
+                      style={{ gap: 12 }}
+                      onClick={() => setOpen(false)}
+                    >
+                      {getLabel(item)}
+                      {item.hasChevron && <Chevron />}
+                    </Link>
+                  ) : (
+                    <span className="mobile-menu__link hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">
+                      {getLabel(item)}
+                    </span>
+                  )}
+                </li>
+              ))}
             </ul>
 
             <div className="mobile-menu__cta" style={{ marginTop: 48 }}>
               <Link
-                href="/contact"
+                href={contactHref}
                 className="mobile-menu__contact-btn inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
                 style={{ fontFamily: "var(--font-inter)", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
                 onClick={() => setOpen(false)}
               >
-                {t.contact}
+                {contactLabel}
                 <span className="flex items-center justify-center rounded-full bg-[#00FF7E] rtl:rotate-180" style={{ width: 30, height: 30 }}>
                   <ArrowRight size={14} color="#141127" strokeWidth={2.5} />
                 </span>

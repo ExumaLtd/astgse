@@ -32,6 +32,13 @@ export const contactSubmission = defineType({
       description: "Auto-translated to English if submitted in another language.",
     }),
     defineField({
+      name: "messageOriginal",
+      title: "Message (Original)",
+      type: "text",
+      description: "Original message as submitted — only differs from English if submitted in another language.",
+      readOnly: true,
+    }),
+    defineField({
       name: "submittedLang",
       title: "Submitted Language",
       type: "string",
@@ -106,6 +113,34 @@ export const contactSubmission = defineType({
       title: "Internal Notes",
       type: "text",
       description: "Private notes — not visible to the enquirer.",
+    }),
+    defineField({
+      name: "assignedTo",
+      title: "Assigned to",
+      type: "string",
+      options: {
+        list: [
+          { title: "Jonathon", value: "jonathon" },
+        ],
+        layout: "radio",
+      },
+    }),
+    defineField({
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [{ type: "string" }],
+      options: {
+        list: [
+          { title: "Equipment sale", value: "equipment_sale" },
+          { title: "Equipment hire", value: "equipment_hire" },
+          { title: "Maintenance", value: "maintenance" },
+          { title: "Contract support", value: "contract_support" },
+          { title: "Parts", value: "parts" },
+          { title: "General enquiry", value: "general_enquiry" },
+        ],
+        layout: "tags",
+      },
     }),
   ],
   preview: {

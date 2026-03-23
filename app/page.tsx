@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Navbar from "@/app/components/navigation/Navbar";
+import NavbarServer from "@/app/components/navigation/NavbarServer";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 
@@ -51,7 +51,7 @@ export default async function Home() {
       {/* Overlay */}
       <div className="home-page__overlay absolute inset-0 backdrop-blur-[8px]" style={{ backgroundColor: "rgba(20,17,39,0.50)" }} />
 
-      <Navbar />
+      <NavbarServer />
 
       {/* Hero content */}
       <div className="home-hero page-px relative z-10 flex flex-col flex-1 w-full" style={{ paddingBottom: 65 }}>

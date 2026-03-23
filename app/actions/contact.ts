@@ -187,6 +187,7 @@ export async function submitContact(
     phone: phone || undefined,
     company: company || undefined,
     message: englishMessage,
+    messageOriginal: locale !== "en" ? message : undefined,
     submittedLang: lang?.toUpperCase() ?? "EN",
     location: location || undefined,
     referrer: referrer || undefined,

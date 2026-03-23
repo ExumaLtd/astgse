@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/app/components/navigation/Navbar";
 import { submitContact, type ContactFormState } from "@/app/actions/contact";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const initial: ContactFormState = { success: false };
 
@@ -65,18 +66,46 @@ const PHONE_PLACEHOLDERS: Record<string, string> = {
   ES: "+34 XXX XXX XXX",       // Spain — closed plan, no trunk prefix
 };
 
+const STORAGE_KEY = "astgse-contact-draft";
+
 export default function ContactPage() {
   const [state, action, pending] = useActionState(submitContact, initial);
   const formRef = useRef<HTMLFormElement>(null);
   const [lang, setLang] = useState<LangCode>("EN");
+  const [fields, setFields] = useState({ name: "", email: "", phone: "", company: "", message: "" });
 
   const t = CONTACT_UI[lang];
   const isRtl = lang === "AR";
   const phonePlaceholder = PHONE_PLACEHOLDERS[lang] ?? PHONE_PLACEHOLDERS.EN;
 
+  // Load draft from localStorage on mount (expires after 24 hours)
   useEffect(() => {
-    if (state.success) formRef.current?.reset();
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const { fields: savedFields, savedAt } = JSON.parse(saved);
+        if (Date.now() - savedAt < 24 * 60 * 60 * 1000) setFields(savedFields);
+        else localStorage.removeItem(STORAGE_KEY);
+      }
+    } catch {}
+  }, []);
+
+  // Persist draft to localStorage on change
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ fields, savedAt: Date.now() })); } catch {}
+  }, [fields]);
+
+  // Clear draft on successful submit
+  useEffect(() => {
+    if (state.success) {
+      formRef.current?.reset();
+      setFields({ name: "", email: "", phone: "", company: "", message: "" });
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    }
   }, [state.success]);
+
+  const setField = (name: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setFields(f => ({ ...f, [name]: e.target.value }));
 
   useEffect(() => {
     const saved = (localStorage.getItem("astgse-lang") ?? "EN") as LangCode;
@@ -159,8 +188,8 @@ export default function ContactPage() {
               <form ref={formRef} action={action} className="contact-form flex flex-col gap-[24px]">
 
                 <div className="contact-form__row grid grid-cols-1 sm:grid-cols-2 gap-[24px]">
-                  <Field label={t.labelName} name="name" autoComplete="name" placeholder={t.placeholderName} error={state.fieldErrors?.name} />
-                  <Field label={t.labelEmail} name="email" type="email" autoComplete="email" placeholder={t.placeholderEmail} error={state.fieldErrors?.email} />
+                  <Field label={t.labelName} name="name" autoComplete="name" placeholder={t.placeholderName} value={fields.name} onChange={setField("name")} error={state.fieldErrors?.name} />
+                  <Field label={t.labelEmail} name="email" type="email" autoComplete="email" placeholder={t.placeholderEmail} value={fields.email} onChange={setField("email")} error={state.fieldErrors?.email} />
                 </div>
 
                 <div className="contact-form__row grid grid-cols-1 sm:grid-cols-2 gap-[24px]">
@@ -170,18 +199,18 @@ export default function ContactPage() {
                     type="tel"
                     autoComplete="tel"
                     placeholder={phonePlaceholder}
-                    pattern="\+[0-9]{7,15}"
-                    maxLength={16}
-                    onInput={(e) => {
-                      const el = e.currentTarget;
-                      el.value = el.value
-                        .replace(/[^\d+]/g, "")
+                    maxLength={20}
+                    value={fields.phone}
+                    onChange={(e) => {
+                      const val = e.target.value
+                        .replace(/[^\d+ ]/g, "")
                         .replace(/(?!^)\+/g, "")
-                        .slice(0, 16);
+                        .slice(0, 20);
+                      setFields(f => ({ ...f, phone: val }));
                     }}
                     error={state.fieldErrors?.phone}
                   />
-                  <Field label={t.labelCompany} name="company" autoComplete="organization" placeholder={t.placeholderCompany} error={state.fieldErrors?.company} />
+                  <Field label={t.labelCompany} name="company" autoComplete="organization" placeholder={t.placeholderCompany} value={fields.company} onChange={setField("company")} error={state.fieldErrors?.company} />
                 </div>
 
                 <div className="contact-form__field flex flex-col gap-[8px]">
@@ -197,6 +226,8 @@ export default function ContactPage() {
                     name="message"
                     rows={6}
                     placeholder={t.placeholderMessage}
+                    value={fields.message}
+                    onChange={setField("message")}
                     className="contact-form__textarea w-full resize-none text-white placeholder-white/30 outline-none transition-colors duration-200"
                     style={{
                       background: "rgba(255,255,255,0.05)",
@@ -208,20 +239,26 @@ export default function ContactPage() {
                     }}
                   />
                   {state.fieldErrors?.message && (
-                    <span className="contact-form__error" style={{ fontFamily: "var(--font-dm-mono)", fontSize: "0.75rem", color: "#ef4444" }}>
+                    <span className="contact-form__error" style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "#ef4444" }}>
                       {state.fieldErrors.message}
                     </span>
                   )}
                 </div>
 
                 {state.error && (
-                  <p style={{ fontFamily: "var(--font-dm-mono)", fontSize: "0.75rem", color: "#ef4444", textTransform: "uppercase" }}>
+                  <p style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "#ef4444", textTransform: "uppercase" }}>
                     {t.errorGeneral}
                   </p>
                 )}
 
                 {/* Pass current lang to server so email arrives in English */}
                 <input type="hidden" name="lang" value={lang} />
+                <Turnstile
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                  options={{ size: "invisible" }}
+                />
+                {/* Honeypot — bots fill this, humans don't */}
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ display: "none" }} />
 
                 <button
                   type="submit"
@@ -252,10 +289,10 @@ export default function ContactPage() {
 }
 
 function Field({
-  label, name, type = "text", autoComplete, placeholder, pattern, maxLength, onInput, error,
+  label, name, type = "text", autoComplete, placeholder, pattern, maxLength, value, onChange, error,
 }: {
   label: string; name: string; type?: string; autoComplete?: string; placeholder?: string;
-  pattern?: string; maxLength?: number; onInput?: React.FormEventHandler<HTMLInputElement>; error?: string;
+  pattern?: string; maxLength?: number; value?: string; onChange?: React.ChangeEventHandler<HTMLInputElement>; error?: string;
 }) {
   return (
     <div className="contact-form__field flex flex-col gap-[8px]">
@@ -274,7 +311,8 @@ function Field({
         placeholder={placeholder}
         pattern={pattern}
         maxLength={maxLength}
-        onInput={onInput}
+        value={value}
+        onChange={onChange}
         className="contact-form__input w-full text-white placeholder-white/30 outline-none transition-colors duration-200"
         style={{
           background: "rgba(255,255,255,0.05)",
@@ -286,7 +324,7 @@ function Field({
         }}
       />
       {error && (
-        <span className="contact-form__error" style={{ fontFamily: "var(--font-dm-mono)", fontSize: "0.75rem", color: "#ef4444" }}>
+        <span className="contact-form__error" style={{ fontFamily: "var(--font-inter)", fontSize: "0.75rem", color: "#ef4444" }}>
           {error}
         </span>
       )}

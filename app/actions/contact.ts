@@ -26,7 +26,7 @@ function esc(str: string): string {
 const schema = z.object({
   name:    z.string().min(1, "Name is required").max(100),
   email:   z.string().email("Invalid email address"),
-  phone:   z.string().regex(/^\+[0-9]{7,15}$/, "Use international format: +447700900000").optional().or(z.literal("")),
+  phone:   z.string().regex(/^[\d+ ]{7,20}$/, "Please enter a valid phone number").optional().or(z.literal("")),
   company: z.string().max(100).optional(),
   message: z.string().min(10, "Message must be at least 10 characters").max(2000),
   lang:    z.string().optional(),
@@ -60,6 +60,20 @@ export async function submitContact(
   _prev: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
+  // Honeypot — silently reject if filled
+  if (formData.get("website")) return { success: false };
+
+  // Turnstile verification
+  const token = formData.get("cf-turnstile-response") as string | null;
+  if (!token) return { success: false, error: "Verification failed. Please try again." };
+  const verify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ secret: process.env.TURNSTILE_SECRET_KEY!, response: token }),
+  });
+  const { success: tokenValid } = await verify.json() as { success: boolean };
+  if (!tokenValid) return { success: false, error: "Verification failed. Please try again." };
+
   const raw = {
     name:    formData.get("name"),
     email:   formData.get("email"),

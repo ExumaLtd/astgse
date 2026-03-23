@@ -20,15 +20,15 @@ async function seed() {
     _type: "navigation",
     navItems: [
       {
-        _key: "services", labelEN: "Services", labelAR: "الخدمات", labelES: "Servicios", labelFR: "Services", href: "",
+        _key: "services", labelEN: "Services", labelAR: "الخدمات", labelES: "Servicios", labelFR: "Services", href: "", hasChevron: true,
         children: [
           { _key: "maintenance", labelEN: "Maintenance & Diagnostics", labelAR: "الصيانة والتشخيص", labelES: "Mantenimiento y diagnóstico", labelFR: "Maintenance et diagnostics", href: "/services/maintenance-and-diagnostics" },
         ],
       },
-      { _key: "equipment", labelEN: "Equipment", labelAR: "المعدات",   labelES: "Equipamiento", labelFR: "Équipements", href: "/equipment", children: [] },
-      { _key: "about",     labelEN: "About",     labelAR: "عن الشركة", labelES: "Acerca de",    labelFR: "À propos",   href: "", children: [] },
-      { _key: "careers",   labelEN: "Careers",   labelAR: "وظائف",     labelES: "Empleos",      labelFR: "Carrières",  href: "", children: [] },
-      { _key: "newsroom",  labelEN: "Newsroom",  labelAR: "الأخبار",   labelES: "Noticias",     labelFR: "Actualités", href: "/newsroom", children: [] },
+      { _key: "equipment", labelEN: "Equipment", labelAR: "المعدات",   labelES: "Equipamiento", labelFR: "Équipements", href: "/equipment", hasChevron: true,  children: [] },
+      { _key: "about",     labelEN: "About",     labelAR: "عن الشركة", labelES: "Acerca de",    labelFR: "À propos",   href: "",           hasChevron: false, children: [] },
+      { _key: "careers",   labelEN: "Careers",   labelAR: "وظائف",     labelES: "Empleos",      labelFR: "Carrières",  href: "",           hasChevron: false, children: [] },
+      { _key: "newsroom",  labelEN: "Newsroom",  labelAR: "الأخبار",   labelES: "Noticias",     labelFR: "Actualités", href: "/newsroom",  hasChevron: false, children: [] },
     ],
     contactLabelEN: "Contact us",
     contactLabelAR: "اتصل بنا",

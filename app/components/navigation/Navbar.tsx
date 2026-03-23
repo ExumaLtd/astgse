@@ -67,16 +67,15 @@ export default function Navbar({ navData }: { navData?: NavData }) {
   // Derive labels from Sanity or fall back to hardcoded
   // Items with children use the first child's href as their link (until dropdown UI is designed)
   const navItems = (navData?.navItems ?? [
-    { labelEN: t.services,  labelAR: NAV_UI.ar.services,  labelES: NAV_UI.es.services,  labelFR: NAV_UI.fr.services,  href: "/services/maintenance-and-diagnostics", children: [] },
-    { labelEN: t.equipment, labelAR: NAV_UI.ar.equipment, labelES: NAV_UI.es.equipment, labelFR: NAV_UI.fr.equipment, href: "/equipment", children: [] },
-    { labelEN: t.about,     labelAR: NAV_UI.ar.about,     labelES: NAV_UI.es.about,     labelFR: NAV_UI.fr.about,     href: "", children: [] },
-    { labelEN: t.careers,   labelAR: NAV_UI.ar.careers,   labelES: NAV_UI.es.careers,   labelFR: NAV_UI.fr.careers,   href: "", children: [] },
-    { labelEN: t.newsroom,  labelAR: NAV_UI.ar.newsroom,  labelES: NAV_UI.es.newsroom,  labelFR: NAV_UI.fr.newsroom,  href: "/newsroom", children: [] },
+    { labelEN: t.services,  labelAR: NAV_UI.ar.services,  labelES: NAV_UI.es.services,  labelFR: NAV_UI.fr.services,  href: "/services/maintenance-and-diagnostics", hasChevron: true,  children: [] },
+    { labelEN: t.equipment, labelAR: NAV_UI.ar.equipment, labelES: NAV_UI.es.equipment, labelFR: NAV_UI.fr.equipment, href: "/equipment",                              hasChevron: true,  children: [] },
+    { labelEN: t.about,     labelAR: NAV_UI.ar.about,     labelES: NAV_UI.es.about,     labelFR: NAV_UI.fr.about,     href: "",                                        hasChevron: false, children: [] },
+    { labelEN: t.careers,   labelAR: NAV_UI.ar.careers,   labelES: NAV_UI.es.careers,   labelFR: NAV_UI.fr.careers,   href: "",                                        hasChevron: false, children: [] },
+    { labelEN: t.newsroom,  labelAR: NAV_UI.ar.newsroom,  labelES: NAV_UI.es.newsroom,  labelFR: NAV_UI.fr.newsroom,  href: "/newsroom",                               hasChevron: false, children: [] },
   ]).map(item => ({
     ...item,
     // If parent has no href but has children, fall back to first child's href
     resolvedHref: item.href || item.children?.[0]?.href || "",
-    hasChevron: (item.children?.length ?? 0) > 0,
   }));
 
   type LangKey = "EN" | "AR" | "ES" | "FR";

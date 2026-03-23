@@ -33,6 +33,7 @@ export const navigation = defineType({
             defineField({ name: "labelES", title: "Label (ES)", type: "string" }),
             defineField({ name: "labelFR", title: "Label (FR)", type: "string" }),
             defineField({ name: "href", title: "Link (leave blank if this is a dropdown parent)", type: "string" }),
+            defineField({ name: "hasChevron", title: "Show chevron", type: "boolean", initialValue: false }),
             defineField({
               name: "children",
               title: "Sub-items",

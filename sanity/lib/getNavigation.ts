@@ -21,6 +21,7 @@ export type NavItem = {
   labelES: string;
   labelFR: string;
   href: string;
+  hasChevron: boolean;
   children?: NavChild[];
 };
 
@@ -38,7 +39,7 @@ export async function getNavigation(): Promise<NavData | null> {
     return await client.fetch<NavData>(
       `*[_type == "navigation" && _id == "navigation"][0]{
         navItems[]{
-          labelEN, labelAR, labelES, labelFR, href,
+          labelEN, labelAR, labelES, labelFR, href, hasChevron,
           children[]{ labelEN, labelAR, labelES, labelFR, href }
         },
         contactLabelEN, contactLabelAR, contactLabelES, contactLabelFR, contactHref

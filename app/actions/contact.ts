@@ -193,13 +193,13 @@ export async function submitContact(
     }), sanityPromise]);
 
     if (sendError) {
-      console.error("Resend error:", sendError);
+      console.error("Resend error:", JSON.stringify(sendError, null, 2));
       return { success: false, error: "send_failed" };
     }
 
     return { success: true };
   } catch (err) {
-    console.error("Resend exception:", err);
+    console.error("Resend exception:", JSON.stringify(err, null, 2));
     return { success: false, error: "send_failed" };
   }
 }

@@ -7,13 +7,7 @@ import { ArrowRight, Menu, X, Search } from "lucide-react";
 import { translatePage } from "@/app/utils/translate";
 import SearchModal from "@/app/components/navigation/SearchModal";
 import LanguageSwitcher from "./LanguageSwitcher";
-
-const LANGUAGES = [
-  { code: "AR", locale: "ar" },
-  { code: "EN", locale: "en" },
-  { code: "ES", locale: "es" },
-  { code: "FR", locale: "fr" },
-];
+import { type LC, LANGUAGES, isRtl, LANG_STORAGE_KEY, LANG_CHANGE_EVENT } from "@/app/i18n/config";
 
 type LangCode = "en" | "ar" | "es" | "fr";
 
@@ -35,7 +29,7 @@ const Chevron = ({ open }: { open?: boolean }) => (
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [lang, setLang] = useState("EN");
+  const [lang, setLang] = useState<LC>("EN");
   const locale = (lang.toLowerCase()) as LangCode;
   const t = NAV_UI[locale] ?? NAV_UI.en;
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
@@ -52,7 +46,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem("astgse-lang");
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
     const match = LANGUAGES.find((l) => l.code === stored);
     if (match && match.code !== "EN") {
       setLang(match.code);
@@ -63,10 +57,10 @@ export default function Navbar() {
   function switchLanguage(code: string) {
     const match = LANGUAGES.find((l) => l.code === code);
     if (!match) return;
-    setLang(code);
-    localStorage.setItem("astgse-lang", code);
+    setLang(code as LC);
+    localStorage.setItem(LANG_STORAGE_KEY, code);
     translatePage(match.locale);
-    window.dispatchEvent(new CustomEvent("astgse:lang-change", { detail: code }));
+    window.dispatchEvent(new CustomEvent(LANG_CHANGE_EVENT, { detail: code }));
   }
 
   return (
@@ -148,7 +142,7 @@ export default function Navbar() {
       <AnimatePresence>
       {open && (
         <motion.div
-          dir={lang === "AR" ? "rtl" : "ltr"}
+          dir={isRtl(lang) ? "rtl" : "ltr"}
           translate="no"
           className="mobile-menu lg:hidden fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: "#141127" }}

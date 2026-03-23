@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Globe } from "lucide-react";
+import { LANGUAGES } from "@/app/i18n/config";
 
 const Chevron = ({ open }: { open?: boolean }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"
@@ -11,12 +12,6 @@ const Chevron = ({ open }: { open?: boolean }) => (
   </svg>
 );
 
-const LANGUAGES = [
-  { code: "AR", locale: "ar" },
-  { code: "EN", locale: "en" },
-  { code: "ES", locale: "es" },
-  { code: "FR", locale: "fr" },
-];
 
 interface Props {
   lang: string;

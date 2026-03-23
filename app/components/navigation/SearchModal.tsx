@@ -7,6 +7,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ArrowRight } from "lucide-react";
 import { client } from "@/sanity/client";
+import { LANG_STORAGE_KEY } from "@/app/i18n/config";
 import type { SearchResult as Result } from "@/app/types/search";
 import {
   TYPE_LABELS,
@@ -61,7 +62,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
   const router = useRouter();
 
   useEffect(() => {
-    const stored = localStorage.getItem("astgse-lang")?.toLowerCase() || "en";
+    const stored = localStorage.getItem(LANG_STORAGE_KEY)?.toLowerCase() || "en";
     setLocale(UI[stored] ? stored : "en");
   }, [open]);
 

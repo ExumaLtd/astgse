@@ -83,6 +83,11 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
+/* Almarena Neue — always use Display letterforms (disp axis = 100) */
+* {
+  font-variation-settings: 'disp' 100;
+}
+
 ::selection {
   background-color: #00ff7e;
   color: #141127;

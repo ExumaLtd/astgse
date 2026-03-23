@@ -23,7 +23,7 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 });
 
 const almarenaNueva = localFont({
-  src: "./fonts/AlmarenaNeueDemoVF.ttf",
+  src: "./fonts/Almarena_Neue_Variable.ttf",
   variable: "--font-almaren-nueva",
 });
 

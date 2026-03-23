@@ -3,6 +3,7 @@
 import { Resend } from "resend";
 import { z } from "zod";
 import { createClient } from "next-sanity";
+import { LANG_TO_LOCALE } from "@/app/i18n/config";
 
 const writeClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kcmbd43u",
@@ -23,19 +24,17 @@ function esc(str: string): string {
     .replace(/'/g, "&#x27;");
 }
 
+// Schema returns error codes — translation happens client-side so errors re-translate on lang switch
 const schema = z.object({
-  name:    z.string().min(1, "Name is required").max(100),
-  email:   z.string().email("Invalid email address"),
-  phone:   z.string().regex(/^[\d+ ]{1,20}$/).refine(v => v.replace(/\D/g, "").length >= 10, "Please enter a valid phone number").optional().or(z.literal("")),
+  name:    z.string().min(1, "name_required").max(100),
+  email:   z.string().email("email_invalid"),
+  phone:   z.string().regex(/^[\d+ ]{1,20}$/).refine(v => v.replace(/\D/g, "").length >= 10, "phone_invalid").optional().or(z.literal("")),
   company: z.string().max(100).optional(),
-  message: z.string().min(10, "Message must be at least 10 characters").max(2000),
+  message: z.string().min(10, "message_short").max(2000),
   lang:    z.string().regex(/^[a-zA-Z]{2,5}$/).optional().default("EN"),
-  consent: z.literal("on", { error: "Consent is required to store and process the data in this form." }),
+  consent: z.literal("on", { error: "consent_required" }),
 });
 
-const LANG_TO_LOCALE: Record<string, string> = {
-  AR: "ar", ES: "es", FR: "fr", EN: "en",
-};
 
 async function toEnglish(text: string, sourceLang: string): Promise<string> {
   if (!sourceLang || sourceLang === "en") return text;
@@ -71,7 +70,7 @@ async function isRateLimited(email: string): Promise<boolean> {
 export type ContactFormState = {
   success: boolean;
   error?: string;
-  fieldErrors?: Partial<Record<keyof z.infer<typeof schema>, string>>;
+  fieldErrors?: Partial<Record<"name" | "email" | "phone" | "company" | "message" | "lang" | "consent", string>>;
 };
 
 export async function submitContact(
@@ -84,14 +83,14 @@ export async function submitContact(
   // Turnstile verification (bypassed in development)
   if (process.env.NODE_ENV !== "development") {
     const token = formData.get("cf-turnstile-response") as string | null;
-    if (!token) return { success: false, error: "Verification failed. Please try again." };
+    if (!token) return { success: false, error: "verify_failed" };
     const verify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ secret: process.env.TURNSTILE_SECRET_KEY!, response: token }),
     });
     const { success: tokenValid } = await verify.json() as { success: boolean };
-    if (!tokenValid) return { success: false, error: "Verification failed. Please try again." };
+    if (!tokenValid) return { success: false, error: "verify_failed" };
   }
 
   const tz = (formData.get("timezone") as string | null) ?? "";
@@ -125,10 +124,11 @@ export async function submitContact(
 
   // Rate limit: max 3 submissions per email per hour
   if (await isRateLimited(email)) {
-    return { success: false, error: "Too many submissions. Please try again later." };
+    return { success: false, error: "rate_limit" };
   }
 
-  const locale = LANG_TO_LOCALE[lang?.toUpperCase() ?? "EN"] ?? "en";
+  const langKey = (lang?.toUpperCase() ?? "EN") as keyof typeof LANG_TO_LOCALE;
+  const locale = LANG_TO_LOCALE[langKey] ?? "en";
 
   // Translate message to English if submitted in another language
   const englishMessage = await toEnglish(message, locale);
@@ -139,30 +139,26 @@ export async function submitContact(
   const safeCompany = company ? esc(company) : null;
   const safeMessage = esc(englishMessage);
 
-  try {
-    // Save to Sanity first — if email fails the submission is not lost
-    await writeClient.create({
-      _type: "contactSubmission",
-      name,
-      email,
-      phone: phone || undefined,
-      company: company || undefined,
-      message: englishMessage,
-      submittedLang: lang?.toUpperCase() ?? "EN",
-      timezone: tz || undefined,
-      localTime,
-      submittedAt: now.toISOString(),
-      consentGivenAt: now.toISOString(),
-      consentText: "Yes, I give permission to store and process my data. You can find more information in our privacy policy and cookie policy.",
-      status: "new",
-    });
-  } catch {
-    // Non-fatal — log and continue to send email
-  }
+  // Save to Sanity and send email in parallel — Sanity save is non-fatal
+  const sanityPromise = writeClient.create({
+    _type: "contactSubmission",
+    name,
+    email,
+    phone: phone || undefined,
+    company: company || undefined,
+    message: englishMessage,
+    submittedLang: lang?.toUpperCase() ?? "EN",
+    timezone: tz || undefined,
+    localTime,
+    submittedAt: now.toISOString(),
+    consentGivenAt: now.toISOString(),
+    consentText: "Yes, I give permission to store and process my data. You can find more information in our privacy policy and cookie policy.",
+    status: "new",
+  }).catch(() => {});
 
   try {
-    await resend.emails.send({
-      from:    "ASTGSE Enquiry <noreply@astgse.exuma.co.uk>",
+    const [{ error: sendError }] = await Promise.all([resend.emails.send({
+      from:    "ASTGSE Enquiry <noreply@exuma.co.uk>",
       to:      "jonathon@exuma.co.uk",
       replyTo: email,
       subject: `New enquiry from ${safeName}`,
@@ -189,10 +185,16 @@ export async function submitContact(
           </div>
         </div>
       `,
-    });
+    }), sanityPromise]);
+
+    if (sendError) {
+      console.error("Resend error:", sendError);
+      return { success: false, error: "send_failed" };
+    }
 
     return { success: true };
-  } catch {
-    return { success: false, error: "Failed to send message. Please try again." };
+  } catch (err) {
+    console.error("Resend exception:", err);
+    return { success: false, error: "send_failed" };
   }
 }

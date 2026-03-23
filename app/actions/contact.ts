@@ -135,7 +135,9 @@ export async function submitContact(
   const ip = (headersList.get("x-forwarded-for") ?? "").split(",")[0].trim() || headersList.get("x-real-ip") || "";
   const location = await getLocation(ip);
 
-  const tz = (formData.get("timezone") as string | null) ?? "";
+  const tz       = (formData.get("timezone")  as string | null) ?? "";
+  const referrer  = (formData.get("referrer")  as string | null) ?? "";
+  const utmParams = (formData.get("utmParams") as string | null) ?? "";
   const now = new Date();
   const gmtTime = now.toUTCString();
   const localTime = tz
@@ -171,6 +173,8 @@ export async function submitContact(
     message: englishMessage,
     submittedLang: lang?.toUpperCase() ?? "EN",
     location: location || undefined,
+    referrer: referrer || undefined,
+    utmParams: utmParams || undefined,
     timezone: tz || undefined,
     localTime,
     submittedAt: now.toISOString(),

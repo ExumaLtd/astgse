@@ -44,6 +44,20 @@ export const contactSubmission = defineType({
       readOnly: true,
     }),
     defineField({
+      name: "referrer",
+      title: "Referrer",
+      type: "string",
+      description: "Where the visitor came from (e.g. google.com, linkedin.com, direct).",
+      readOnly: true,
+    }),
+    defineField({
+      name: "utmParams",
+      title: "UTM Parameters",
+      type: "string",
+      description: "UTM tracking parameters from the URL at time of submission.",
+      readOnly: true,
+    }),
+    defineField({
       name: "timezone",
       title: "Timezone",
       type: "string",

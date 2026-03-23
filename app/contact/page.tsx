@@ -124,6 +124,8 @@ export default function ContactPage() {
   const lang = useLang();
   const [fields, setFields] = useState({ name: "", email: "", phone: "", company: "", message: "" });
   const [timezone, setTimezone] = useState("");
+  const [referrer, setReferrer] = useState("");
+  const [utmParams, setUtmParams] = useState("");
   const [consent, setConsent] = useState(false);
   const [messageFocused, setMessageFocused] = useState(false);
   const [messageHeight, setMessageHeight] = useState<number | null>(null);
@@ -176,6 +178,23 @@ export default function ContactPage() {
 
   useEffect(() => {
     setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    try {
+      const ref = document.referrer;
+      if (ref) {
+        const host = new URL(ref).hostname.replace(/^www\./, "");
+        setReferrer(host);
+      } else {
+        setReferrer("direct");
+      }
+    } catch { setReferrer("direct"); }
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+        .filter(k => params.has(k))
+        .map(k => `${k}=${params.get(k)}`)
+        .join("&");
+      setUtmParams(utms);
+    } catch {}
   }, []);
 
   return (
@@ -327,6 +346,8 @@ export default function ContactPage() {
                 <div style={{ display: "none" }} aria-hidden="true">
                   <input type="hidden" name="lang" value={lang} />
                   <input type="hidden" name="timezone" value={timezone} />
+                  <input type="hidden" name="referrer" value={referrer} />
+                  <input type="hidden" name="utmParams" value={utmParams} />
                   <input type="text" name="website" tabIndex={-1} autoComplete="off" />
                 </div>
                 <Turnstile

@@ -43,11 +43,11 @@ export const navigation = defineType({
           ],
           preview: {
             select: { title: "labelEN", subtitle: "href", children: "children" },
-            prepare({ title, href, children }) {
+            prepare({ title, subtitle, children }: { title?: string; subtitle?: string; children?: unknown[] }) {
               const count = Array.isArray(children) ? children.length : 0;
               return {
                 title: title || "Untitled",
-                subtitle: count > 0 ? `${count} sub-item${count !== 1 ? "s" : ""}` : (href || "No link"),
+                subtitle: count > 0 ? `${count} sub-item${count !== 1 ? "s" : ""}` : (subtitle || "No link"),
               };
             },
           },

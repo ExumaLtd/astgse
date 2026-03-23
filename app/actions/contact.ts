@@ -23,15 +23,13 @@ function esc(str: string): string {
     .replace(/'/g, "&#x27;");
 }
 
-const ALLOWED_LANGS = ["EN", "AR", "ES", "FR"] as const;
-
 const schema = z.object({
   name:    z.string().min(1, "Name is required").max(100),
   email:   z.string().email("Invalid email address"),
   phone:   z.string().regex(/^[\d+ ]{7,20}$/, "Please enter a valid phone number").optional().or(z.literal("")),
   company: z.string().max(100).optional(),
   message: z.string().min(10, "Message must be at least 10 characters").max(2000),
-  lang:    z.enum(ALLOWED_LANGS).optional().default("EN"),
+  lang:    z.string().regex(/^[a-zA-Z]{2,5}$/).optional().default("EN"),
 });
 
 const LANG_TO_LOCALE: Record<string, string> = {

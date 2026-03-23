@@ -166,7 +166,7 @@ export async function submitContact(
       from:    "ASTGSE Enquiry <noreply@exuma.co.uk>",
       to:      "jonathon@exuma.co.uk",
       replyTo: email,
-      subject: `New enquiry from ${safeName}`,
+      subject: `New enquiry from ${name}`,
       html: `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#141127;">
           <div style="background:#141127;padding:24px 32px;">

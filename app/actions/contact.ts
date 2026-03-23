@@ -80,26 +80,7 @@ export async function submitContact(
   // Honeypot — silently reject if filled
   if (formData.get("website")) return { success: false };
 
-  // Turnstile verification (bypassed in development)
-  if (process.env.NODE_ENV !== "development") {
-    const token = formData.get("cf-turnstile-response") as string | null;
-    if (!token) return { success: false, error: "verify_failed" };
-    const verify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ secret: process.env.TURNSTILE_SECRET_KEY!, response: token }),
-    });
-    const { success: tokenValid } = await verify.json() as { success: boolean };
-    if (!tokenValid) return { success: false, error: "verify_failed" };
-  }
-
-  const tz = (formData.get("timezone") as string | null) ?? "";
-  const now = new Date();
-  const gmtTime = now.toUTCString();
-  const localTime = tz
-    ? now.toLocaleString("en-GB", { timeZone: tz, dateStyle: "full", timeStyle: "short" })
-    : gmtTime;
-
+  // Validate fields first so errors show without a Turnstile round-trip
   const raw = {
     name:    formData.get("name"),
     email:   formData.get("email"),
@@ -119,6 +100,30 @@ export async function submitContact(
     }
     return { success: false, fieldErrors };
   }
+
+  // Turnstile verification (bypassed in development)
+  if (process.env.NODE_ENV !== "development") {
+    const token = formData.get("cf-turnstile-response") as string | null;
+    if (!token) return { success: false, error: "verify_failed" };
+    try {
+      const verify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ secret: process.env.TURNSTILE_SECRET_KEY!, response: token }),
+      });
+      const { success: tokenValid } = await verify.json() as { success: boolean };
+      if (!tokenValid) return { success: false, error: "verify_failed" };
+    } catch {
+      return { success: false, error: "verify_failed" };
+    }
+  }
+
+  const tz = (formData.get("timezone") as string | null) ?? "";
+  const now = new Date();
+  const gmtTime = now.toUTCString();
+  const localTime = tz
+    ? now.toLocaleString("en-GB", { timeZone: tz, dateStyle: "full", timeStyle: "short" })
+    : gmtTime;
 
   const { name, email, phone, company, message, lang } = parsed.data;
 

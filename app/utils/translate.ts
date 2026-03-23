@@ -51,6 +51,13 @@ function getTextNodes(root: Element): Text[] {
 
 // Store originals so we can restore them on switch back to English
 const originals = new Map<Text, string>();
+const placeholderOriginals = new Map<Element, string>();
+
+function getPlaceholderElements(): Element[] {
+  return Array.from(document.querySelectorAll<Element>("[placeholder]")).filter(
+    (el) => !el.closest("[translate='no']"),
+  );
+}
 
 export function translatePage(targetLang: string): void {
   // Defer to idle so the language switcher click response feels instant
@@ -70,6 +77,7 @@ async function _translatePage(targetLang: string): Promise<void> {
 
   if (targetLang === "en") {
     originals.forEach((original, node) => { node.textContent = original; });
+    placeholderOriginals.forEach((original, el) => { el.setAttribute("placeholder", original); });
     document.documentElement.removeAttribute("dir");
     document.documentElement.setAttribute("lang", "en");
     return;
@@ -81,6 +89,17 @@ async function _translatePage(targetLang: string): Promise<void> {
 
   document.documentElement.setAttribute("dir", targetLang === "ar" ? "rtl" : "ltr");
   document.documentElement.setAttribute("lang", targetLang);
+
+  // Translate placeholder attributes
+  const placeholderEls = getPlaceholderElements();
+  for (const el of placeholderEls) {
+    if (_activeLang !== targetLang) return;
+    if (!placeholderOriginals.has(el)) placeholderOriginals.set(el, el.getAttribute("placeholder") || "");
+    const original = placeholderOriginals.get(el)!;
+    const translated = await translateText(original, targetLang);
+    if (_activeLang !== targetLang) return;
+    el.setAttribute("placeholder", translated);
+  }
 
   // Translate in batches of 10 to avoid overwhelming the API
   const BATCH_SIZE = 10;

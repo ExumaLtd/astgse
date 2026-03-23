@@ -66,6 +66,7 @@ export default function Navbar() {
     setLang(code);
     localStorage.setItem("astgse-lang", code);
     translatePage(match.locale);
+    window.dispatchEvent(new CustomEvent("astgse:lang-change", { detail: code }));
   }
 
   return (
@@ -99,7 +100,7 @@ export default function Navbar() {
 
           <div className="navbar__actions flex items-center" style={{ gap: 28 }}>
             <Link
-              href=""
+              href="/contact"
               className="navbar__contact-btn inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
               style={{ fontFamily: "var(--font-inter)", paddingBlock: 6, paddingInlineStart: 20, paddingInlineEnd: 6, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
             >
@@ -187,7 +188,7 @@ export default function Navbar() {
 
             <div className="mobile-menu__cta" style={{ marginTop: 48 }}>
               <Link
-                href=""
+                href="/contact"
                 className="mobile-menu__contact-btn inline-flex items-center rounded-full text-white text-[0.9375rem] hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
                 style={{ fontFamily: "var(--font-inter)", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
                 onClick={() => setOpen(false)}

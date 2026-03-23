@@ -74,4 +74,8 @@ export const structure: StructureResolver = (S) =>
       S.listItem().title("Menu").child(
         S.document().schemaType("navigation").documentId("navigation")
       ),
+      S.divider(),
+      S.listItem().title("Website enquiries").child(
+        S.documentTypeList("contactSubmission").title("Website enquiries")
+      ),
     ]);

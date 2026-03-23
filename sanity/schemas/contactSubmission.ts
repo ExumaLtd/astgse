@@ -37,9 +37,33 @@ export const contactSubmission = defineType({
       type: "string",
     }),
     defineField({
+      name: "timezone",
+      title: "Timezone",
+      type: "string",
+    }),
+    defineField({
+      name: "localTime",
+      title: "Local Time",
+      type: "string",
+      description: "Submission time in the user's local timezone.",
+    }),
+    defineField({
       name: "submittedAt",
-      title: "Submitted At",
+      title: "Submitted At (GMT)",
       type: "datetime",
+    }),
+    defineField({
+      name: "consentGivenAt",
+      title: "Consent Given At",
+      type: "datetime",
+      description: "Timestamp when the user ticked the consent checkbox.",
+    }),
+    defineField({
+      name: "consentText",
+      title: "Consent Text (at time of submission)",
+      type: "string",
+      description: "Exact wording the user agreed to — for GDPR audit purposes.",
+      readOnly: true,
     }),
     defineField({
       name: "status",

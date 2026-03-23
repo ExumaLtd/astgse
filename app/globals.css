@@ -172,6 +172,7 @@ body {
   font-weight: 600;
 }
 
+
 /* Contact form — RTL overrides
    The form wrapper is locked dir="ltr" to keep column order stable.
    These rules restore correct Arabic text alignment inside the fields. */
@@ -192,4 +193,8 @@ html[dir="rtl"] .contact-form__error {
 }
 html[dir="rtl"] .contact-form__submit {
   align-self: flex-end;
+}
+.contact-form__submit {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

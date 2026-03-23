@@ -26,10 +26,11 @@ function esc(str: string): string {
 const schema = z.object({
   name:    z.string().min(1, "Name is required").max(100),
   email:   z.string().email("Invalid email address"),
-  phone:   z.string().regex(/^[\d+ ]{7,20}$/, "Please enter a valid phone number").optional().or(z.literal("")),
+  phone:   z.string().regex(/^[\d+ ]{1,20}$/).refine(v => v.replace(/\D/g, "").length >= 10, "Please enter a valid phone number").optional().or(z.literal("")),
   company: z.string().max(100).optional(),
   message: z.string().min(10, "Message must be at least 10 characters").max(2000),
   lang:    z.string().regex(/^[a-zA-Z]{2,5}$/).optional().default("EN"),
+  consent: z.literal("on", { error: "Consent is required to store and process the data in this form." }),
 });
 
 const LANG_TO_LOCALE: Record<string, string> = {
@@ -80,16 +81,25 @@ export async function submitContact(
   // Honeypot — silently reject if filled
   if (formData.get("website")) return { success: false };
 
-  // Turnstile verification
-  const token = formData.get("cf-turnstile-response") as string | null;
-  if (!token) return { success: false, error: "Verification failed. Please try again." };
-  const verify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ secret: process.env.TURNSTILE_SECRET_KEY!, response: token }),
-  });
-  const { success: tokenValid } = await verify.json() as { success: boolean };
-  if (!tokenValid) return { success: false, error: "Verification failed. Please try again." };
+  // Turnstile verification (bypassed in development)
+  if (process.env.NODE_ENV !== "development") {
+    const token = formData.get("cf-turnstile-response") as string | null;
+    if (!token) return { success: false, error: "Verification failed. Please try again." };
+    const verify = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ secret: process.env.TURNSTILE_SECRET_KEY!, response: token }),
+    });
+    const { success: tokenValid } = await verify.json() as { success: boolean };
+    if (!tokenValid) return { success: false, error: "Verification failed. Please try again." };
+  }
+
+  const tz = (formData.get("timezone") as string | null) ?? "";
+  const now = new Date();
+  const gmtTime = now.toUTCString();
+  const localTime = tz
+    ? now.toLocaleString("en-GB", { timeZone: tz, dateStyle: "full", timeStyle: "short" })
+    : gmtTime;
 
   const raw = {
     name:    formData.get("name"),
@@ -98,6 +108,7 @@ export async function submitContact(
     company: formData.get("company"),
     message: formData.get("message"),
     lang:    formData.get("lang"),
+    consent: formData.get("consent"),
   };
 
   const parsed = schema.safeParse(raw);
@@ -138,7 +149,11 @@ export async function submitContact(
       company: company || undefined,
       message: englishMessage,
       submittedLang: lang?.toUpperCase() ?? "EN",
-      submittedAt: new Date().toISOString(),
+      timezone: tz || undefined,
+      localTime,
+      submittedAt: now.toISOString(),
+      consentGivenAt: now.toISOString(),
+      consentText: "Yes, I give permission to store and process my data. You can find more information in our privacy policy and cookie policy.",
       status: "new",
     });
   } catch {
@@ -163,6 +178,8 @@ export async function submitContact(
               <tr><td style="padding:8px 0;color:#6b7280;">Email</td><td style="padding:8px 0;"><a href="mailto:${safeEmail}" style="color:#141127;">${safeEmail}</a></td></tr>
               ${safePhone   ? `<tr><td style="padding:8px 0;color:#6b7280;">Phone</td><td style="padding:8px 0;">${safePhone}</td></tr>` : ""}
               ${safeCompany ? `<tr><td style="padding:8px 0;color:#6b7280;">Company</td><td style="padding:8px 0;">${safeCompany}</td></tr>` : ""}
+              <tr><td style="padding:8px 0;color:#6b7280;">Local time</td><td style="padding:8px 0;">${esc(localTime)}${tz ? ` <span style="color:#6b7280;">(${esc(tz)})</span>` : ""}</td></tr>
+              <tr><td style="padding:8px 0;color:#6b7280;">GMT</td><td style="padding:8px 0;">${esc(gmtTime)}</td></tr>
             </table>
             <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
             <p style="margin:0;font-size:0.9375rem;line-height:1.6;white-space:pre-wrap;">${safeMessage}</p>

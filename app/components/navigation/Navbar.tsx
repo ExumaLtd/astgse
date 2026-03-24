@@ -45,7 +45,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
 
   const startHideTimer = () => {
     clearTimeout(hideTimer.current);
-    hideTimer.current = setTimeout(() => setNavState("hidden"), 2000);
+    hideTimer.current = setTimeout(() => setNavState("hidden"), 2500);
   };
 
   const cancelHideTimer = () => clearTimeout(hideTimer.current);
@@ -143,9 +143,9 @@ export default function Navbar({ navData }: { navData?: NavData }) {
           position: isSmartScroll ? "fixed" : "absolute",
           transform: navState === "hidden" ? "translateY(-100%)" : "translateY(0)",
           backgroundColor: isSmartScroll && navState === "visible" ? "#141127" : "transparent",
-          paddingTop: isSmartScroll ? (navState === "visible" ? 14 : 20) : undefined,
-          paddingBottom: isSmartScroll ? (navState === "visible" ? 14 : 20) : undefined,
-          height: isSmartScroll ? undefined : 80,
+          paddingTop: isSmartScroll && navState === "visible" ? 14 : undefined,
+          paddingBottom: isSmartScroll && navState === "visible" ? 14 : undefined,
+          height: isSmartScroll && navState === "visible" ? undefined : 80,
           transition: "transform 300ms ease-in-out, background-color 300ms ease-in-out, padding 300ms ease-in-out",
         }}
         translate="no"

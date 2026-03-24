@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { useLang } from "@/app/hooks/useLang";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Breadcrumbs from "@/app/components/ui/Breadcrumbs";
 import { ArrowRight, Check, Grip } from "lucide-react";
 import { submitContact, type ContactFormState } from "@/app/actions/contact";
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -200,16 +201,10 @@ export default function ContactPage() {
     <div className="contact-page min-h-screen bg-blue text-white flex flex-col pt-[80px]">
       <main className="contact-page__main page-px flex flex-col flex-1 max-w-[1440px] mx-auto w-full pb-[40px] md:pb-[80px]" translate="no">
 
-        {/* Breadcrumb */}
-        <nav
-          className="contact-breadcrumb flex items-center gap-[12px] pt-[10px] md:pt-4 mb-[30px] md:mb-[64px]"
-          style={{ fontFamily: "var(--font-almaren-nueva)", fontSize: "0.875rem", fontWeight: 21 }}
-          aria-label="Breadcrumb"
-        >
-          <Link href="/" className="contact-breadcrumb__link transition-colors" style={{ color: "rgba(255,255,255,0.40)" }}>{t.breadcrumbHome}</Link>
-          <span style={{ color: "#00FF7E" }}>/</span>
-          <span style={{ color: "#ffffff" }}>{t.breadcrumbContact}</span>
-        </nav>
+        <Breadcrumbs crumbs={[
+          { label: t.breadcrumbHome, href: "/" },
+          { label: t.breadcrumbContact },
+        ]} />
 
         <div className="flex-1 flex items-center">
         <div className="contact-page__grid w-full grid grid-cols-1 md:grid-cols-2 gap-[40px] md:gap-[60px] lg:gap-[120px]" dir={rtl ? "rtl" : "ltr"}>

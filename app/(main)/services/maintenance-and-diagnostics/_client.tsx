@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ScrollButton from "@/app/components/ui/ScrollButton";
+import Breadcrumbs from "@/app/components/ui/Breadcrumbs";
 import { type LC, isRtl } from "@/app/i18n/config";
 import { useLang } from "@/app/hooks/useLang";
 
@@ -304,19 +305,12 @@ export default function MaintenancePageClient({
           <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1 min-h-0">
             <main className="flex flex-col flex-1 min-h-0">
 
-              <div className="page-px">
-                <nav
-                  className="maintenance-breadcrumb flex items-center gap-[12px] pt-[10px] md:pt-4 pb-[30px] md:pb-[40px] lg:pb-[80px]"
-                  style={{ fontFamily: "var(--font-almaren-nueva)", fontSize: "0.875rem", fontWeight: 21 }}
-                  aria-label="Breadcrumb"
-                  translate="no"
-                >
-                  <Link href="/" style={{ color: "rgba(255,255,255,0.40)" }}>{t.breadHome}</Link>
-                  <span style={{ color: "#00FF7E" }}>/</span>
-                  <Link href="/services" style={{ color: "rgba(255,255,255,0.40)" }}>{t.breadServices}</Link>
-                  <span style={{ color: "#00FF7E" }}>/</span>
-                  <span style={{ color: "#ffffff" }}>{t.breadCurrent}</span>
-                </nav>
+              <div className="page-px max-w-[1440px] mx-auto w-full">
+                <Breadcrumbs crumbs={[
+                  { label: t.breadHome, href: "/" },
+                  { label: t.breadServices, href: "/services/maintenance-and-diagnostics" },
+                  { label: t.breadCurrent },
+                ]} />
 
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-[24px] pb-6 lg:pb-[80px]">
                   <div className="md:col-span-6 lg:col-span-5">

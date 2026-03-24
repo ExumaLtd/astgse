@@ -12,7 +12,7 @@ import { type LC, LANGUAGES, isRtl, LANG_STORAGE_KEY, LANG_CHANGE_EVENT } from "
 import { type NavData } from "@/sanity/lib/getNavigation";
 
 // Pages that get the smart-scroll navbar (hide on down, reveal on up)
-const SMART_SCROLL_PATHS = ["/services/maintenance-and-diagnostics", "/contact"];
+const SMART_SCROLL_PATHS = ["/services/maintenance-and-diagnostics", "/services/servicing-and-inspection", "/contact"];
 
 type LangCode = "en" | "ar" | "es" | "fr";
 

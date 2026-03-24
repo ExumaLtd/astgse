@@ -1,14 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, X, Search } from "lucide-react";
 import { translatePage } from "@/app/utils/translate";
 import SearchModal from "@/app/components/navigation/SearchModal";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { type LC, LANGUAGES, isRtl, LANG_STORAGE_KEY, LANG_CHANGE_EVENT } from "@/app/i18n/config";
 import { type NavData } from "@/sanity/lib/getNavigation";
+
+// Pages that get the smart-scroll navbar (hide on down, reveal on up)
+const SMART_SCROLL_PATHS = ["/services/maintenance-and-diagnostics", "/contact"];
 
 type LangCode = "en" | "ar" | "es" | "fr";
 
@@ -31,6 +35,48 @@ export default function Navbar({ navData }: { navData?: NavData }) {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [lang, setLang] = useState<LC>("EN");
+  const pathname = usePathname();
+  const isSmartScroll = SMART_SCROLL_PATHS.some(p => pathname.startsWith(p));
+
+  // Smart scroll: 'top' | 'visible' | 'hidden'
+  const [navState, setNavState] = useState<"top" | "visible" | "hidden">("top");
+  const lastScrollY = useRef(0);
+  const hideTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const startHideTimer = () => {
+    clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => setNavState("hidden"), 2000);
+  };
+
+  const cancelHideTimer = () => clearTimeout(hideTimer.current);
+
+  useEffect(() => {
+    if (!isSmartScroll) return;
+    setNavState("top");
+    lastScrollY.current = 0;
+    const handleScroll = () => {
+      const y = window.scrollY;
+      if (y < 80) {
+        setNavState("top");
+        cancelHideTimer();
+      } else if (y > lastScrollY.current) {
+        setNavState("hidden");
+        cancelHideTimer();
+      } else {
+        setNavState(prev => {
+          if (prev !== "visible") startHideTimer();
+          return "visible";
+        });
+      }
+      lastScrollY.current = y;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      cancelHideTimer();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSmartScroll, pathname]);
   const locale = (lang.toLowerCase()) as LangCode;
   const t = NAV_UI[locale] ?? NAV_UI.en;
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
@@ -91,7 +137,21 @@ export default function Navbar({ navData }: { navData?: NavData }) {
 
   return (
     <>
-      <nav className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full absolute inset-x-0 top-0 z-50 h-[80px]" translate="no">
+      <nav
+        className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full inset-x-0 top-0 z-50"
+        style={{
+          position: isSmartScroll ? "fixed" : "absolute",
+          transform: navState === "hidden" ? "translateY(-100%)" : "translateY(0)",
+          backgroundColor: isSmartScroll && navState === "visible" ? "#141127" : "transparent",
+          paddingTop: isSmartScroll ? (navState === "visible" ? 14 : 20) : undefined,
+          paddingBottom: isSmartScroll ? (navState === "visible" ? 14 : 20) : undefined,
+          height: isSmartScroll ? undefined : 80,
+          transition: "transform 300ms ease-in-out, background-color 300ms ease-in-out, padding 300ms ease-in-out",
+        }}
+        translate="no"
+        onMouseEnter={isSmartScroll && navState === "visible" ? cancelHideTimer : undefined}
+        onMouseLeave={isSmartScroll && navState === "visible" ? startHideTimer : undefined}
+      >
         {/* Logo */}
         <Link href="/" className="navbar__logo shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}

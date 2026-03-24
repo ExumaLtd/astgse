@@ -197,7 +197,7 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <div className="contact-page min-h-screen bg-blue text-white flex flex-col pt-[80px]">
+    <div className="contact-page h-screen bg-blue text-white flex flex-col pt-[80px] overflow-y-auto">
       <main className="contact-page__main page-px flex flex-col flex-1 max-w-[1440px] mx-auto w-full pb-[40px] md:pb-[80px]" translate="no">
 
         {/* Breadcrumb */}
@@ -211,7 +211,8 @@ export default function ContactPage() {
           <span style={{ color: "#ffffff" }}>{t.breadcrumbContact}</span>
         </nav>
 
-        <div className="contact-page__grid grid grid-cols-1 lg:grid-cols-2 gap-[40px] lg:gap-[120px]" dir={rtl ? "rtl" : "ltr"}>
+        <div className="flex-1 flex items-center">
+        <div className="contact-page__grid w-full grid grid-cols-1 md:grid-cols-2 gap-[40px] md:gap-[60px] lg:gap-[120px]" dir={rtl ? "rtl" : "ltr"}>
 
           {/* Left — heading + info */}
           <div className="contact-page__intro flex flex-col gap-[20px] md:gap-[32px]">
@@ -403,6 +404,7 @@ export default function ContactPage() {
               </form>
           </div>
 
+        </div>
         </div>
       </main>
     </div>

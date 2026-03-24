@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import ScrollRestoration from "@/app/components/ScrollRestoration";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -49,6 +50,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${dmMono.variable} ${almarenaNueva.variable} ${ibmPlexSansArabic.variable} antialiased`}
       >
+        <ScrollRestoration />
         {children}
         <Analytics />
         <SpeedInsights />

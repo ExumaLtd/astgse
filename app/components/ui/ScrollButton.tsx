@@ -22,6 +22,7 @@ export default function ScrollButton({ targetId }: { targetId: string }) {
   return (
     <button
       onClick={handleClick}
+      translate="no"
       className="inline-flex items-center rounded-full text-[0.9375rem] text-white bg-transparent hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out cursor-pointer"
       style={{ fontFamily: "var(--font-inter)", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: "12px", border: "1px solid #00FF7E", borderRadius: "100px" }}
     >

@@ -106,7 +106,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
                 {item.resolvedHref ? (
                   <Link
                     href={item.resolvedHref}
-                    className="navbar__link flex items-center group text-white hover:text-[#00FF7E] transition-colors duration-200"
+                    className="navbar__link flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200"
                     style={{ gap: "12px" }}
                     onMouseEnter={() => item.hasChevron ? setHoveredNav(item.labelEN) : undefined}
                     onMouseLeave={() => item.hasChevron ? setHoveredNav(null) : undefined}
@@ -115,9 +115,15 @@ export default function Navbar({ navData }: { navData?: NavData }) {
                     {item.hasChevron && <Chevron open={hoveredNav === item.labelEN} />}
                   </Link>
                 ) : (
-                  <span className="navbar__link text-white hover:text-[#00FF7E] transition-colors duration-200 cursor-pointer">
+                  <button
+                    className="navbar__link flex items-center text-white hover:text-[#00FF7E] transition-colors duration-200"
+                    style={{ gap: "12px", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "var(--font-inter)", fontSize: "0.9375rem" }}
+                    onMouseEnter={() => item.hasChevron ? setHoveredNav(item.labelEN) : undefined}
+                    onMouseLeave={() => item.hasChevron ? setHoveredNav(null) : undefined}
+                  >
                     {getLabel(item)}
-                  </span>
+                    {item.hasChevron && <Chevron open={hoveredNav === item.labelEN} />}
+                  </button>
                 )}
               </li>
             ))}

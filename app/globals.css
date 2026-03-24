@@ -55,8 +55,55 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
+
+/* Hero section — concrete height so flex children fill correctly.
+   clamp: never shorter than 600px, prefers full viewport, never taller than 1200px. */
+.maintenance-hero {
+  height: 100vh;
+}
+.hero-image-wrap {
+  padding-bottom: 40px;
+}
+@media (min-height: 1081px) {
+  .hero-image-wrap {
+    padding-bottom: 60px;
+  }
+}
+
+/* Pill toggle — full width on mobile, shrink-wrap on desktop */
+.carousel-toggle {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .carousel-toggle {
+    display: inline-flex;
+    width: auto;
+    align-self: flex-start;
+  }
+}
+
+/* Carousel section — responsive content spacing (ghost + real must always match) */
+.crs-pad  { padding-top: 40px; }
+.crs-mt1  { margin-top: 20px; }   /* h2 → body */
+.crs-mt2  { margin-top: 20px; }   /* body → pills */
+.crs-mt3  { margin-top: 28px; }   /* pills → CTA */
+@media (min-width: 1024px) {
+  .crs-pad { padding-top: 56px; }
+  .crs-mt1 { margin-top: 26px; }
+  .crs-mt2 { margin-top: 30px; }
+  .crs-mt3 { margin-top: 40px; }
+}
+
+/* Carousel portrait image — fixed height mobile, fluid on desktop */
+.carousel-image-wrap {
+  height: 260px;
+}
+@media (min-width: 1024px) {
+  .carousel-image-wrap {
+    height: min(652px, calc(100vh - 120px));
+  }
 }
 
 /* Global page padding — use .page-px on any full-width container */

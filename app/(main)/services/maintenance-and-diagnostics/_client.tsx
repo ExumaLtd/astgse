@@ -116,7 +116,7 @@ export default function MaintenancePageClient({
   // ── Image crossfade ──────────────────────────────────────────────────────
   const [displayedImageIndex, setDisplayedImageIndex] = useState(0);
   const [imgOpacity, setImgOpacity] = useState(1);
-  const imgFadeTimer = useRef<ReturnType<typeof setTimeout>>();
+  const imgFadeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     if (currentIndex === displayedImageIndex) return;

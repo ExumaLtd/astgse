@@ -133,7 +133,7 @@ export default function MaintenancePageClient({
   // ── Content fade ─────────────────────────────────────────────────────────
   const [displayedContentIndex, setDisplayedContentIndex] = useState(0);
   const [contentVisible, setContentVisible] = useState(true);
-  const contentFadeTimer = useRef<ReturnType<typeof setTimeout>>();
+  const contentFadeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     if (currentIndex === displayedContentIndex) return;

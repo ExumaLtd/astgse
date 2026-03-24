@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useLang } from "@/app/hooks/useLang";
 import { type LC } from "@/app/i18n/config";
 
-const UI: Record<LC, { breadHome: string; breadServices: string; breadCurrent: string }> = {
-  EN: { breadHome: "Home", breadServices: "Services", breadCurrent: "Servicing and inspection" },
-  AR: { breadHome: "الرئيسية", breadServices: "الخدمات", breadCurrent: "الخدمة والتفتيش" },
-  ES: { breadHome: "Inicio", breadServices: "Servicios", breadCurrent: "Servicio e inspección" },
-  FR: { breadHome: "Accueil", breadServices: "Services", breadCurrent: "Service et inspection" },
+const UI: Record<LC, { breadHome: string; breadServices: string; breadParent: string; breadCurrent: string }> = {
+  EN: { breadHome: "Home", breadServices: "Services", breadParent: "Maintenance and diagnostics", breadCurrent: "Servicing and inspection" },
+  AR: { breadHome: "الرئيسية", breadServices: "الخدمات", breadParent: "الصيانة والتشخيص", breadCurrent: "الخدمة والتفتيش" },
+  ES: { breadHome: "Inicio", breadServices: "Servicios", breadParent: "Mantenimiento y diagnósticos", breadCurrent: "Servicio e inspección" },
+  FR: { breadHome: "Accueil", breadServices: "Services", breadParent: "Maintenance et diagnostics", breadCurrent: "Service et inspection" },
 };
 
 export default function ServicingAndInspection() {
@@ -27,6 +27,8 @@ export default function ServicingAndInspection() {
           <Link href="/" style={{ color: "rgba(255,255,255,0.40)" }}>{t.breadHome}</Link>
           <span style={{ color: "#00FF7E" }}>/</span>
           <Link href="/services" style={{ color: "rgba(255,255,255,0.40)" }}>{t.breadServices}</Link>
+          <span style={{ color: "#00FF7E" }}>/</span>
+          <Link href="/services/maintenance-and-diagnostics" style={{ color: "rgba(255,255,255,0.40)" }}>{t.breadParent}</Link>
           <span style={{ color: "#00FF7E" }}>/</span>
           <span style={{ color: "#ffffff" }}>{t.breadCurrent}</span>
         </nav>

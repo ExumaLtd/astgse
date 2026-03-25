@@ -101,7 +101,7 @@ export default function EquipmentListingClient({ listing, heroImage, title }: Pr
     <div className="listing-page" dir={isRtl(lang) ? "rtl" : "ltr"}>
       {/* Hero */}
       <section className="listing-hero relative bg-blue text-white flex flex-col" style={{ minHeight: "100svh" }}>
-        <div className="relative z-10 flex flex-col flex-1 pt-[80px]">
+        <div className="relative z-10 flex flex-col flex-1 nav-offset">
           <div className="max-w-[1440px] mx-auto w-full flex flex-col flex-1">
             <main className="flex flex-col flex-1 page-px pb-[60px]">
 

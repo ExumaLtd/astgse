@@ -16,7 +16,7 @@ export default function ServicingAndInspection() {
   const t = UI[lang];
 
   return (
-    <main className="min-h-screen bg-blue text-white flex flex-col pt-[80px]">
+    <main className="min-h-screen bg-blue text-white flex flex-col nav-offset">
       <div className="page-px max-w-[1440px] mx-auto w-full">
         <Breadcrumbs crumbs={[
           { label: t.breadHome, href: "/" },

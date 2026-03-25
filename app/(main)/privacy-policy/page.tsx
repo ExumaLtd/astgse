@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
   const t = UI[lang];
 
   return (
-    <div className="min-h-screen bg-blue text-white flex flex-col pt-[80px]">
+    <div className="min-h-screen bg-blue text-white flex flex-col nav-offset">
       
       <main
         dir={isRtl(lang) ? "rtl" : "ltr"}

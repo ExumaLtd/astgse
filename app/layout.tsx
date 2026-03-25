@@ -30,6 +30,7 @@ const almarenaNueva = localFont({
 
 export const viewport: Viewport = {
   themeColor: "#141127",
+  viewportFit: "cover",
 };
 
 export const metadata: Metadata = {

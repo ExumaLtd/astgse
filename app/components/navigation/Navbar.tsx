@@ -158,6 +158,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
         className="navbar px-[20px] md:px-[32px] lg:px-[40px] flex items-center justify-between w-full inset-x-0 top-0 z-50"
         style={{
           position: isSmartScroll ? "fixed" : "absolute",
+          top: "env(safe-area-inset-top, 0px)",
           transform: navState === "hidden" ? "translateY(-100%)" : "translateY(0)",
           backgroundColor: isSmartScroll && navState === "visible" ? "#141127" : "transparent",
           paddingTop: isSmartScroll && navState === "visible" ? 14 : undefined,

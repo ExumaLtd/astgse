@@ -130,6 +130,14 @@ html {
   background-color: #141127;
 }
 
+/* Nav offset — replaces pt-[80px] on page content.
+   With black-translucent + viewport-fit=cover the page extends behind
+   the status bar, so we add env(safe-area-inset-top) on top of the
+   80px navbar height so content never slides under the navbar.        */
+.nav-offset {
+  padding-top: calc(80px + env(safe-area-inset-top, 0px));
+}
+
 body {
   background: #141127;
   color: var(--foreground);

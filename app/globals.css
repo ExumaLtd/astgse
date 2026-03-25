@@ -131,7 +131,7 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: #141127;
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
 }

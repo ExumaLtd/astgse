@@ -161,14 +161,11 @@ export default function Navbar({ navData }: { navData?: NavData }) {
           top: "env(safe-area-inset-top, 0px)",
           transform: navState === "hidden" ? "translateY(-100%)" : "translateY(0)",
           backgroundColor: isSmartScroll && navState !== "top" ? "#141127" : "transparent",
-          paddingTop: isSmartScroll && navState === "visible" ? 14 : undefined,
-          paddingBottom: isSmartScroll && navState === "visible" ? 14 : undefined,
-          height: isSmartScroll && navState === "visible" ? undefined : 80,
-          transition: "transform 300ms ease-in-out, background-color 300ms ease-in-out, padding 300ms ease-in-out",
+          transition: "transform 300ms ease-in-out, background-color 300ms ease-in-out",
         }}
         translate="no"
-        onMouseEnter={isSmartScroll && navState === "visible" ? cancelHideTimer : undefined}
-        onMouseLeave={isSmartScroll && navState === "visible" ? startHideTimer : undefined}
+        onMouseEnter={isSmartScroll && navState !== "top" ? cancelHideTimer : undefined}
+        onMouseLeave={isSmartScroll && navState !== "top" ? startHideTimer : undefined}
       >
         {/* Logo */}
         <Link href="/" className="navbar__logo shrink-0">

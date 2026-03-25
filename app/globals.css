@@ -106,6 +106,16 @@
   }
 }
 
+/* Navbar height — consistent across all scroll states to prevent snapping */
+.navbar {
+  height: 60px;
+}
+@media (min-width: 1024px) {
+  .navbar {
+    height: 80px;
+  }
+}
+
 /* Global page padding — use .page-px on any full-width container */
 .page-px {
   padding-left: 20px;
@@ -133,9 +143,14 @@ html {
 /* Nav offset — replaces pt-[80px] on page content.
    With black-translucent + viewport-fit=cover the page extends behind
    the status bar, so we add env(safe-area-inset-top) on top of the
-   80px navbar height so content never slides under the navbar.        */
+   navbar height so content never slides under the navbar.             */
 .nav-offset {
-  padding-top: calc(80px + env(safe-area-inset-top, 0px));
+  padding-top: calc(60px + env(safe-area-inset-top, 0px));
+}
+@media (min-width: 1024px) {
+  .nav-offset {
+    padding-top: calc(80px + env(safe-area-inset-top, 0px));
+  }
 }
 
 body {

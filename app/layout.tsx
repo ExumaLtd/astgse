@@ -53,6 +53,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="theme-color" content="#141127" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body
         className={`${inter.variable} ${dmMono.variable} ${almarenaNueva.variable} ${ibmPlexSansArabic.variable} antialiased`}

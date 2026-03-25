@@ -61,7 +61,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
       const delta = y - lastScrollY.current;
       lastScrollY.current = y;
 
-      if (y < 80) {
+      if (y <= 5) {
         setNavState("top");
         cancelHideTimer();
         scrollDelta.current = 0;
@@ -160,7 +160,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
           position: isSmartScroll ? "fixed" : "absolute",
           top: "env(safe-area-inset-top, 0px)",
           transform: navState === "hidden" ? "translateY(-100%)" : "translateY(0)",
-          backgroundColor: isSmartScroll && navState === "visible" ? "#141127" : "transparent",
+          backgroundColor: isSmartScroll && navState !== "top" ? "#141127" : "transparent",
           paddingTop: isSmartScroll && navState === "visible" ? 14 : undefined,
           paddingBottom: isSmartScroll && navState === "visible" ? 14 : undefined,
           height: isSmartScroll && navState === "visible" ? undefined : 80,

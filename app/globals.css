@@ -85,7 +85,7 @@
 }
 
 /* Carousel section — responsive content spacing (ghost + real must always match) */
-.crs-pad  { padding-top: 40px; }
+.crs-pad  { padding-top: 30px; }
 .crs-mt1  { margin-top: 20px; }   /* h2 → body */
 .crs-mt2  { margin-top: 20px; }   /* body → pills */
 .crs-mt3  { margin-top: 28px; }   /* pills → CTA */

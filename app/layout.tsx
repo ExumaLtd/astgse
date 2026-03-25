@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, DM_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
@@ -28,6 +28,10 @@ const almarenaNueva = localFont({
   variable: "--font-almaren-nueva",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#141127",
+};
+
 export const metadata: Metadata = {
   title: {
     default: "ASTGSE",
@@ -38,7 +42,6 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
-  themeColor: "#141127",
 };
 
 export default function RootLayout({

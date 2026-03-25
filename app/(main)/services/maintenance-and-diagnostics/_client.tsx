@@ -517,7 +517,7 @@ export default function MaintenancePageClient({
               {/* paddingTop instead of marginTop on the child — prevents the    */}
               {/* child's margin from collapsing out of this box, which would    */}
               {/* make minHeight understated and cause vertical jumping.          */}
-              <div className="crs-pad" style={{ minHeight: colMinHeight || undefined }}>
+              <div className="crs-pad" style={{ minHeight: isDesktop ? (colMinHeight || undefined) : undefined }}>
                 <div
                   style={{
                     opacity: contentVisible ? 1 : 0,

@@ -416,7 +416,7 @@ export default function MaintenancePageClient({
                 >
                   <div
                     ref={trackMotionRef}
-                    style={{ display: "flex", width: "max-content", cursor: "grab", willChange: "transform", userSelect: "none" }}
+                    style={{ display: "flex", width: "max-content", cursor: "grab", willChange: "transform", userSelect: "none", touchAction: "pan-y" }}
                     onPointerDown={handlePointerDown}
                     onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}
@@ -502,7 +502,7 @@ export default function MaintenancePageClient({
                       {item.body}
                     </p>
                     <div className="crs-mt2" style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-                      {item.pills.map((pill, j) => (
+                      {(isDesktop ? item.pills : [...item.pills].sort((a, b) => a.length - b.length)).map((pill, j) => (
                         <span key={j} style={{ display: "inline-flex", padding: "8px 16px", borderRadius: 100, fontSize: 14, lineHeight: "20px", whiteSpace: "nowrap" }}>
                           {pill}
                         </span>
@@ -551,7 +551,7 @@ export default function MaintenancePageClient({
                   </p>
 
                   <div className="crs-mt2" style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-                    {displayedContent.pills.map((pill, i) => (
+                    {(isDesktop ? displayedContent.pills : [...displayedContent.pills].sort((a, b) => a.length - b.length)).map((pill, i) => (
                       <span
                         key={i}
                         style={{

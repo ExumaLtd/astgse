@@ -124,10 +124,25 @@
   }
 }
 
+/* iOS overscroll / rubber-band background — set on html so the colour
+   shows when Safari bounces past the top or bottom of the page.        */
+html {
+  background-color: #141127;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), sans-serif;
+}
+
+/* iOS input zoom prevention — Safari zooms when font-size < 16px.
+   Keep visual size at 0.9375rem on desktop; force 16px on mobile.    */
+@media (max-width: 767px) {
+  .contact-form__input,
+  .contact-form__textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* Almarena Neue — always use Display letterforms (disp axis = 100) */

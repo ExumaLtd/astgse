@@ -108,7 +108,7 @@
 
 /* Navbar height — consistent across all scroll states to prevent snapping */
 .navbar {
-  height: 60px;
+  height: 72px;
 }
 @media (min-width: 1024px) {
   .navbar {
@@ -145,7 +145,7 @@ html {
    the status bar, so we add env(safe-area-inset-top) on top of the
    navbar height so content never slides under the navbar.             */
 .nav-offset {
-  padding-top: calc(60px + env(safe-area-inset-top, 0px));
+  padding-top: calc(72px + env(safe-area-inset-top, 0px));
 }
 @media (min-width: 1024px) {
   .nav-offset {

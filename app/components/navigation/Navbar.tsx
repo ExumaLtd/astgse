@@ -263,7 +263,7 @@ export default function Navbar({ navData }: { navData?: NavData }) {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
-          <div className="mobile-menu__header page-px flex items-center justify-between h-[80px] shrink-0">
+          <div className="mobile-menu__header page-px flex items-center justify-between h-[72px] lg:h-[80px] shrink-0">
             <Link href="/" onClick={() => setOpen(false)} className="mobile-menu__logo shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/images/astgse_Logo_Web_White.svg" alt="AST GSE" width={91} height={27} className="block" />

@@ -40,8 +40,9 @@ export default function Navbar({ navData }: { navData?: NavData }) {
 
   // Smart scroll: 'top' | 'visible' | 'hidden'
   const [navState, setNavState] = useState<"top" | "visible" | "hidden">("top");
-  const lastScrollY = useRef(0);
-  const hideTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const lastScrollY   = useRef(0);
+  const scrollDelta   = useRef(0);   // cumulative delta — filters momentum micro-oscillations
+  const hideTimer     = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const startHideTimer = () => {
     clearTimeout(hideTimer.current);
@@ -54,21 +55,37 @@ export default function Navbar({ navData }: { navData?: NavData }) {
     if (!isSmartScroll) return;
     setNavState("top");
     lastScrollY.current = 0;
+    scrollDelta.current = 0;
     const handleScroll = () => {
-      const y = window.scrollY;
+      const y     = window.scrollY;
+      const delta = y - lastScrollY.current;
+      lastScrollY.current = y;
+
       if (y < 80) {
         setNavState("top");
         cancelHideTimer();
-      } else if (y > lastScrollY.current) {
+        scrollDelta.current = 0;
+        return;
+      }
+
+      // Accumulate delta in current direction; reset if direction reverses
+      if ((delta > 0 && scrollDelta.current < 0) || (delta < 0 && scrollDelta.current > 0)) {
+        scrollDelta.current = 0;
+      }
+      scrollDelta.current += delta;
+
+      // Only act after 10px of consistent movement — ignores momentum oscillations
+      if (scrollDelta.current > 10) {
         setNavState("hidden");
         cancelHideTimer();
-      } else {
+        scrollDelta.current = 0;
+      } else if (scrollDelta.current < -10) {
         setNavState(prev => {
           if (prev !== "visible") startHideTimer();
           return "visible";
         });
+        scrollDelta.current = 0;
       }
-      lastScrollY.current = y;
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {

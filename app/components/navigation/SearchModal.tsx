@@ -15,6 +15,7 @@ import {
   TYPES_WITH_DETAIL_PAGES,
   SUGGESTIONS,
   SEARCH_UI as UI,
+  type SearchUILang,
 } from "@/app/constants/search";
 
 function fuzzyMatch(text: string, q: string): boolean {
@@ -37,12 +38,12 @@ function fuzzyMatch(text: string, q: string): boolean {
 
 function levenshtein(a: string, b: string): number {
   const m = a.length, n = b.length;
-  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
-  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) => [i, ...(Array(n).fill(0) as number[])]);
+  for (let j = 0; j <= n; j++) dp[0]![j] = j;
   for (let i = 1; i <= m; i++)
     for (let j = 1; j <= n; j++)
-      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
-  return dp[m][n];
+      dp[i]![j] = a[i-1] === b[j-1] ? dp[i-1]![j-1]! : 1 + Math.min(dp[i-1]![j]!, dp[i]![j-1]!, dp[i-1]![j-1]!);
+  return dp[m]![n]!;
 }
 
 function searchFields(r: Result) {
@@ -63,7 +64,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
 
   useEffect(() => {
     const stored = localStorage.getItem(LANG_STORAGE_KEY)?.toLowerCase() || "en";
-    setLocale(UI[stored] ? stored : "en");
+    setLocale(stored in UI ? stored : "en");
   }, [open]);
 
   // Lock height to initial viewport so keyboard opening doesn't reflow the modal.
@@ -97,7 +98,7 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     }
   }, [open]);
 
-  const t = UI[locale] || UI.en;
+  const t = UI[locale as SearchUILang] ?? UI.en;
 
   // Strip any HTML tags from display-only copy of query to prevent XSS if
   // the value is ever used in a context other than React JSX text nodes
@@ -204,8 +205,9 @@ export default function SearchModal({ open, onClose }: { open: boolean; onClose:
     ranges.sort((a, b) => a[0] - b[0]);
     const merged: [number, number][] = [];
     for (const [s, e] of ranges) {
-      if (merged.length && s <= merged[merged.length - 1][1]) {
-        merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], e);
+      const last = merged[merged.length - 1];
+      if (last && s <= last[1]) {
+        last[1] = Math.max(last[1], e);
       } else {
         merged.push([s, e]);
       }

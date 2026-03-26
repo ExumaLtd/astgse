@@ -247,10 +247,10 @@ export default function ContactPage() {
             <form ref={formRef} action={action} autoComplete="on" className="contact-form flex flex-col gap-[24px]"
               onSubmit={(e) => {
                 const errs: Record<string, string> = {};
-                if (!fields.name.trim())    errs.name    = t.errors.name_required;
-                if (!fields.email.trim())   errs.email   = t.errors.email_invalid;
-                if (!fields.message.trim() || fields.message.trim().length < 10) errs.message = t.errors.message_short;
-                if (!consent)               errs.consent = t.errors.consent_required;
+                if (!fields.name.trim())    errs.name    = t.errors.name_required    ?? "";
+                if (!fields.email.trim())   errs.email   = t.errors.email_invalid    ?? "";
+                if (!fields.message.trim() || fields.message.trim().length < 10) errs.message = t.errors.message_short    ?? "";
+                if (!consent)               errs.consent = t.errors.consent_required ?? "";
                 if (Object.keys(errs).length) { e.preventDefault(); setClientErrors(errs); }
                 else setClientErrors({});
               }}

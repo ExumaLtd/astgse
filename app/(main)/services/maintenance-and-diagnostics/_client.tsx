@@ -148,8 +148,9 @@ export default function MaintenancePageClient({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex]);
 
-  const displayedContent = carouselItems[displayedContentIndex];
-  const displayedImage   = carouselItems[displayedImageIndex];
+  // carouselItems is a module-level constant — indices are bounded by the array length
+  const displayedContent = carouselItems[displayedContentIndex]!;
+  const displayedImage   = carouselItems[displayedImageIndex]!;
 
   // ── Pill carousel ────────────────────────────────────────────────────────
   const trackRef        = useRef<HTMLDivElement>(null);

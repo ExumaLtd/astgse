@@ -20,7 +20,17 @@ export const SUGGESTIONS = [
   { en: "For hire",    ar: "للإيجار",  es: "Para alquilar", fr: "À louer",     href: null },
 ];
 
-export const SEARCH_UI: Record<string, Record<string, string>> = {
+export type SearchUIStrings = {
+  searching: string;
+  placeholder: string;
+  suggestions: string;
+  loading: string;
+  noResults: string;
+};
+
+export type SearchUILang = "en" | "ar" | "es" | "fr";
+
+export const SEARCH_UI: Record<SearchUILang, SearchUIStrings> = {
   en: {
     searching: "I'm searching for",
     placeholder: "e.g. Diagnostics",

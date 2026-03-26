@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createClient } from "next-sanity";
 import { headers } from "next/headers";
 import { LANG_TO_LOCALE } from "@/app/i18n/config";
+import * as Sentry from "@sentry/nextjs";
 
 const writeClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "kcmbd43u",
@@ -63,13 +64,13 @@ const CONTINENT_MAP: Record<string, string> = {
 async function getLocation(ip: string): Promise<{ display: string; country: string; continent: string }> {
   if (!ip || ip === "127.0.0.1" || ip === "::1") return { display: "", country: "", continent: "" };
   try {
-    const res = await fetch(`http://ip-api.com/json/${ip}?fields=city,country,continentCode`, { signal: AbortSignal.timeout(3_000) });
+    const res = await fetch(`https://ipapi.co/${ip}/json/`, { signal: AbortSignal.timeout(3_000) });
     if (!res.ok) return { display: "", country: "", continent: "" };
-    const { city, country, continentCode } = await res.json() as { city?: string; country?: string; continentCode?: string };
+    const { city, country_name, continent_code } = await res.json() as { city?: string; country_name?: string; continent_code?: string };
     return {
-      display: [city, country].filter(Boolean).join(", "),
-      country: country ?? "",
-      continent: CONTINENT_MAP[continentCode ?? ""] ?? "",
+      display: [city, country_name].filter(Boolean).join(", "),
+      country: country_name ?? "",
+      continent: CONTINENT_MAP[continent_code ?? ""] ?? "",
     };
   } catch {
     return { display: "", country: "", continent: "" };
@@ -99,8 +100,8 @@ export async function submitContact(
   _prev: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
-  // Honeypot — silently reject if filled
-  if (formData.get("website")) return { success: false };
+  // Honeypot — return fake success so bots don't know they were blocked
+  if (formData.get("website")) return { success: true };
 
   // Validate fields first so errors show without a Turnstile round-trip
   const raw = {
@@ -140,8 +141,15 @@ export async function submitContact(
     }
   }
 
+  const { name, email, phone, company, message, lang } = parsed.data;
+
+  // Rate limit: max 3 submissions per email per hour — checked before any external calls
+  if (await isRateLimited(email)) {
+    return { success: false, error: "rate_limit" };
+  }
+
   const headersList = await headers();
-  const ip = (headersList.get("x-forwarded-for") ?? "").split(",")[0].trim() || headersList.get("x-real-ip") || "";
+  const ip = ((headersList.get("x-forwarded-for") ?? "").split(",")[0] ?? "").trim() || headersList.get("x-real-ip") || "";
   const { display: location, country, continent } = await getLocation(ip);
 
   const tz       = (formData.get("timezone")  as string | null) ?? "";
@@ -153,15 +161,8 @@ export async function submitContact(
     ? now.toLocaleString("en-GB", { timeZone: tz, dateStyle: "full", timeStyle: "short" })
     : gmtTime;
 
-  const { name, email, phone, company, message, lang } = parsed.data;
-
-  // Rate limit: max 3 submissions per email per hour
-  if (await isRateLimited(email)) {
-    return { success: false, error: "rate_limit" };
-  }
-
   const langKey = (lang?.toUpperCase() ?? "EN") as keyof typeof LANG_TO_LOCALE;
-  const locale = LANG_TO_LOCALE[langKey] ?? "en";
+  const locale  = LANG_TO_LOCALE[langKey] ?? "en";
 
   // Translate message to English if submitted in another language
   const englishMessage = await toEnglish(message, locale);
@@ -232,13 +233,13 @@ export async function submitContact(
     }), sanityPromise, contactPromise]);
 
     if (sendError) {
-      console.error("Resend error:", JSON.stringify(sendError, null, 2));
+      Sentry.captureException(new Error(`Resend error: ${JSON.stringify(sendError)}`));
       return { success: false, error: "send_failed" };
     }
 
     return { success: true };
   } catch (err) {
-    console.error("Resend exception:", JSON.stringify(err, null, 2));
+    Sentry.captureException(err);
     return { success: false, error: "send_failed" };
   }
 }

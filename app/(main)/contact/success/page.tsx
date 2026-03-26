@@ -10,6 +10,7 @@ const UI: Record<LC, {
   breadCurrent: string;
   label: string;
   headingBefore: string;
+  headingWhite: string;
   headingGreen: string;
   body: string;
 }> = {
@@ -19,7 +20,8 @@ const UI: Record<LC, {
     breadCurrent: "Form submitted successfully",
     label: "Thank you for contacting us",
     headingBefore: "Your message has been received and",
-    headingGreen: "a member of our team will respond within 1 working day.",
+    headingWhite: "a member of",
+    headingGreen: "our team will respond within 1 working day.",
     body: "For urgent enquiries, please call us directly on",
   },
   AR: {
@@ -28,7 +30,8 @@ const UI: Record<LC, {
     breadCurrent: "تم إرسال النموذج بنجاح",
     label: "شكراً لتواصلك معنا",
     headingBefore: "تم استلام رسالتك و",
-    headingGreen: "سيرد أحد أعضاء فريقنا خلال يوم عمل واحد.",
+    headingWhite: "سيرد أحد أعضاء",
+    headingGreen: "فريقنا خلال يوم عمل واحد.",
     body: "للاستفسارات العاجلة، يرجى الاتصال بنا مباشرة على",
   },
   ES: {
@@ -37,7 +40,8 @@ const UI: Record<LC, {
     breadCurrent: "Formulario enviado con éxito",
     label: "Gracias por contactarnos",
     headingBefore: "Tu mensaje ha sido recibido y",
-    headingGreen: "un miembro de nuestro equipo responderá en 1 día hábil.",
+    headingWhite: "un miembro de",
+    headingGreen: "nuestro equipo responderá en 1 día hábil.",
     body: "Para consultas urgentes, llámenos directamente al",
   },
   FR: {
@@ -46,7 +50,8 @@ const UI: Record<LC, {
     breadCurrent: "Formulaire soumis avec succès",
     label: "Merci de nous avoir contactés",
     headingBefore: "Votre message a bien été reçu et",
-    headingGreen: "un membre de notre équipe vous répondra dans 1 jour ouvré.",
+    headingWhite: "un membre de",
+    headingGreen: "notre équipe vous répondra dans 1 jour ouvré.",
     body: "Pour les demandes urgentes, appelez-nous directement au",
   },
 };
@@ -76,12 +81,13 @@ export default function ContactSuccess() {
           <span style={{ color: "#ffffff" }}>{t.breadCurrent}</span>
         </nav>
 
-        <div className="flex flex-col gap-[32px] max-w-[720px]">
+        <div className="flex flex-col gap-[32px] max-w-[800px]">
           <p style={{ fontFamily: "var(--font-inter)", fontSize: "1rem", color: "#ffffff", display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ color: "#00FF7E" }}>/</span> {t.label}
           </p>
           <h1 style={{ fontFamily: "var(--font-almaren-nueva)", fontWeight: 21, fontSize: "clamp(2rem, 4vw, 3.25rem)", lineHeight: 1.1 }}>
             {t.headingBefore}{" "}
+            {t.headingWhite}{" "}
             <span style={{ color: "#00FF7E" }}>{t.headingGreen}</span>
           </h1>
           <p style={{ fontFamily: "var(--font-inter)", fontSize: "1rem", color: "#ffffff", lineHeight: 1.6 }}>

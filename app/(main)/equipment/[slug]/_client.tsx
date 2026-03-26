@@ -212,8 +212,8 @@ export default function EquipmentListingClient({ listing, heroImage, title }: Pr
 
                   {/* CTA */}
                   <div className="listing-cta" style={{ marginTop: 8 }}>
-                    <a
-                      href="#"
+                    <Link
+                      href={`/contact?ref=${encodeURIComponent(listing.title)}`}
                       className="listing-enquire-btn inline-flex items-center hover:bg-[#00FF7E] hover:text-[#141127] transition-[background-color,color] duration-300 ease-out"
                       style={{ fontFamily: "var(--font-inter)", fontSize: "0.9375rem", paddingBlock: 8, paddingInlineStart: 20, paddingInlineEnd: 8, gap: 12, border: "1px solid #00FF7E", borderRadius: 100, color: "#ffffff" }}
                     >
@@ -221,7 +221,7 @@ export default function EquipmentListingClient({ listing, heroImage, title }: Pr
                       <span className="flex items-center justify-center rounded-full bg-[#00FF7E]" style={{ width: 30, height: 30, transform: isRtl(lang) ? "scaleX(-1)" : undefined }}>
                         <ArrowRight size={14} color="#141127" strokeWidth={2.5} />
                       </span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
